@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<!-- jruby -run -e httpd . -p 9090 -->
+
+<head>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.15/vue.js"></script>
+  <script type="text/javascript" src="./workforce_simulation.js"></script>
+
+  <style>
+    body {
+      margin: 20px;
+    }
+
+    .clearfix:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    ul.unstyled {
+      list-style-type: none;
+      padding-left: 0px;
+    }
+
+    #years-vue {
+      position: relative;
+    }
+
+    .years {
+      text-align: center;
+      font-weight: bold;
+      float: left;
+      width: 100px;
+      font-size: 12px;
+      padding-left: 5px;
+    }
+
+
+    #stats-vue {
+      position: relative;
+      min-height: 100px;
+    }
+
+    .stats {
+      float: left;
+      width: 100px;
+      font-size: 12px;
+      padding-left: 5px;
+    }
+
+
+    #grades-vue {
+      position: relative;
+      min-height: 100px;
+    }
+
+    .grades {
+      float: left;
+      width: 100px;
+      font-size: 12px;
+      padding-left: 5px;
+    }
+
+    .simulation {
+
+    }
+
+    h1,h2,h3,h4,h5,h6 {
+      font-weight: normal;
+    }
+
+  </style>
+
+
+<body>
+  
+  <div>
+    <h1>Simulating the Workforce</h1>
+    <p>
+      The visualization allows you to see how we build up projections on important workforce characteristics by repeatedly simulating individual employee events for the next five years.
+    </p>
+  </div>
+  <div>
+    <button id="simulate" class="pure-button">Simulate</button>
+  </div>
+  
+  <hr>
+
+  <div id="years-vue" class="clearfix">
+    <div class="years" v-for="year in years">
+      {{year}}
+    </div>
+  </div>
+
+  <div id="grades-vue" class="clearfix">
+    <div class="grades" v-for="grade in grades">
+      <ul class="unstyled">
+        <li v-for="(key,value) in grade">
+          GS-{{key}}: {{value}}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="stats-vue" class="clearfix">
+    <div class="stats" v-for="stat in stats">
+      <ul class="unstyled">
+        <li v-for="(key,value) in stat">
+          {{key}}: {{value}}
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="simulation">
+    
+  </div>
