@@ -143,26 +143,44 @@
     }
   }
 
-  var base_year = 2012;
+  var base_year = 2012,
+      states = ['none','promotion','expired_appt','attrite','quit'],
+      state_colors = ['#d9d9d9','#74c476','#fdae6b',' #fd8d3c','#e6550d'];
 
-  var vis = {
+  var simulation_controller = {
+
+    element: '.simulation',
+
+    clear: function(){
+      d3.select(this.element).html('');
+    },
     
     bar_height: 1.5,
     
     bar_padding: 0.5,
-    
-    width: 100,
+
+    margin: { top: 0, right: 5, bottom: 0, left: 5},
+
+    element_width: 100,
+
+    width: function(){
+      return this.element_width - this.margin.left - this.margin.right;
+    },
+
+    height: function(data){
+      var h = data.length * (this.bar_height + this.bar_padding);
+      return h + this.margin.top + this.margin.bottom;
+    },
+
 
     draw: function(data){
-      var svg = d3.select('.simulation').append('svg'),
+      var svg = d3.select(this.element).append('svg')
+              .attr({ width: this.element_width, height: this.height(data)})
+            .append('g')
+              .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')'),
           height = data.length * (this.bar_height + this.bar_padding),
           self = this;
       
-      svg.attr({
-        width: this.width,
-        height: height
-      });
-
       var bars = svg.selectAll('.p-bar')
               .data(data, function(d, i){
                 return i;
@@ -174,19 +192,19 @@
               return 'translate(0,' +  y + ')';
             });
 
-      var colors = ['#d9d9d9','#74c476','#fdae6b',' #fd8d3c','#e6550d'];
+      // var colors = ['#d9d9d9','#74c476','#fdae6b',' #fd8d3c','#e6550d'];
 
       var stacks = bars.selectAll('rect')
               .data(this.map_intervals, this.key)
             .enter().append('rect')
               .attr('fill', function(d,i){
-                return colors[i];
+                return state_colors[i];
               })
               .attr('x', function(d){
-                return d.start * self.width;
+                return d.start * self.width();
               })
               .attr('width', function(d){
-                return d.width * self.width;
+                return d.width * self.width();
               })
               .attr({ y: 0, height: 0 })
               .transition()
@@ -195,7 +213,6 @@
     },
 
     update: function(svg, data){
-      console.log('Updating.')
       var bars = svg.selectAll('.p-bar'),
           self = this;
 
@@ -208,28 +225,27 @@
               return i * 5;
             })
               .attr('x', function(d){
-                return d.start * self.width;
+                return d.start * self.width();
               })
               .attr({ y: 0, height: this.bar_height })
               .attr('width', function(d){
-                return d.width * self.width;
+                return d.width * self.width();
               });
       }
     },
 
     map_intervals: function(bar,i){
-        var states = ['none','promotion','expired_appt','attrite','quit'],
-            probs = states.map(function(s){ 
-                return bar[s];
-              }),
-            intervals = probs.map(function(d,i){
-                var s = 0;
-                for(var j = 0; j < i; j++){
-                  s += probs[j];
-                };
-                return { start: s, width: d, i: i};
-              });
-        return intervals;
+      var probs = states.map(function(s){ 
+            return bar[s];
+          }),
+        intervals = probs.map(function(d,i){
+            var s = 0;
+            for(var j = 0; j < i; j++){
+              s += probs[j];
+            };
+            return { start: s, width: d, i: i};
+          });
+      return intervals;
     },
 
 
@@ -240,13 +256,278 @@
   }
 
 
+  var grade_controller = {
+
+    element: '#grades-vue',
+
+    clear: function(){
+      d3.select(this.element).selectAll('.chart').remove();
+      this.max = 0;
+      this.svgs = [];
+    },
+
+    max: 0,
+    
+    svgs: [],
+
+    bar_height: 10,
+    
+    bar_padding: 1,
+
+    bar_class: '.grade-bar',
+    
+    margin: { top: 0, right: 5, bottom: 0, left: 5},
+
+    element_width: 100,
+
+    width: function(){
+      return this.element_width - this.margin.left - this.margin.right;
+    },
+
+    height: function(data){
+      var h = data.length * (this.bar_height + this.bar_padding);
+      return h + this.margin.top + this.margin.bottom;
+    },
+
+
+    label: function(label_text){
+      var label_width = 60,
+          labels = d3.select(this.element).append('svg')
+            .attr('class','labels')
+            .attr({ width: label_width, height: this.height(label_text) }),
+          self = this;
+
+      labels.selectAll('text')
+          .data(label_text)
+        .enter().append('text')
+          .attr('transform', function(d,i){
+            var y = i * (self.bar_height + self.bar_padding) + self.bar_height - 2;
+            return 'translate(' + label_width + ',' +  y + ')';
+          })
+          .text(function(d){
+            return d;
+          })
+          .attr({
+            'text-anchor': 'end',
+            'font-size': this.bar_height - 1
+          })
+          .style('fill', 'steel_blue');
+
+    },
+
+    draw: function(data){
+      if(d3.select(this.element).select('.labels').empty()){
+        console.log(data)
+        this.label(data.map(function(d){
+          return 'GS-' + d.grade;
+        }));
+      }
+
+      var svg = d3.select(this.element).append('svg')
+              .attr('class','chart')
+              .attr({ width: this.element_width, height: this.height(data) }) 
+            .append('g')
+              .attr('class','chart-layer')
+              .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')'),
+
+          height = data.length * (this.bar_height + this.bar_padding),
+          m = d3.max(data, function(d){
+            return d.count;
+          }),
+          self = this;
+
+      // Rescale other graphs if the max changes
+      if(this.max < m){
+        this.max = m;
+        this.svgs.forEach(function(s){
+          self.update(s, d3.select(s).data());
+        });
+      }
+
+      var scale = d3.scale.linear()
+        .domain([0, this.max])
+        .range([0, this.width()]);
+
+      svg.selectAll(this.bar_class)
+              .data(data, this.key)
+            .enter().append('rect')
+            .attr('class','grade-bar')
+            .attr('transform', function(d,i){
+              var y = i * (self.bar_height + self.bar_padding);
+              return 'translate(0,' +  y + ')';
+            })
+            .attr('height', this.bar_height)
+            .attr('width', function(d){
+              return scale(d.count)
+            })
+            .style('fill', '#6baed6');
+
+      this.svgs.push(svg);
+    },
+
+    update: function(svg, data){
+      var scale = d3.scale.linear()
+            .domain([0, this.max])
+            .range([0, this.width])
+          self = this;
+      
+      svg.selectAll(this.bar_class)
+        .data(data, this.key)
+        .transition()
+          .ease('bounce')
+          .attr('width', function(d){
+            return scale(d.count);
+          })
+    },
+
+    key: function(d,i){
+      return d.grade;
+    }
+
+  }
+
+
+  var state_controller = {
+
+    element: '#states-vue',
+
+    clear: function(){
+      d3.select(this.element).selectAll('.chart').remove();
+      this.max = 0;
+      this.svgs = [];
+    },
+
+    max: 0,
+    
+    svgs: [],
+
+    bar_height: 10,
+    
+    bar_padding: 1,
+
+    bar_class: '.state-bar',
+    
+    margin: { top: 0, right: 5, bottom: 0, left: 5},
+
+    element_width: 100,
+
+    width: function(){
+      return this.element_width - this.margin.left - this.margin.right;
+    },
+
+    height: function(data){
+      var h = data.length * (this.bar_height + this.bar_padding);
+      return h + this.margin.top + this.margin.bottom;
+    },
+
+    label: function(states){
+      var label_width = 60,
+          labels = d3.select(this.element).append('svg')
+            .attr('class','labels')
+            .attr({ width: label_width, height: this.height(states) }),
+          self = this;
+
+      labels.selectAll('text')
+          .data(states)
+        .enter().append('text')
+          .attr('transform', function(d,i){
+            var y = i * (self.bar_height + self.bar_padding) + self.bar_height - 1;
+            return 'translate(' + label_width + ',' +  y + ')';
+          })
+          .text(function(d){
+            return d;
+          })
+          .attr({
+            'text-anchor': 'end',
+            'font-size': this.bar_height - 1
+          })
+          .style('fill', function(d,i){
+            return state_colors[i];
+          });
+
+    },
+
+    draw: function(data){
+      if(d3.select(this.element).select('.labels').empty())
+        this.label(states);
+
+      var svg = d3.select(this.element).append('svg')
+              .attr('class','chart')
+              .attr({ width: this.element_width, height: this.height(data) }) 
+            .append('g')
+              .attr('class','chart-layer')
+              .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')'),
+
+          height = data.length * (this.bar_height + this.bar_padding),
+          m = d3.max(data, function(d){
+            return d.count;
+          }),
+          self = this;
+
+      // Rescale other graphs if the max changes
+      if(this.max < m){
+        this.max = m;
+        this.svgs.forEach(function(s){
+          self.update(s, d3.select(s).data());
+        });
+      }
+
+      var scale = d3.scale.linear()
+        .domain([0, this.max])
+        .range([0, this.width()]);
+
+      svg.selectAll(this.bar_class)
+              .data(data, this.key)
+            .enter().append('rect')
+            .attr('class','grade-bar')
+            .attr('transform', function(d,i){
+              var y = i * (self.bar_height + self.bar_padding);
+              return 'translate(0,' +  y + ')';
+            })
+            .attr('height', this.bar_height)
+            .attr('width', function(d){
+              return scale(d.count)
+            })
+            .style('fill', function(d,i){
+              return state_colors[i];
+            });
+
+      this.svgs.push(svg);
+    },
+
+    update: function(svg, data){
+      var scale = d3.scale.linear()
+            .domain([0, this.max])
+            .range([0, this.width])
+          self = this;
+      
+      svg.selectAll(this.bar_class)
+        .data(data, this.key)
+        .transition()
+          .ease('bounce')
+          .attr('width', function(d){
+            return scale(d.count);
+          })
+    },
+
+    key: function(d,i){
+      console.log(d);
+      return d.state;
+    }
+
+  }
+
+
+
   var summarize_grades = function(data){
     var grades = {};
     for(var i = 0, l = data.length; i < l; i++){
       var g = data[i].grade;
       grades.hasOwnProperty(g) ? grades[g] += 1 : grades[g] = 1;
     }
-    return grades;
+    return Object.keys(grades).map(function(k){
+      return { grade: k, count: grades[k] };
+    });
   }
 
 
@@ -259,7 +540,9 @@
         summary[s] = summary.hasOwnProperty(s) ? summary[s] + data[i][s] : 0 + data[i][s];
       }
     }
-    return summary;
+    return Object.keys(summary).map(function(k){
+      return { state: k, count: summary[k] };
+    });
   }
 
 
@@ -289,41 +572,11 @@
 
   var current_year = 0,
       svg,
-      data;
+      base_year_data,
+      data,
+      trials = [];
 
   
-  var years_vue,
-      stats_vue,
-      grades_vue;
-
-  $(document).ready(function(){
-    years_vue = new Vue({
-      el: '#years-vue',
-      data: {
-        years: []
-      }
-    });
-    var years = []
-    for(var i = 0; i < 6; i++){
-      years.push(base_year + i);
-    }
-    years_vue.years = years;
-
-    stats_vue = new Vue({
-      el: '#stats-vue',
-      data: {
-        stats: []
-      }
-    });
-    grades_vue = new Vue({
-      el: '#grades-vue',
-      data: {
-        grades: []
-      }
-    });
-  }); 
-
-
   var model_and_draw = function(){
     data = data.map(function(d){
       var p_s = logistic_modeler.model(model_set, d);
@@ -333,14 +586,18 @@
       return d;
     })
 
-    grades_vue.grades.push( summarize_grades(data) );
+    var grade_summary = summarize_grades(data);
+    grade_controller.draw(grade_summary);
+    push_stats('grade', grade_summary);
     
-    svg = vis.draw(data);
+    svg = simulation_controller.draw(data);
   }
 
    
 
   var simulate = function(){
+    if(current_year == 0)
+      app_vue.trial += 1;
 
     data = data.map(function(d){
       var p_s = logistic_simulator.simulate(model_set, d).p_s;
@@ -350,16 +607,28 @@
       return d;
     });
 
-    vis.update(svg, data);
+    simulation_controller.update(svg, data);
 
-    setTimeout(function(){
-      stats_vue.stats.push( summarize_states(data) );
+    app_vue.run_timeout = setTimeout(function(){
+
+      var state_summary = summarize_states(data);
+      state_controller.draw(state_summary);
+      push_stats('state', state_summary)
+
       if(current_year < 5){
         data = evolve(data)
         model_and_draw();
         setTimeout(function(){
-          if(current_year < 5)
+          if(current_year < 5) {
             simulate();
+          } else {
+            // Restart here
+            setTimeout(function(){
+              reset();
+              model_and_draw();
+              simulate();
+            }, 1000);
+          }
         }, 500);
       }
       
@@ -367,18 +636,86 @@
     }, data.length * 6);
   }
 
+  var reset = function(){
+    current_year = 0;
+    data = base_year_data.map(function(d){
+      return clone(d);
+    });
+    simulation_controller.clear();
+    grade_controller.clear();
+    state_controller.clear();
+  }
+
   $(document).on('click','#simulate', function(e){
     simulate();
   });
 
 
+  var app_vue;
+
+  $(document).ready(function(){
+    app_vue = new Vue({
+      el: '#app',
+      data: {
+        running: false,
+        run_timeout: null,
+        years: [],
+        trials: [],
+        trial: 0
+      },
+      methods: {
+        run: function(event){
+          this.running = true;
+          simulate();
+        },
+        stop: function(event){
+          clearTimeout(this.run_timeout)
+          this.running = false;
+        }
+      }
+    });
+    
+    var years = [];
+
+    for(var i = 0; i < 6; i++){
+      years.push(base_year + i);
+    }
+    app_vue.years = years;
+  }); 
+
+
+  var push_stats = function(stat, data){
+    if(current_year >= app_vue.trials.length)
+      app_vue.trials.push({});
+
+    var t = app_vue.trials[current_year];
+
+    if(!t[stat])
+      t[stat] = {};
+
+    data.forEach(function(d){
+      if(t[stat][d[stat]]){
+        t[stat][d[stat]].push(d.count);
+      } else {
+        t[stat][d[stat]] = [d.count];
+      }
+    });
+    console.log(app_vue.trials)
+  }
+
+
   d3.csv('./current_year_data.csv', function(error, rows){
-    var numeric = ['age','aptyrs','empid','grade','retirement_eligible_year','run_year','salary','sex'],
-        rows = rows.map(function(d){
-          numeric.forEach(function(n){ d[n] = +d[n]; });
-          return d;
-        });
-    data = rows;
+    var numeric = ['age','aptyrs','empid','grade','retirement_eligible_year','run_year','salary','sex'];
+
+    base_year_data = rows.map(function(d){
+      numeric.forEach(function(n){ d[n] = +d[n]; });
+      return d;
+    });
+
+    data = base_year_data.map(function(d){
+      return clone(d);
+    });
+    
     model_and_draw();
   });
 

@@ -7,6 +7,7 @@
   <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.15/vue.js"></script>
+  <script type="text/javascript" src="./clone.js"></script>
   <script type="text/javascript" src="./workforce_simulation.js"></script>
 
   <style>
@@ -27,45 +28,30 @@
 
     #years-vue {
       position: relative;
+      margin-left: 60px;
     }
 
     .years {
+      
       text-align: center;
       font-weight: bold;
       float: left;
       width: 100px;
       font-size: 12px;
-      padding-left: 5px;
     }
 
-
-    #stats-vue {
+    #states-vue {
       position: relative;
       min-height: 100px;
     }
-
-    .stats {
-      float: left;
-      width: 100px;
-      font-size: 12px;
-      padding-left: 5px;
-    }
-
 
     #grades-vue {
       position: relative;
       min-height: 100px;
     }
 
-    .grades {
-      float: left;
-      width: 100px;
-      font-size: 12px;
-      padding-left: 5px;
-    }
-
     .simulation {
-
+      margin-left: 60px;
     }
 
     h1,h2,h3,h4,h5,h6 {
@@ -83,37 +69,32 @@
       The visualization allows you to see how we build up projections on important workforce characteristics by repeatedly simulating individual employee events for the next five years.
     </p>
   </div>
-  <div>
-    <button id="simulate" class="pure-button">Simulate</button>
-  </div>
-  
-  <hr>
-
-  <div id="years-vue" class="clearfix">
-    <div class="years" v-for="year in years">
-      {{year}}
+  <div id="app">
+    <div>
+      <button v-if="running" v-on:click="stop" class="pure-button">Stop</button>
+      <button v-else v-on:click="run" class="pure-button">Run</button>
     </div>
-  </div>
+    <h3>Trial: {{trial}}</h3>
+    <hr>
 
-  <div id="grades-vue" class="clearfix">
-    <div class="grades" v-for="grade in grades">
-      <ul class="unstyled">
-        <li v-for="(key,value) in grade">
-          GS-{{key}}: {{value}}
-        </li>
-      </ul>
-    </div>
-  </div>
 
-  <div id="stats-vue" class="clearfix">
-    <div class="stats" v-for="stat in stats">
-      <ul class="unstyled">
-        <li v-for="(key,value) in stat">
-          {{key}}: {{value}}
-        </li>
-      </ul>
+    <div class="pure-g">
+      <div class="pure-u-5-5">
+        <div id="years-vue" class="clearfix">
+          <div class="years" v-for="year in years">
+            {{year}}
+          </div>
+        </div>
+
+        <div id="grades-vue" class="clearfix"></div>
+        <div id="states-vue" class="clearfix"></div>
+        <div class="simulation"></div>
+      </div>
+
+      <div class="pure-u-2-5">
+      </div>
+
     </div>
-  </div>
-  <div class="simulation">
-    
+
+
   </div>
