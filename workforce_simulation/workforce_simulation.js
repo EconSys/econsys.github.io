@@ -1,5 +1,4 @@
 (function(){
-  
 
   var model_set = {
 
@@ -315,7 +314,7 @@
 
     },
 
-    draw: function(data){
+    draw: function(data, callback){
       if(d3.select(this.element).select('.labels').empty()){
         console.log(data)
         this.label(data.map(function(d){
@@ -323,7 +322,16 @@
         }));
       }
 
-      var svg = d3.select(this.element).append('svg')
+      console.log(current_year)
+      var svg = this.svgs[current_year];
+
+      if(svg){
+        console.log('Updating SVG');
+        this.update(svg, data, callback);
+        return svg;
+      }
+
+      svg = d3.select(this.element).append('svg')
               .attr('class','chart')
               .attr({ width: this.element_width, height: this.height(data) }) 
             .append('g')
@@ -365,10 +373,11 @@
       this.svgs.push(svg);
     },
 
-    update: function(svg, data){
+    update: function(svg, data, callback){
+      console.log(data);
       var scale = d3.scale.linear()
             .domain([0, this.max])
-            .range([0, this.width])
+            .range([0, this.width()])
           self = this;
       
       svg.selectAll(this.bar_class)
@@ -378,6 +387,10 @@
           .attr('width', function(d){
             return scale(d.count);
           })
+          .call(transitionEnd, function(){
+            if(callback)
+              callback();
+          });
     },
 
     key: function(d,i){
@@ -451,18 +464,25 @@
       if(d3.select(this.element).select('.labels').empty())
         this.label(states);
 
-      var svg = d3.select(this.element).append('svg')
-              .attr('class','chart')
-              .attr({ width: this.element_width, height: this.height(data) }) 
-            .append('g')
-              .attr('class','chart-layer')
-              .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')'),
+      var svg = this.svgs[current_year];
+      if(svg){
+        console.log('Updating SVG');
+        this.update(svg, data, callback);
+        return svg;
+      }
 
-          height = data.length * (this.bar_height + this.bar_padding),
-          m = d3.max(data, function(d){
-            return d.count;
-          }),
-          self = this;
+      svg = d3.select(this.element).append('svg')
+            .attr('class','chart')
+            .attr({ width: this.element_width, height: this.height(data) }) 
+          .append('g')
+            .attr('class','chart-layer')
+            .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')'),
+
+        height = data.length * (this.bar_height + this.bar_padding),
+        m = d3.max(data, function(d){
+          return d.count;
+        }),
+        self = this;
 
       // Rescale other graphs if the max changes
       if(this.max < m){
@@ -496,9 +516,10 @@
     },
 
     update: function(svg, data){
+      console.log(data);
       var scale = d3.scale.linear()
             .domain([0, this.max])
-            .range([0, this.width])
+            .range([0, this.width()])
           self = this;
       
       svg.selectAll(this.bar_class)
@@ -511,7 +532,6 @@
     },
 
     key: function(d,i){
-      console.log(d);
       return d.state;
     }
 
@@ -586,6 +606,7 @@
       return d;
     })
 
+    console.log('grade summary: ' + current_year);
     var grade_summary = summarize_grades(data);
     grade_controller.draw(grade_summary);
     push_stats('grade', grade_summary);
@@ -616,9 +637,17 @@
       push_stats('state', state_summary)
 
       if(current_year < 5){
-        data = evolve(data)
+        if(!app_vue.running)
+          return;
+        
+        current_year += 1;
+        
+        data = evolve(data);
+        
         model_and_draw();
         setTimeout(function(){
+          if(!app_vue.running)
+            return;
           if(current_year < 5) {
             simulate();
           } else {
@@ -632,7 +661,7 @@
         }, 500);
       }
       
-      current_year += 1;
+      
     }, data.length * 6);
   }
 
@@ -642,13 +671,13 @@
       return clone(d);
     });
     simulation_controller.clear();
-    grade_controller.clear();
-    state_controller.clear();
+    // grade_controller.clear();
+    // state_controller.clear();
   }
 
-  $(document).on('click','#simulate', function(e){
-    simulate();
-  });
+  // $(document).on('click','#simulate', function(e){
+  //   simulate();
+  // });
 
 
   var app_vue;
@@ -715,7 +744,7 @@
     data = base_year_data.map(function(d){
       return clone(d);
     });
-    
+
     model_and_draw();
   });
 
