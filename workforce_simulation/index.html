@@ -58,12 +58,16 @@
       margin: 15px 0px 0px 72px;
     }
 
-    .years {
+    .years, .goals {
       text-align: center;
       font-weight: bold;
       float: left;
       width: 148px;
       font-size: 12px;
+    }
+
+    .goals input{
+      text-align: right;
     }
 
     #states-vue {
@@ -94,7 +98,7 @@
       <div class="title">
         <h1>Simulating the Workforce</h1>
         <p>
-          The visualization shows how we build up projections on important workforce characteristics by repeatedly simulating individual personnel events for the next five years. Trial results are averaged in the Grade and Events sections, showing the expected number of personnel events by type and the expected future grade distributions.
+          This visualization shows how we build up projections on important workforce characteristics by repeatedly simulating individual personnel events for the next five years. Trial results are averaged in the Grade and Events sections, showing the expected number of personnel events by type and the expected future grade distributions.
         </p>
         <div class="toolbar u-full-width u-cf">
           <div class="u-pull-left">
@@ -114,6 +118,10 @@
         <div id="years-vue" class="u-cf">
           <div class="years" v-for="year in years">
             {{year}}
+          </div>
+          <div class="goals">&nbsp;</div>
+          <div class="goals" v-for="goal in goals" track-by="$index">
+            <input type="text" v-model="goal" placeholder="">
           </div>
         </div>
         <div class="section">Expected Grade Distribution</div>

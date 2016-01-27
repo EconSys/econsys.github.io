@@ -1,18 +1,9 @@
 define(function(){
     return function(transition, callback) {
-        var n;
-
-        if (transition.empty()) {
-            callback();
-        }
-        else {
-            n = transition.size();
-            transition.each("end", function () {
-                n--;
-                if (n === 0) {
-                    callback();
-                }
+    var n = 0;
+          transition.each(function() { ++n; })
+            .each('end', function() {
+              if (!--n) callback.apply(this, arguments);
             });
-        }
     }
 })

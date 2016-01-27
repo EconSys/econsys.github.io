@@ -88,11 +88,12 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
       self.push_stats('grade', grade_summary);
 
       var grade_trials = self.app_vue.trials[self.current_year].grade,
-          grade_stats =  Object.keys(grade_trials).map(function(k){
+          grade_means =  Object.keys(grade_trials).map(function(k){
             return { grade: k, count: d3.mean(grade_trials[k]) };
           });
           
-      self.grade_controller.draw(grade_stats);
+      self.update_means('grade', grade_means);
+      self.grade_controller.draw(grade_means);
       
       this.svg = this.simulation_controller.draw(this.data);
     },
@@ -114,9 +115,9 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
         return d;
       });
 
-      this.simulation_controller.update(this.svg, this.data);
-
-      this.app_vue.run_timeout = setTimeout(function(){
+      this.simulation_controller.update(this.svg, this.data, function(){
+        if(!self.app_vue.running)
+          return;
 
         self.app_vue.whats_happening = 'Summarizing ' + year + ' events...'
 
@@ -124,11 +125,12 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
         self.push_stats('state', state_summary);
 
         var state_trials = self.app_vue.trials[self.current_year].state,
-            state_stats =  Object.keys(state_trials).map(function(k){
+            state_means =  Object.keys(state_trials).map(function(k){
               return { state: k, count: d3.mean(state_trials[k]) };
             });
 
-        self.state_controller.draw(state_stats);
+        self.update_means('state', state_means);
+        self.state_controller.draw(state_means);
 
         if(self.current_year < 5){
           if(!self.app_vue.running)
@@ -149,9 +151,9 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
             }
           }, 500);
         }
-        
-        
-      }, this.data.length * 6);
+
+      });
+
     },
 
     next_trial: function(){
@@ -178,6 +180,22 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
       });
     },
 
+
+    update_means: function(stat, data){
+      if(this.current_year >= this.app_vue.means.length)
+        this.app_vue.means.push({});
+
+      var t = this.app_vue.means[this.current_year];
+
+      if(!t[stat])
+        t[stat] = {};
+
+      data.forEach(function(d){
+        t[stat][d[stat]] = d.count;
+      });
+    },
+
+
     reset: function(){
       var self = this;
 
@@ -190,7 +208,7 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
 
     run: function(){
       var self = this;
-      d3.csv('./current_year_data.csv', function(error, rows){
+      d3.csv('./current_year_data.csv?123', function(error, rows){
         var numeric = ['age','aptyrs','empid','grade','retirement_eligible_year','run_year','salary','sex'];
 
         self.base_year_data = rows.map(function(d){
@@ -219,9 +237,11 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
       run_timeout: null,
       years: [],
       trials: [],
+      means: [],
       trial: 0,
       employee_count: 0,
-      whats_happening: ''
+      whats_happening: '',
+      goals: []
     },
     methods: {
       run: function(event){
@@ -235,11 +255,15 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
       }
     },
     created: function(){
-      var years = [];
+      var years = [],
+          goals = [];
       for(var i = 0; i < 6; i++){
         years.push(app.base_year + i);
+        if(i > 0)
+          goals.push('');
       }
       this.years = years;
+      this.goals = goals;
     }
   });
 

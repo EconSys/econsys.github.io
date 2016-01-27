@@ -1,4 +1,4 @@
-define(function() {
+define(['helpers/transition_end'], function(transition_end) {
   var simulation_controller = {
 
     element: '.simulation',
@@ -61,26 +61,49 @@ define(function() {
       return svg;
     },
 
-    update: function(svg, data){
-      var bars = svg.selectAll('.p-bar'),
+    update: function(svg, data, callback){
+      // We'll animate the first few updates. Then we'll just update the rest for efficiency.
+
+      var animate_first = 300,
+          bars = svg.selectAll('.p-bar'),
+          animate_bars = d3.selectAll (bars[0].slice(0, animate_first) ),
+          no_animate_bars = d3.selectAll( bars[0].slice(animate_first) ),
+          delay_ms = 4,
           self = this;
 
-      for(var i = 0, l = bars[0].length; i < l; i++){
-        d3.select(bars[0][i]).selectAll('rect')
+      setTimeout(function(){
+        no_animate_bars.selectAll('rect')
+          .data(self.map_intervals, self.key)
+        .attr('x', function(d){
+          return d.start * self.width();
+        })
+        .attr({ y: 0, height: self.bar_height })
+        .attr('width', function(d){
+          return d.width * self.width();
+        });
+
+        if(callback)
+          callback();
+      }, animate_bars[0].length * delay_ms + 250);
+
+      for(var i = 0, l = animate_bars[0].length; i < l; i++){
+        d3.select(animate_bars[0][i]).selectAll('rect')
             .data(this.map_intervals, this.key)
           .transition()
             .ease('bounce')
             .delay(function(d){
-              return i * 5;
+              return i * delay_ms;
             })
-              .attr('x', function(d){
-                return d.start * self.width();
-              })
-              .attr({ y: 0, height: this.bar_height })
-              .attr('width', function(d){
-                return d.width * self.width();
-              });
+            .attr('x', function(d){
+              return d.start * self.width();
+            })
+            .attr({ y: 0, height: this.bar_height })
+            .attr('width', function(d){
+              return d.width * self.width();
+            });
       }
+
+        
     },
 
     map_intervals: function(bar,i){
