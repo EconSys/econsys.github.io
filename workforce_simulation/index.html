@@ -3,7 +3,7 @@
 <!-- jruby -run -e httpd . -p 9090 -->
 
 <head>
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
 
   <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.min.js"></script>
@@ -14,25 +14,23 @@
   <script type="text/javascript" src="./workforce_simulation.js"></script>-->
 
   <style>
-    body {
-      margin: 20px;
+
+    #app {
+      min-width: 960px;
     }
 
-    .clearfix:after {
-      content: "";
-      display: table;
-      clear: both;
-    }
-
-    ul.unstyled {
-      list-style-type: none;
-      padding-left: 0px;
+    .title{
+      border-bottom:1px solid whitesmoke;
+      color: gray;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 10px;
     }
 
     #years-vue {
       position: relative;
-      margin-left: 80px;
-      margin-bottom: 20px;
+      margin-left: 60px;
+      margin-bottom: 10px;
     }
 
     .years {
@@ -54,7 +52,7 @@
     }
 
     .simulation {
-      margin-left: 80px;
+      margin-left: 60px;
     }
 
     h1,h2,h3,h4,h5,h6 {
@@ -66,38 +64,30 @@
 
 <body>
   
-  <div>
+  <div class="container">
     <h1>Simulating the Workforce</h1>
     <p>
       The visualization allows you to see how we build up projections on important workforce characteristics by repeatedly simulating individual employee events for the next five years.
     </p>
-  </div>
-  <div id="app">
-    <div>
-      <button v-if="running" v-on:click="stop" class="pure-button">Stop</button>
-      <button v-else v-on:click="run" class="pure-button">Run</button>
-    </div>
-    <h3>Trial: {{trial}}</h3>
-    <hr>
-
-
-    <div class="pure-g">
-      <div class="pure-u-5-5">
-        <div id="years-vue" class="clearfix">
+    <div id="app">
+      <div>
+        <button v-if="running" v-on:click="stop" class="pure-button">Stop</button>
+        <button v-else v-on:click="run" class="pure-button">Run</button>
+      </div>
+      <div class="trial_count">Trial: {{trial}}</div>
+      <div>
+        <div id="years-vue" class="u-cf">
           <div class="years" v-for="year in years">
             {{year}}
           </div>
         </div>
-
-        <div id="grades-vue" class="clearfix"></div>
-        <div id="states-vue" class="clearfix"></div>
+        <div class="title">Grade</div>
+        <div id="grades-vue" class="u-cf"></div>
+        <div class="title">States</div>
+        <div id="states-vue" class="u-cf"></div>
+        <div class="title">Simulations</div>
         <div class="simulation"></div>
       </div>
 
-      <div class="pure-u-2-5">
-      </div>
-
     </div>
-
-
   </div>

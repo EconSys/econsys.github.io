@@ -38,6 +38,14 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
       quit: '#e6550d'
     },
 
+    state_labels: {
+      none: 'Onboard',
+      promotion: 'Promotion',
+      expired_appt: 'Expired Appt',
+      attrite: 'Attrite',
+      quit: 'Quit'
+    },
+
     evolve: function(data){
       var self = this;
       return data.filter(function(d){

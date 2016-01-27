@@ -7,7 +7,7 @@ define(function() {
       d3.select(this.element).html('');
     },
     
-    bar_height: 1.5,
+    bar_height: 1,
     
     bar_padding: 0.5,
 

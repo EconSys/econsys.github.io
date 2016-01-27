@@ -40,7 +40,7 @@ define(['helpers/transition_end'], function(transition_end){
 
 
     label: function(label_text){
-      var label_width = 80,
+      var label_width = 60,
           labels = d3.select(this.element).append('svg')
             .attr('class','labels')
             .attr({ width: label_width, height: this.height(label_text) }),

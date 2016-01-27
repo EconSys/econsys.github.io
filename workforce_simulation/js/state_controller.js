@@ -40,7 +40,7 @@ define(function(){
     },
 
     label: function(states){
-      var label_width = 80,
+      var label_width = 60,
           labels = d3.select(this.element).append('svg')
             .attr('class','labels')
             .attr({ width: label_width, height: this.height(states) }),
