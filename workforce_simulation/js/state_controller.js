@@ -14,9 +14,9 @@ define(function(){
     
     svgs: [],
 
-    bar_height: 12,
+    bar_height: 13,
     
-    bar_padding: 2.5,
+    bar_padding: 3,
 
     bar_class: '.state-bar',
 
@@ -24,7 +24,7 @@ define(function(){
     
     margin: { top: 0, right: 10, bottom: 0, left: 10},
 
-    element_width: 150,
+    element_width: 148,
 
     label_width: 25,
 
@@ -40,7 +40,7 @@ define(function(){
     },
 
     label: function(states){
-      var label_width = 60,
+      var label_width = 72,
           labels = d3.select(this.element).append('svg')
             .attr('class','labels')
             .attr({ width: label_width, height: this.height(states) }),
@@ -54,14 +54,14 @@ define(function(){
             return 'translate(' + label_width + ',' +  y + ')';
           })
           .text(function(d){
-            return d;
+            return app.state_labels[d];
           })
           .attr({
             'text-anchor': 'end',
             'font-size': this.bar_height - 1
           })
           .style('fill', function(d){
-            return app.state_colors[d];
+            return d3.rgb( app.state_colors[d] ).darker(0.25);
           });
 
     },
@@ -72,7 +72,6 @@ define(function(){
 
       var svg = this.svgs[app.current_year];
       if(svg){
-        console.log('Updating SVG');
         this.update(svg, data);
         return svg;
       }
@@ -132,7 +131,7 @@ define(function(){
           return i * (self.bar_height + self.bar_padding) + font_size;
         })
         .style('fill', function(d,i){
-          return app.state_colors[ d.state ];
+          return d3.rgb( app.state_colors[d.state] ).darker(0.25);
         })
         .style({ 
           'font-size': font_size,

@@ -13,9 +13,9 @@ define(['helpers/transition_end'], function(transition_end){
     
     svgs: [],
 
-    bar_height: 12,
+    bar_height: 13,
     
-    bar_padding: 2.5,
+    bar_padding: 3,
 
     bar_class: '.grade-bar',
 
@@ -23,7 +23,7 @@ define(['helpers/transition_end'], function(transition_end){
     
     margin: { top: 0, right: 10, bottom: 0, left: 10},
 
-    element_width: 150,
+    element_width: 148,
 
     label_width: 25,
 
@@ -40,7 +40,7 @@ define(['helpers/transition_end'], function(transition_end){
 
 
     label: function(label_text){
-      var label_width = 60,
+      var label_width = 72,
           labels = d3.select(this.element).append('svg')
             .attr('class','labels')
             .attr({ width: label_width, height: this.height(label_text) }),
@@ -66,7 +66,6 @@ define(['helpers/transition_end'], function(transition_end){
 
     draw: function(data, callback){
       if(d3.select(this.element).select('.labels').empty()){
-        console.log(data)
         this.label(data.map(function(d){
           return 'GS-' + d.grade;
         }));
@@ -75,7 +74,6 @@ define(['helpers/transition_end'], function(transition_end){
       var svg = this.svgs[app.current_year];
 
       if(svg){
-        console.log('Updating SVG');
         this.update(svg, data, callback);
         return svg;
       }
@@ -132,10 +130,12 @@ define(['helpers/transition_end'], function(transition_end){
         .attr('y', function(d,i){
           return i * (self.bar_height + self.bar_padding) + font_size;
         })
-        .style({ 
-          'fill': '#6baed6',
+        .style({
           'font-size': font_size,
           'text-anchor': 'end'
+        })
+        .style('fill',function(d,i){
+          return d3.rgb( '#6baed6' ).darker(0.25);
         });
 
       this.svgs.push(svg);

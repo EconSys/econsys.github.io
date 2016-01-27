@@ -13,7 +13,7 @@ define(function() {
 
     margin: { top: 0, right: 5, bottom: 0, left: 5},
 
-    element_width: 150,
+    element_width: 148,
 
     width: function(){
       return this.element_width - this.margin.left - this.margin.right;

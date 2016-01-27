@@ -31,7 +31,7 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
     logistic_simulator: logistic_simulator,
 
     state_colors: { 
-      none: '#d9d9d9', 
+      none: '#d2d2d2', 
       promotion: '#74c476', 
       expired_appt: '#fdae6b', 
       attrite:'#fd8d3c', 
@@ -39,7 +39,7 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
     },
 
     state_labels: {
-      none: 'Onboard',
+      none: 'None',
       promotion: 'Promotion',
       expired_appt: 'Expired Appt',
       attrite: 'Attrite',
@@ -70,7 +70,9 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
     },
 
     model_and_draw: function(){
-      var self = this;
+      var self = this
+          year = this.current_year + this.base_year;
+
       this.data = this.data.map(function(d){
         var p_s = self.logistic_modeler.model(self.model_set, d);
         for(s in p_s){
@@ -78,6 +80,9 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
         }
         return d;
       })
+
+      self.app_vue.whats_happening = 'Updating ' + year + ' grade distribution...'
+
 
       var grade_summary = self.grade_controller.summarize(self.data);
       self.push_stats('grade', grade_summary);
@@ -93,10 +98,13 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
     },
 
     simulate: function(){
-      var self = this;
+      var self = this,
+          year = self.current_year + self.base_year;
 
       if(this.current_year == 0)
         this.app_vue.trial += 1;
+
+      self.app_vue.whats_happening = 'Simulating ' + year + ' events...'
 
       this.data = this.data.map(function(d){
         var p_s = self.logistic_simulator.simulate(self.model_set, d).p_s;
@@ -109,6 +117,8 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
       this.simulation_controller.update(this.svg, this.data);
 
       this.app_vue.run_timeout = setTimeout(function(){
+
+        self.app_vue.whats_happening = 'Summarizing ' + year + ' events...'
 
         var state_summary = self.state_controller.summarize(self.data);
         self.push_stats('state', state_summary);
@@ -188,11 +198,14 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
           return d;
         });
 
+        self.app_vue.employee_count = self.base_year_data.length;
+
         self.data = self.base_year_data.map(function(d){
           return clone(d);
         });
 
         self.model_and_draw();
+        self.app_vue.whats_happening = '';
       });
     }
 
@@ -206,14 +219,17 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
       run_timeout: null,
       years: [],
       trials: [],
-      trial: 0
+      trial: 0,
+      employee_count: 0,
+      whats_happening: ''
     },
     methods: {
       run: function(event){
         this.running = true;
         app.simulate();
       },
-      stop: function(event){
+      pause: function(event){
+        this.whats_happening = '';
         clearTimeout(this.run_timeout)
         this.running = false;
       }
