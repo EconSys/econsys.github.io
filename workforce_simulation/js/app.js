@@ -71,9 +71,15 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
         return d;
       })
 
-      var grade_summary = this.grade_controller.summarize(this.data);
-      this.grade_controller.draw(grade_summary);
-      // push_stats('grade', grade_summary);
+      var grade_summary = self.grade_controller.summarize(self.data);
+      self.push_stats('grade', grade_summary);
+
+      var grade_trials = self.app_vue.trials[self.current_year].grade,
+          grade_stats =  Object.keys(grade_trials).map(function(k){
+            return { grade: k, count: d3.mean(grade_trials[k]) };
+          });
+          
+      self.grade_controller.draw(grade_stats);
       
       this.svg = this.simulation_controller.draw(this.data);
     },
@@ -97,8 +103,14 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
       this.app_vue.run_timeout = setTimeout(function(){
 
         var state_summary = self.state_controller.summarize(self.data);
-        self.state_controller.draw(state_summary);
-        // push_stats('state', state_summary)
+        self.push_stats('state', state_summary);
+
+        var state_trials = self.app_vue.trials[self.current_year].state,
+            state_stats =  Object.keys(state_trials).map(function(k){
+              return { state: k, count: d3.mean(state_trials[k]) };
+            });
+
+        self.state_controller.draw(state_stats);
 
         if(self.current_year < 5){
           if(!self.app_vue.running)
@@ -115,18 +127,37 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
             if(self.current_year < 5) {
               self.simulate();
             } else {
-              // Restart here
-              setTimeout(function(){
-                self.reset();
-                self.model_and_draw();
-                self.simulate();
-              }, 1000);
+              setTimeout(self.next_trial, 1000);
             }
           }, 500);
         }
         
         
       }, this.data.length * 6);
+    },
+
+    next_trial: function(){
+      app.reset();
+      app.model_and_draw();
+      app.simulate();
+    },
+
+    push_stats: function(stat, data){
+      if(this.current_year >= this.app_vue.trials.length)
+        this.app_vue.trials.push({});
+
+      var t = this.app_vue.trials[this.current_year];
+
+      if(!t[stat])
+        t[stat] = {};
+
+      data.forEach(function(d){
+        if(t[stat][d[stat]]){
+          t[stat][d[stat]].push(d.count);
+        } else {
+          t[stat][d[stat]] = [d.count];
+        }
+      });
     },
 
     reset: function(){
@@ -155,7 +186,7 @@ define(['helpers/clone','model_set', 'logistic_modeler', 'logistic_simulator', '
 
         self.model_and_draw();
       });
-    },
+    }
 
 
   }.init();

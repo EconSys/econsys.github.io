@@ -13,7 +13,7 @@ define(function() {
 
     margin: { top: 0, right: 5, bottom: 0, left: 5},
 
-    element_width: 100,
+    element_width: 150,
 
     width: function(){
       return this.element_width - this.margin.left - this.margin.right;
@@ -23,7 +23,6 @@ define(function() {
       var h = data.length * (this.bar_height + this.bar_padding);
       return h + this.margin.top + this.margin.bottom;
     },
-
 
     draw: function(data){
       var svg = d3.select(this.element).append('svg')

@@ -13,15 +13,21 @@ define(['helpers/transition_end'], function(transition_end){
     
     svgs: [],
 
-    bar_height: 10,
+    bar_height: 12,
     
-    bar_padding: 1,
+    bar_padding: 2.5,
 
     bar_class: '.grade-bar',
-    
-    margin: { top: 0, right: 5, bottom: 0, left: 5},
 
-    element_width: 100,
+    label_class: '.grade-label',
+    
+    margin: { top: 0, right: 10, bottom: 0, left: 10},
+
+    element_width: 150,
+
+    label_width: 25,
+
+    label_format: d3.format('.1f'),
 
     width: function(){
       return this.element_width - this.margin.left - this.margin.right;
@@ -34,7 +40,7 @@ define(['helpers/transition_end'], function(transition_end){
 
 
     label: function(label_text){
-      var label_width = 60,
+      var label_width = 80,
           labels = d3.select(this.element).append('svg')
             .attr('class','labels')
             .attr({ width: label_width, height: this.height(label_text) }),
@@ -66,7 +72,6 @@ define(['helpers/transition_end'], function(transition_end){
         }));
       }
 
-      console.log(app.current_year)
       var svg = this.svgs[app.current_year];
 
       if(svg){
@@ -101,24 +106,42 @@ define(['helpers/transition_end'], function(transition_end){
         .range([0, this.width()]);
 
       svg.selectAll(this.bar_class)
-              .data(data, this.key)
-            .enter().append('rect')
-            .attr('class','grade-bar')
-            .attr('transform', function(d,i){
-              var y = i * (self.bar_height + self.bar_padding);
-              return 'translate(0,' +  y + ')';
-            })
-            .attr('height', this.bar_height)
-            .attr('width', function(d){
-              return scale(d.count)
-            })
-            .style('fill', '#6baed6');
+          .data(data, this.key)
+        .enter().append('rect')
+        .attr('class','grade-bar')
+        .attr('transform', function(d,i){
+          var x = self.label_width + 2,
+              y = i * (self.bar_height + self.bar_padding);
+          return 'translate(' + x + ',' +  y + ')';
+        })
+        .attr('height', this.bar_height)
+        .attr('width', function(d){
+          return scale(d.count)
+        })
+        .style('fill', '#6baed6');
+
+      var font_size = self.bar_height - 1;
+      svg.selectAll(this.label_class)
+          .data(data, this.key)
+        .enter().append('text')
+        .attr('class','grade-label')
+        .text(function(d,i){
+          return self.label_format(d.count);
+        })
+        .attr('x', self.label_width)
+        .attr('y', function(d,i){
+          return i * (self.bar_height + self.bar_padding) + font_size;
+        })
+        .style({ 
+          'fill': '#6baed6',
+          'font-size': font_size,
+          'text-anchor': 'end'
+        });
 
       this.svgs.push(svg);
     },
 
     update: function(svg, data, callback){
-      console.log(data);
       var scale = d3.scale.linear()
             .domain([0, this.max])
             .range([0, this.width()])
@@ -135,6 +158,13 @@ define(['helpers/transition_end'], function(transition_end){
             if(callback)
               callback();
           });
+
+      svg.selectAll(this.label_class)
+          .data(data, this.key)
+        .text(function(d,i){
+          return self.label_format(d.count);
+        });
+
     },
 
     key: function(d,i){
