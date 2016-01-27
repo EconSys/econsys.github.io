@@ -22,6 +22,7 @@
     }
 
     .section{
+      border-top:1px solid whitesmoke;
       border-bottom:1px solid whitesmoke;
       color: gray;
       font-size: 12px;
@@ -67,7 +68,7 @@
 
     #states-vue {
       position: relative;
-      min-height: 100px;
+      min-height: 80px;
     }
 
     #grades-vue {
@@ -115,9 +116,9 @@
             {{year}}
           </div>
         </div>
-        <div class="section">Grade</div>
+        <div class="section">Expected Grade Distribution</div>
         <div id="grades-vue" class="u-cf"></div>
-        <div class="section">Events</div>
+        <div class="section">Expected Events</div>
         <div id="states-vue" class="u-cf"></div>
         <div class="section">Simulations for {{employee_count}} employees</div>
         <div class="simulation"></div>
