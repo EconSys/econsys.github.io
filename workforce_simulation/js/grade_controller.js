@@ -169,17 +169,6 @@ define(['helpers/transition_end'], function(transition_end){
 
     key: function(d,i){
       return d.grade;
-    },
-
-    summarize: function(data){
-      var grades = {};
-      for(var i = 0, l = data.length; i < l; i++){
-        var g = data[i].grade;
-        grades.hasOwnProperty(g) ? grades[g] += 1 : grades[g] = 1;
-      }
-      return Object.keys(grades).map(function(k){
-        return { grade: k, count: grades[k] };
-      });
     }
 
   }

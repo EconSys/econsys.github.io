@@ -164,26 +164,11 @@ define(function(){
 
     key: function(d,i){
       return d.state;
-    },
-
-    summarize: function(data){
-      var states = Object.keys(app.model_set),
-          summary = {};
-      for(var i = 0, l = data.length; i < l; i++){
-        for(var j = 0, m = states.length; j < m; j++){
-          var s = states[j];
-          summary[s] = summary.hasOwnProperty(s) ? summary[s] + data[i][s] : 0 + data[i][s];
-        }
-      }
-      return Object.keys(summary).map(function(k){
-        return { state: k, count: summary[k] };
-      });
     }
 
   };
 
   return function(app){
-    state_controller.app = app;
     return state_controller;
   }
 

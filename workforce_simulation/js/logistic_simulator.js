@@ -1,7 +1,7 @@
 define(function(){
   return {
-    simulate: function(model_set, object){
-      var states = Object.keys(model_set),
+    simulate: function(models, object){
+      var states = Object.keys(models),
           r = Math.random(),
           a = 0,
           state,

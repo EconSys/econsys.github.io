@@ -53,12 +53,12 @@
       color: gray;
     }
 
-    #years-vue {
+    #years-vue, #gaps-vue {
       position: relative;
       margin: 15px 0px 0px 72px;
     }
 
-    .years, .goals {
+    .years, .goals, .gaps {
       text-align: center;
       font-weight: bold;
       float: left;
@@ -66,8 +66,14 @@
       font-size: 12px;
     }
 
-    .goals input{
+
+    .goals input, .gaps {
       text-align: right;
+    }
+
+    .gaps {
+      padding-right: 10px;
+      width: 138px;
     }
 
     #states-vue {
@@ -75,7 +81,7 @@
       min-height: 87px;
     }
 
-    #grades-vue {
+    #grades-vue, #gaps-vue {
       position: relative;
       min-height: 100px;
     }
@@ -108,26 +114,36 @@
           <div class="u-pull-right trial-count">Trial {{trial}}</div>
         </div>
       </div>
+
       <div class="whats-happening">
         <span v-if="running">{{whats_happening}}</span>
-      </div>
-    
-     
+      </div>   
      
       <div>
         <div id="years-vue" class="u-cf">
           <div class="years" v-for="year in years">
-            {{year}}
+            Year {{year}}
           </div>
           <div class="goals">&nbsp;</div>
           <div class="goals" v-for="goal in goals" track-by="$index">
             <input type="text" v-model="goal" placeholder="">
           </div>
         </div>
+
+        <div class="section">Expected Gaps</div>
+        <div id="gaps-vue" class="u-cf">
+          <div class="gaps">&nbsp;</div>
+          <div class="gaps" v-for="gap in gaps" track-by="$index">
+            <span v-text="gap | isnan | d3-formatter ',.1f' "></span>
+          </div>
+        </div>
+
         <div class="section">Expected Grade Distribution</div>
         <div id="grades-vue" class="u-cf"></div>
+        
         <div class="section">Expected Events</div>
         <div id="states-vue" class="u-cf"></div>
+        
         <div class="section">Simulations for {{employee_count}} employees</div>
         <div class="simulation"></div>
       </div>
