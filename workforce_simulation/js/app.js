@@ -197,8 +197,8 @@ define(['evolution','employee_controller', 'stats_controller', 'grade_controller
     }
   });
 
-  window.app = app;
-  Vue.config.debug = true;
+  // window.app = app;
+  // Vue.config.debug = true;
 
   return app;
 });
