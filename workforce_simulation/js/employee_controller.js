@@ -1,7 +1,8 @@
 define(['helpers/clone','logistic_modeler','logistic_simulator'], function(clone, logistic_modeler, logistic_simulator){
   var employee_controller = {
 
-    init: function(data){
+    init: function(app, data){
+      this.app = app;
       this.base_year_data = data;
       this.reset();
       return this;
@@ -16,7 +17,7 @@ define(['helpers/clone','logistic_modeler','logistic_simulator'], function(clone
     model: function(){
       var self = this;
       this.data = this.data.map(function(d){
-        var p_s = self.logistic_modeler.model(app.evolution.models, d);
+        var p_s = self.logistic_modeler.model(self.app.evolution.models, d);
         for(s in p_s){
           d[s] = p_s[s];
         }
@@ -28,7 +29,7 @@ define(['helpers/clone','logistic_modeler','logistic_simulator'], function(clone
     simulate: function(){
       var self = this;
       this.data = this.data.map(function(d){
-        var p_s = self.logistic_simulator.simulate(app.evolution.models, d).p_s;
+        var p_s = self.logistic_simulator.simulate(self.app.evolution.models, d).p_s;
         for(s in p_s){
           d[s] = p_s[s];
         }
@@ -38,7 +39,7 @@ define(['helpers/clone','logistic_modeler','logistic_simulator'], function(clone
     },
 
     evolve: function(){
-      this.data = app.evolution.evolve(this.data);
+      this.data = self.app.evolution.evolve(this.data);
     },
 
     summarize: function(prop_name){
@@ -51,7 +52,7 @@ define(['helpers/clone','logistic_modeler','logistic_simulator'], function(clone
     },
 
     summarize_states: function(){
-      var states = Object.keys(app.evolution.models),
+      var states = Object.keys(this.app.evolution.models),
           summary = {};
       for(var i = 0, l = this.data.length; i < l; i++){
         for(var j = 0, m = states.length; j < m; j++){
@@ -71,6 +72,6 @@ define(['helpers/clone','logistic_modeler','logistic_simulator'], function(clone
   };
 
   return function(app, data){
-    return employee_controller.init(data);
+    return employee_controller.init(app, data);
   }
 });

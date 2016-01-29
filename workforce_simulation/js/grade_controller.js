@@ -1,6 +1,11 @@
 define(['helpers/transition_end'], function(transition_end){
   var grade_controller = {
 
+    init: function(app){
+      this.app = app;
+      return this;
+    },
+
     element: '#grades-vue',
 
     clear: function(){
@@ -71,7 +76,7 @@ define(['helpers/transition_end'], function(transition_end){
         }));
       }
 
-      var svg = this.svgs[app.current_year];
+      var svg = this.svgs[this.app.current_year];
 
       if(svg){
         this.update(svg, data, callback);
@@ -171,10 +176,10 @@ define(['helpers/transition_end'], function(transition_end){
       return d.grade;
     }
 
-  }
+  }.init()
   
   return function(app){
-    return grade_controller;
+    return grade_controller.init(app);
   }
 
 });

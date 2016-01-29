@@ -1,5 +1,5 @@
 define(function(){
-    return {
+    var evolution = {
         evolve: function(data){
           var self = this;
           
@@ -116,4 +116,9 @@ define(function(){
         }
     }
   }
+
+
+  return function(app){
+    return evolution;
+  };
 });

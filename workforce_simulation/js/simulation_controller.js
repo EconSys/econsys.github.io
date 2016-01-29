@@ -1,6 +1,11 @@
 define(['helpers/transition_end'], function(transition_end) {
   var simulation_controller = {
 
+    init: function(app){
+      this.app = app;
+      return this;
+    },
+
     element: '.simulation',
 
     clear: function(){
@@ -25,13 +30,13 @@ define(['helpers/transition_end'], function(transition_end) {
     },
 
     draw: function(data){
-      var svg = d3.select(this.element).append('svg')
+      var self = this,
+          svg = d3.select(this.element).append('svg')
               .attr({ width: this.element_width, height: this.height(data)})
             .append('g')
               .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')'),
-          height = data.length * (this.bar_height + this.bar_padding),
-          self = this;
-      
+          height = data.length * (this.bar_height + this.bar_padding);
+
       var bars = svg.selectAll('.p-bar')
               .data(data, function(d, i){
                 return i;
@@ -44,10 +49,12 @@ define(['helpers/transition_end'], function(transition_end) {
             });
 
       var stacks = bars.selectAll('rect')
-              .data(this.map_intervals, this.key)
+              .data(function(d,i){
+                  return self.map_intervals(self.app.states, d, i);
+                }, self.key)
             .enter().append('rect')
               .attr('fill', function(d,i){
-                return app.state_colors[ app.states[i] ];
+                return self.app.state_colors[ self.app.states[i] ];
               })
               .attr('x', function(d){
                 return d.start * self.width();
@@ -73,7 +80,9 @@ define(['helpers/transition_end'], function(transition_end) {
 
       setTimeout(function(){
         no_animate_bars.selectAll('rect')
-          .data(self.map_intervals, self.key)
+          .data(function(d,i){
+            return self.map_intervals(self.app.states, d, i);
+          }, self.key)
         .attr('x', function(d){
           return d.start * self.width();
         })
@@ -86,9 +95,12 @@ define(['helpers/transition_end'], function(transition_end) {
           callback();
       }, animate_bars[0].length * delay_ms + 250);
 
+
       for(var i = 0, l = animate_bars[0].length; i < l; i++){
         d3.select(animate_bars[0][i]).selectAll('rect')
-            .data(this.map_intervals, this.key)
+            .data(function(d,i){
+              return self.map_intervals(self.app.states, d, i);
+            }, self.key)
           .transition()
             .ease('bounce')
             .delay(function(d){
@@ -106,18 +118,18 @@ define(['helpers/transition_end'], function(transition_end) {
         
     },
 
-    map_intervals: function(bar,i){
-      var probs = app.states.map(function(s){ 
-            return bar[s];
-          }),
-        intervals = probs.map(function(d,i){
-            var s = 0;
-            for(var j = 0; j < i; j++){
-              s += probs[j];
-            };
-            return { start: s, width: d, i: i};
-          });
-      return intervals;
+    map_intervals: function(states, bar, i){
+      var probs = states.map(function(s){ 
+          return bar[s];
+        }),
+      intervals = probs.map(function(d,i){
+          var s = 0;
+          for(var j = 0; j < i; j++){
+            s += probs[j];
+          };
+          return { start: s, width: d, i: i};
+        });
+      return intervals;    
     },
 
 
@@ -125,9 +137,9 @@ define(['helpers/transition_end'], function(transition_end) {
       return i;
     }
 
-  }
+  }.init();
 
   return function(app){
-    return simulation_controller;
+    return simulation_controller.init(app);
   }
 })

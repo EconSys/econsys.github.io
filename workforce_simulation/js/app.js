@@ -3,6 +3,8 @@ define(['evolution','employee_controller', 'stats_controller', 'grade_controller
   var app = {
 
     init: function(){
+      this.evolution = evolution(this);
+
       this.states = Object.keys(this.evolution.models);
       this.stats_controller = stats_controller(this);
 
@@ -33,8 +35,6 @@ define(['evolution','employee_controller', 'stats_controller', 'grade_controller
     years: [],
 
     goals: [],
-
-    evolution: evolution,
 
     state_colors: { 
       none: '#d2d2d2', 
@@ -148,7 +148,7 @@ define(['evolution','employee_controller', 'stats_controller', 'grade_controller
           return d;
         });
 
-        self.employee_controller = employee_controller(app, rows);
+        self.employee_controller = employee_controller(self, rows);
         self.model_and_draw();
       });
     }
@@ -197,8 +197,7 @@ define(['evolution','employee_controller', 'stats_controller', 'grade_controller
     }
   });
 
-  // window.app = app;
-  // Vue.config.debug = true;
+  Vue.config.debug = true;
 
   return app;
 });

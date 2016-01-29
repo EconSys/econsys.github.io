@@ -2,6 +2,11 @@ define(function(){
 	
   var state_controller = {
 
+    init: function(app){
+      this.app = app;
+      return this;
+    },
+
     element: '#states-vue',
 
     clear: function(){
@@ -54,23 +59,23 @@ define(function(){
             return 'translate(' + label_width + ',' +  y + ')';
           })
           .text(function(d){
-            return app.state_labels[d];
+            return self.app.state_labels[d];
           })
           .attr({
             'text-anchor': 'end',
             'font-size': this.bar_height - 1
           })
           .style('fill', function(d){
-            return d3.rgb( app.state_colors[d] ).darker(0.25);
+            return d3.rgb( self.app.state_colors[d] ).darker(0.25);
           });
 
     },
 
     draw: function(data){
       if(d3.select(this.element).select('.labels').empty())
-        this.label(app.states);
+        this.label(this.app.states);
 
-      var svg = this.svgs[app.current_year];
+      var svg = this.svgs[this.app.current_year];
       if(svg){
         this.update(svg, data);
         return svg;
@@ -115,7 +120,7 @@ define(function(){
           return scale(d.count)
         })
         .style('fill', function(d,i){
-          return app.state_colors[ d.state ];
+          return self.app.state_colors[ d.state ];
         });
 
       var font_size = self.bar_height - 1;
@@ -131,7 +136,7 @@ define(function(){
           return i * (self.bar_height + self.bar_padding) + font_size;
         })
         .style('fill', function(d,i){
-          return d3.rgb( app.state_colors[d.state] ).darker(0.25);
+          return d3.rgb( self.app.state_colors[d.state] ).darker(0.25);
         })
         .style({ 
           'font-size': font_size,
@@ -166,10 +171,10 @@ define(function(){
       return d.state;
     }
 
-  };
+  }.init();
 
   return function(app){
-    return state_controller;
+    return state_controller.init(app);
   }
 
 })
