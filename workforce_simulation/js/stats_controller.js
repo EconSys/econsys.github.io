@@ -1,20 +1,22 @@
 define(function() {
+  var stats_controller = function(spec){
 
-  var stats_controller = {
+    var self = {
+      simulations: []
+    };
 
-    init: function(){
-      this.simulations = [];
-      for(var i = 0; i < 6; i++){
-        this.simulations.push({ total: null });
-      }
+    for(var p in spec){
+      if(spec.hasOwnProperty(p))
+        self[p] = spec[p];
+    }
 
-      return this;
-    },
+    for(var i = 0; i < 6; i++){
+      self.simulations.push({ total: null });
+    }
 
-    simulations: null,
 
-    push: function(current_year, stat_name, histogram){
-      var sim = this.simulations[current_year],
+    self.push = function(current_year, stat_name, histogram){
+      var sim = self.simulations[current_year],
           categories = Object.keys(histogram),
           new_category_means = {},
           total = 0;
@@ -40,12 +42,12 @@ define(function() {
       sim.total = total;
 
       return new_category_means;
-    }
+    };
 
-  }.init()
+    return self;
+  };
 
-  return function(app){
-    return stats_controller;
+  return function(spec){
+    return stats_controller(spec);
   }
-
 });

@@ -2,7 +2,7 @@ define(function(){
   return {
     simulate: function(models, object){
       var states = Object.keys(models),
-          r = Math.random(),
+          r = jStat.uniform.sample(0,1),
           a = 0,
           state,
           new_p_s = {};

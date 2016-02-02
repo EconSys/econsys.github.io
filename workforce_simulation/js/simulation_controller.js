@@ -1,37 +1,38 @@
 define(['helpers/transition_end'], function(transition_end) {
-  var simulation_controller = {
+  var simulation_controller = function(spec){
+    
+    var self = {
+      element: 'body'
+    };
 
-    init: function(app){
-      this.app = app;
-      return this;
-    },
+    for(var p in spec){
+      if(spec.hasOwnProperty(p))
+        self[p] = spec[p];
+    }
 
-    element: '.simulation',
-
-    clear: function(){
+    self.clear = function(){
       d3.select(this.element).html('');
-    },
+    };
     
-    bar_height: 1,
+    self.bar_height = 1;
     
-    bar_padding: 0.5,
+    self.bar_padding = 0.5;
 
-    margin: { top: 0, right: 5, bottom: 0, left: 5},
+    self.margin = { top: 0, right: 5, bottom: 0, left: 5};
 
-    element_width: 148,
+    self.element_width = 148;
 
-    width: function(){
+    self.width = function(){
       return this.element_width - this.margin.left - this.margin.right;
-    },
+    };
 
-    height: function(data){
+    self.height = function(data){
       var h = data.length * (this.bar_height + this.bar_padding);
       return h + this.margin.top + this.margin.bottom;
-    },
+    };
 
-    draw: function(data){
-      var self = this,
-          svg = d3.select(this.element).append('svg')
+    self.draw = function(data){
+      var svg = d3.select(this.element).append('svg')
               .attr({ width: this.element_width, height: this.height(data)})
             .append('g')
               .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')'),
@@ -50,11 +51,11 @@ define(['helpers/transition_end'], function(transition_end) {
 
       var stacks = bars.selectAll('rect')
               .data(function(d,i){
-                  return self.map_intervals(self.app.states, d, i);
+                  return self.map_intervals(self.app.state_keys, d, i);
                 }, self.key)
             .enter().append('rect')
               .attr('fill', function(d,i){
-                return self.app.state_colors[ self.app.states[i] ];
+                return self.app.state_colors[ self.app.state_keys[i] ];
               })
               .attr('x', function(d){
                 return d.start * self.width();
@@ -66,22 +67,21 @@ define(['helpers/transition_end'], function(transition_end) {
               .transition()
                 .attr({ height: this.bar_height });
       return svg;
-    },
+    };
 
-    update: function(svg, data, callback){
+    self.update = function(svg, data, callback){
       // We'll animate the first few updates. Then we'll just update the rest for efficiency.
 
       var animate_first = 300,
           bars = svg.selectAll('.p-bar'),
           animate_bars = d3.selectAll (bars[0].slice(0, animate_first) ),
           no_animate_bars = d3.selectAll( bars[0].slice(animate_first) ),
-          delay_ms = 4,
-          self = this;
+          delay_ms = 4;
 
       setTimeout(function(){
         no_animate_bars.selectAll('rect')
           .data(function(d,i){
-            return self.map_intervals(self.app.states, d, i);
+            return self.map_intervals(self.app.state_keys, d, i);
           }, self.key)
         .attr('x', function(d){
           return d.start * self.width();
@@ -99,7 +99,7 @@ define(['helpers/transition_end'], function(transition_end) {
       for(var i = 0, l = animate_bars[0].length; i < l; i++){
         d3.select(animate_bars[0][i]).selectAll('rect')
             .data(function(d,i){
-              return self.map_intervals(self.app.states, d, i);
+              return self.map_intervals(self.app.state_keys, d, i);
             }, self.key)
           .transition()
             .ease('bounce')
@@ -116,9 +116,9 @@ define(['helpers/transition_end'], function(transition_end) {
       }
 
         
-    },
+    };
 
-    map_intervals: function(states, bar, i){
+    self.map_intervals = function(states, bar, i){
       var probs = states.map(function(s){ 
           return bar[s];
         }),
@@ -130,16 +130,17 @@ define(['helpers/transition_end'], function(transition_end) {
           return { start: s, width: d, i: i};
         });
       return intervals;    
-    },
+    };
 
 
-    key: function(d,i){
+    self.key = function(d,i){
       return i;
-    }
+    };
 
-  }.init();
+    return self;
+  }
 
-  return function(app){
-    return simulation_controller.init(app);
+  return function(spec){
+    return simulation_controller(spec);
   }
 })
