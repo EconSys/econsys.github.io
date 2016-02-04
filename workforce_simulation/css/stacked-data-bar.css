@@ -1,0 +1,19 @@
+.stacked-data-bar {
+  height: 100%;
+  position: relative;
+}
+
+.stacked-data-bar:after {
+  content: "";
+  display: table;
+  clear: both;
+ }
+
+.stacked-data-bar .bar {
+  position: absolute;
+  width: 88px;
+  margin: 0px 24px;
+  /*height: 0%;*/
+  background-color: steelblue;
+  transition: all 0.25s ease 0s;
+}

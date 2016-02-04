@@ -4,7 +4,10 @@
 
 <head>
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/data-bar.css">
+  <link rel="stylesheet" href="css/stacked-data-bar.css">
 
   <script type="text/javascript" src="//cdn.jsdelivr.net/jstat/1.5.2/jstat.min.js"></script>
   <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
@@ -14,17 +17,24 @@
 
   <style>
 
-    #app {
+    body {
+      margin: 0px  
+    }
+
+    .container {
       min-width: 960px;
     }
 
-    .title {
-      margin-bottom: 50px;
+    h1,h2,h3,h4,h5,h6 {
+      font-weight: normal;
     }
 
+    h1 {
+      font-size: 3rem;
+    }
 
-    .section {
-      margin-bottom: 50px;
+    h2 {
+      font-size: 2.5rem;
     }
 
     .toolbar {
@@ -43,23 +53,21 @@
     }
 
     .whats-happening {
-      min-height: 22px;
       font-size: 14px;
-      padding-left: 5px;
       font-style: italic;
       color: gray;
     }
 
     .years-vue, #gaps-vue, #new-hires-vue {
       position: relative;
-      margin: 15px 0px 0px 72px;
+      margin-top: 15px;
     }
 
-    .years, .goals, .gaps,.new-hires {
+    .years, .goals, .gaps, .new-hires {
       text-align: center;
       font-weight: bold;
       float: left;
-      width: 148px;
+      width: 138px;
       margin-bottom: 10px;
       font-size: 12px;
     }
@@ -78,7 +86,8 @@
 
     .grade-labels {
       float: left;
-      width: 75px;
+      width: 98px;
+      min-height: 85px;
     }
 
     .grades {
@@ -87,34 +96,35 @@
     }
 
 
-
-    .goals input, .gaps, .new-hires input {
-      text-align: right;
-    }
-
-
-    #new-hires-vue {
-      border-top: 1px solid whitesmoke;
-      border-left: 1px solid whitesmoke;
-      border-right: 1px solid whitesmoke;
-    }
-
-    .new-hires {
-      margin-bottom: 0px; 
-      border-bottom: 1px solid whitesmoke;
-    }
-
-    .new-hires input {
-      border: 1px solid white;
+    .goals input, .new-hires input {
+      border: 1px solid #ccc;
       margin: 0px;
       height: inherit;
       width: 75px;
-      border-radius: 0px;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    .goals {
+      text-align: center;
+    }
+
+    .years:first-child, .goals:first-child, .gaps:first-child, .new-hires:first-child { 
+      margin-left: 115px;
+    }
+
+    .new-hires input {
+      margin: 3px;
+    }
+
+    .goals input {
+      border: 1px solid #ccc;
     }
 
     .gaps {
-      padding-right: 10px;
       width: 138px;
+      color: red;
+      font-weight: bold;
     }
 
     #states-vue {
@@ -127,168 +137,143 @@
       min-height: 100px;
     }
 
-    .simulation {
-      margin-left: 72px;
-    }
 
-    h1,h2,h3,h4,h5,h6 {
-      font-weight: normal;
-    }
 
-    h1 {
-      font-size: 3rem;
-    }
+/*    #new-hires-vue {
+      border-top: 1px solid whitesmoke;
+      border-left: 1px solid whitesmoke;
+      border-right: 1px solid whitesmoke;
+    }*/
 
-    h2 {
-      font-size: 2.5rem;
-    }
+/*    .new-hires {
+      margin-bottom: 0px; 
+      border-bottom: 1px solid whitesmoke;
+    }*/
+
+
 
     .border-top {
-      margin-top: 10px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #666;
+      font-weight: 500;
       padding: 5px 0px;
       border-top: 1px solid whitesmoke;
     }
 
 
-    .data-bars {
-      margin-bottom: 2px;
-      position: relative;
-      width: 100%;
+
+    #year-trials {
+      height: 300px;
+      margin-left: 115px;
     }
 
-    .data-bars:after {
-      content: "";
-      display: table;
-      clear: both;
-    }
-
-    .data-bars .label {
+    .trials {
       float: left;
+      height: 300px;
+      width: 138px;
+    }
+
+    .new-hire-grade-label {
       font-size: 12px;
       line-height: 12px;
-      padding-right: 2px;
-      text-align: right;
-      width: 38px;
+      margin: 20px 0px;
     }
 
-    .data-bar-set-label {
-      font-size: 12px;
-      line-height: 12px;
-      margin-bottom: 3px;
-    }
-
-    .data-bars .bar-wrapper {
-      margin: 0px 0px 1px 40px;
-    }
-
-    .data-bars .bar {
-      height: 12px;
-      background-color: steelblue;
-      -webkit-transition: width 0.2s; /* Safari */
-      transition: width 0.2s;
-    }
+    
 
   </style>
 
 
 <body>
-  
-  <div class="container">
-    <div id="app">
-      <div class="title">
-        <h1>Workforce Simulator</h1>
-        <hr>
-        <p>
-        Workforce Simulator helps you explore scenarios of future workforce requirements based on predictive workforce models. To get started follow these steps:
-        </p>
-        <ol>
-          <li><a href="#demand">Estimate your employee demand requirements.</a></li>
-          <li><a href="#supply">Simulate baseline employee supply.</a></li>
-          <li><a href="#new-hires">Simulate new hire requirements.</a></li>
-          <li><a href="#gaps">Review expected gaps.</a></li>
-        </ol>
-         <!--  This visualization shows how we build up projections on important workforce characteristics by repeatedly simulating individual personnel events for the next five years. Trial results are averaged in the Grade and Events sections, showing the expected number of personnel events by type and the expected future grade distributions. Use the inputs to estimate future staffing requirements to compute gaps.  -->
-        
+<div id="app"> 
+   <div class="toolbar">
+    <div class="container">
+      <div class="u-pull-left">
+        <button v-if="running" v-on:click="pause"><i class="fa fa-pause"></i> Pause</button>
+        <button v-else v-on:click="run"><i class="fa fa-play"></i> Run</button>
       </div>
+      <div class="u-pull-right trial-count">Trial {{trial}}</div>
+    </div>
+  </div>
+       
+  <div class="container">
 
-<!--       <div class="whats-happening">
-        <span v-if="running">{{whats_happening}}</span>
-      </div>    -->
+     
 
-      <div class="section" id="demand">
-        <h2>1. Estimate Future Employee Demand</h2>
-        <div class="years-vue" class="u-cf">
+      <div class="section" id="supply">
+       
+
+        <div class="years-vue u-cf">
           <div class="years" v-for="year in years">
             Year {{year}}
           </div>
         </div>
+
+
+        <div class="border-top">Employee Demand</div>
         <div class="u-cf" style="position:relative">
-          <div class="goals">&nbsp;</div>
           <div class="goals" v-for="goal in goals" track-by="$index">
             <input type="text" v-model="goal" placeholder="">
           </div>
         </div>
-      </div>
-
-      <div class="section" id="supply">
-        <h2>2. Simulate baseline supply.</h2>
-        <p>Please click "Run" below to begin simulating onboard employees. The simulation will continue until it converges or it reaches 100 trials. To interrupt the simultion, click pause.</p>
-
-        <div class="toolbar u-full-width u-cf">
-          <div class="u-pull-left">
-            <button v-if="running" v-on:click="pause"><i class="fa fa-pause"></i> Pause</button>
-            <button v-else v-on:click="run"><i class="fa fa-play"></i> Run</button>
-          </div>
-          <div class="u-pull-right trial-count">Trial {{trial}}</div>
-        </div>
-
-        <div class="years-vue" class="u-cf">
-          <div class="years" v-for="year in years">
-            Year {{year}}
+        <div class="u-cf" style="position:relative">
+          <div class="gaps" v-for="gap in gaps" track-by="$index">
+            {{gap | d3-formatter ',f'}}
           </div>
         </div>
-        <div class="u-cf" style="position:relative; width: 100%;">
-          <div class="simulation"></div>
-          
-          <div class="border-top">Expected Baseline Events</div>
-          <div class="grades-charts clearfix" style="min-height: 75px;">
-            <div class="grade-labels">
-              <div class="data-bar-set-label" v-for="label in state_labels">{{label}}</div>
-            </div>
-            <div class="grades" v-for="(index, item) in state_means" track-by="$index">
-              <data-bars :bars="item" :max="max" :min="min" :colors="state_colors"></data-bars>
-            </div>
-          </div>
-          
 
-          <div class="border-top">Expected Baseline Grade Distribution</div>
-          <div class="grades-charts clearfix">
-            <div class="grade-labels">
-              <div class="data-bar-set-label" v-for="label in grade_labels">GS-{{label}}</div>
-            </div>
-            <div class="grades" v-for="(index, item) in grade_means" track-by="$index">
-              <data-bars :bars="item" :max="max" :min="min" :colors="'steelblue'"></data-bars>
-            </div>
-          </div>
 
-        </div>
-      </div>
-
-      <div class="section" id="new-hires">
-        <h2>3. Simulate new hire requirements.</h2>
-        <p>Please enter the number of new hires you expect to make in the coming years for each grade level. Refer to the expected gaps below to make your intial estimates.</p>
-        <div id="new-hires-vue" class="u-cf">
-          <div class="new-hires" v-for="(index, item) in new_hires" track-by="$index">
-            <div class="new-hires" v-for="(grade,count) in item" track-by="$index">
-              <span style="padding-right: 5px; text-align: right;" v-if="index == 0">GS-{{grade}}:</span>
-              <input type="text" v-model="count" placeholder="">
-            </div>
+        <div class="border-top">Simulations <span class="whats-happening" v-if="running">{{whats_happening}}</span></div>
+        <div id="year-trials" class="grades-charts u-cf">
+          <div class="trials" v-for="(index, item) in state_summaries" track-by="$index">
+            <stacked-data-bars :bars="item"  :max="state_summaries_max" :colors="state_colors"></stacked-data-bars>
           </div>
         </div>
-      </div>
 
-      <div class="section" id="gaps">
-        <h2>4. Review expected gaps.</h2>
+
+
+        <div class="border-top">Expected Events</div>
+        <div class="grades-charts clearfix" style="min-height: 75px;">
+          <div class="grade-labels">
+            <div class="data-bar-set-label" v-for="label in state_labels">{{label}}</div>
+          </div>
+          <div class="grades" v-for="(index, item) in state_means" track-by="$index">
+            <data-bars :bars="item" :max="max" :min="min" :colors="state_colors"></data-bars>
+          </div>
+        </div>
+
+
+        <div class="border-top">Expected Onboard Grade Distribution</div>
+        <div class="grades-charts clearfix">
+          <div class="grade-labels">
+            <div class="data-bar-set-label" v-for="label in grade_labels">GS-{{label}}</div>
+          </div>
+          <div class="grades" v-for="(index, item) in grade_means" track-by="$index">
+            <data-bars :bars="item" :max="max" :min="min" :colors="'steelblue'"></data-bars>
+          </div>
+        </div>
+
+        <div class="border-top">New Hires</div>
+        <div class="grades-charts clearfix">
+          <div class="grade-labels">
+            <div class="data-bar-set-label" v-for="label in grade_labels">GS-{{label}}</div>
+          </div>
+          <div class="grades" v-for="(index, item) in new_hire_means" track-by="$index">
+            <data-bars :bars="item" :max="max" :min="min" :colors="'steelblue'"></data-bars>
+          </div>
+        </div>
+
+<!--         <div class="border-top">New Hires</div>
+        <div class="grades-charts clearfix">
+          <div class="grade-labels">
+            <div class="data-bar-set-label" v-for="label in grade_labels">GS-{{label}}</div>
+          </div>
+          <div class="grades" v-for="(index, item) in new_hires" track-by="$index">
+            <data-bars :bars="item" :max="max" :min="min" :colors="'steelblue'" :editable="true"></data-bars>
+          </div>
+        </div>
+ -->
 
       </div>
 

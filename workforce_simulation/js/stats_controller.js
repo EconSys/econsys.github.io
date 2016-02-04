@@ -10,12 +10,14 @@ define(function() {
         self[p] = spec[p];
     }
 
-    for(var i = 0; i < 6; i++){
-      self.simulations.push({ total: null });
-    }
+    self.clear = function(){
+      self.simulations = [];
+      for(var i = 0; i < 6; i++){
+        self.simulations.push({ total: null });
+      }
+    };
 
-
-    self.push = function(current_year, stat_name, histogram){
+    self.push = function(current_year, histogram){
       var sim = self.simulations[current_year],
           categories = Object.keys(histogram),
           new_category_means = {},
@@ -39,10 +41,13 @@ define(function() {
         total += category_stats.mean;
       });
 
-      sim.total = total;
+      if(stat_name == 'grade')
+        sim.total = total;
 
       return new_category_means;
     };
+
+    self.clear();
 
     return self;
   };

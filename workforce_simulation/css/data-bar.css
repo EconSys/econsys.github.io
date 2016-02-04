@@ -1,0 +1,44 @@
+.data-bar {
+  margin-bottom: 2px;
+  position: relative;
+  width: 100%;
+}
+
+.data-bar:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.data-bar .label {
+  float: left;
+  font-size: 12px;
+  line-height: 15px;
+  padding-right: 2px;
+  text-align: right;
+  width: 38px;
+}
+
+.data-bar input.label {
+  border: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+
+.data-bar-set-label {
+  font-size: 12px;
+  line-height: 17px;
+  margin: 0px;
+}
+
+.data-bar .bar-wrapper {
+  margin: 0px 0px 1px 40px;
+}
+
+.data-bar .bar {
+  height: 14px;
+  background-color: steelblue;
+  -webkit-transition: width 0.2s;  Safari 
+  transition: width 0.2s;
+}

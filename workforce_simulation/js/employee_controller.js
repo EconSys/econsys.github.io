@@ -39,11 +39,19 @@ define(['helpers/clone','logistic_modeler','logistic_simulator'], function(clone
     };
 
     self.summarize = function(prop_name){
-      var summary = {};
+      var summary = {},
+          unique_values = self.get_unique_values(prop_name);
+
+      console.log(unique_values);
+      unique_values.forEach(function(u){
+        summary[u] = 0;
+      });
+
       for(var i = 0, l = self.data.length; i < l; i++){
         var g = this.data[i][prop_name];
-        summary[g] ? summary[g] += 1 : summary[g] = 1;
+        summary[g] += 1;
       }
+
       return summary;
     };
 
@@ -58,6 +66,35 @@ define(['helpers/clone','logistic_modeler','logistic_simulator'], function(clone
       };
       return summary;
     };
+
+
+    // Pull the unique values from the base year data to make sure it
+    // the same vals are always present.
+    self.get_unique_values = function(prop_name){
+      if(!self.unique_values)
+        self.unique_values = {};
+
+      if(self.unique_values[prop_name])
+        return self.unique_values[prop_name];
+
+      var o = {},
+          u = [],
+          v;
+
+      for(var i = 0, l = self.base_year_data.length; i < l; i++){
+        v = self.base_year_data[i][prop_name];
+        o[v] = v;
+      }
+
+      for(var i in o){
+        u.push(o[i]);
+      }
+
+      self.unique_values[prop_name] = u;
+
+      return u;
+    };
+
 
     self.reset = function(){
       self.data = self.base_year_data.map(function(d){
