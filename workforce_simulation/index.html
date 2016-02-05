@@ -112,6 +112,8 @@
       text-align: center;
     }
 
+   
+
     .goals {
       text-align: center;
     }
@@ -222,22 +224,23 @@
         </div>
 
 
-        <div class="border-top">Employee Demand</div>
+        <div class="border-top"></div>
         <div class="u-cf" style="position:relative">
+          <div class="title">FTE Demand</div>
           <div class="goals" v-for="goal in goals" track-by="$index">
             <input type="text" v-model="goal" placeholder="" :disabled="running">
           </div>
         </div>
 
         <div class="u-cf" style="position:relative">
-          <div class="title">Onboard</div>
+          <div class="title">Onboard FTEs</div>
           <div class="gaps onboard_count" v-for="onboard in onboards" track-by="$index">
             {{onboard | d3-formatter ',f'}}
           </div>
         </div>
 
         <div class="u-cf" style="position:relative">
-          <div class="title">New Hires</div>
+          <div class="title">New FTEs</div>
           <div class="gaps new_hires_count"></div>
           <div class="gaps new_hires_count" v-for="new_hire in new_hires" track-by="$index">
             {{new_hire | d3-formatter ',f'}}
