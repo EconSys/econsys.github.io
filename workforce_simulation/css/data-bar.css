@@ -29,7 +29,7 @@
 .data-bar-set-label {
   font-size: 12px;
   line-height: 17px;
-  margin: 0px;
+  margin: 0px 0px 1px 0px;
 }
 
 .data-bar .bar-wrapper {
