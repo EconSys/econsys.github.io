@@ -63,6 +63,13 @@
       margin-top: 15px;
     }
 
+    .title {
+      float: left;
+      width: 115px;
+      font-size: 12px;
+      color: black;
+    }
+
     .years, .goals, .gaps, .new-hires {
       text-align: center;
       font-weight: bold;
@@ -109,7 +116,7 @@
       text-align: center;
     }
 
-    .years:first-child, .goals:first-child, .gaps:first-child, .new-hires:first-child { 
+    .years:first-child, .goals:first-child, .new-hires:first-child { 
       margin-left: 115px;
     }
 
@@ -123,8 +130,12 @@
 
     .gaps {
       width: 138px;
-      color: red;
+      /*color: red;*/
       font-weight: bold;
+    }
+
+    .new_hires_count:last-child {
+      display: none;
     }
 
     #states-vue {
@@ -180,6 +191,8 @@
       margin: 20px 0px;
     }
 
+
+
     
 
   </style>
@@ -190,7 +203,7 @@
    <div class="toolbar">
     <div class="container">
       <div class="u-pull-left">
-        <button v-if="running" v-on:click="pause"><i class="fa fa-pause"></i> Pause</button>
+        <button v-if="running" v-on:click="stop"><i class="fa fa-pause"></i> Stop</button>
         <button v-else v-on:click="run"><i class="fa fa-play"></i> Run</button>
       </div>
       <div class="u-pull-right trial-count">Trial {{trial}}</div>
@@ -198,8 +211,6 @@
   </div>
        
   <div class="container">
-
-     
 
       <div class="section" id="supply">
        
@@ -214,12 +225,22 @@
         <div class="border-top">Employee Demand</div>
         <div class="u-cf" style="position:relative">
           <div class="goals" v-for="goal in goals" track-by="$index">
-            <input type="text" v-model="goal" placeholder="">
+            <input type="text" v-model="goal" placeholder="" :disabled="running">
           </div>
         </div>
+
         <div class="u-cf" style="position:relative">
-          <div class="gaps" v-for="gap in gaps" track-by="$index">
-            {{gap | d3-formatter ',f'}}
+          <div class="title">Onboard</div>
+          <div class="gaps onboard_count" v-for="onboard in onboards" track-by="$index">
+            {{onboard | d3-formatter ',f'}}
+          </div>
+        </div>
+
+        <div class="u-cf" style="position:relative">
+          <div class="title">New Hires</div>
+          <div class="gaps new_hires_count"></div>
+          <div class="gaps new_hires_count" v-for="new_hire in new_hires" track-by="$index">
+            {{new_hire | d3-formatter ',f'}}
           </div>
         </div>
 
@@ -239,7 +260,7 @@
             <div class="data-bar-set-label" v-for="label in state_labels">{{label}}</div>
           </div>
           <div class="grades" v-for="(index, item) in state_means" track-by="$index">
-            <data-bars :bars="item" :max="max" :min="min" :colors="state_colors"></data-bars>
+            <data-bars :bars="item" :max="grades_max" :min="min" :colors="state_colors"></data-bars>
           </div>
         </div>
 
@@ -250,30 +271,28 @@
             <div class="data-bar-set-label" v-for="label in grade_labels">GS-{{label}}</div>
           </div>
           <div class="grades" v-for="(index, item) in grade_means" track-by="$index">
-            <data-bars :bars="item" :max="max" :min="min" :colors="'steelblue'"></data-bars>
+            <data-bars :bars="item" :max="grades_max" :min="min" :colors="'steelblue'"></data-bars>
           </div>
         </div>
 
-        <div class="border-top">New Hires</div>
+
+     
+
+        <div class="border-top">Recommended New Hire Grade Distribution</div>
         <div class="grades-charts clearfix">
           <div class="grade-labels">
             <div class="data-bar-set-label" v-for="label in grade_labels">GS-{{label}}</div>
           </div>
+
+          <div class="grades">
+            <data-bars :editable="true" :bars="target_distribution" :min=0 :max=1.0  :colors="'orange'" :format="',%'"></data-bars>
+          </div>
+
           <div class="grades" v-for="(index, item) in new_hire_means" track-by="$index">
-            <data-bars :bars="item" :max="max" :min="min" :colors="'steelblue'"></data-bars>
+            <data-bars :bars="item" :max="new_hires_max" :min="min" :colors="'steelblue'"></data-bars>
           </div>
         </div>
 
-<!--         <div class="border-top">New Hires</div>
-        <div class="grades-charts clearfix">
-          <div class="grade-labels">
-            <div class="data-bar-set-label" v-for="label in grade_labels">GS-{{label}}</div>
-          </div>
-          <div class="grades" v-for="(index, item) in new_hires" track-by="$index">
-            <data-bars :bars="item" :max="max" :min="min" :colors="'steelblue'" :editable="true"></data-bars>
-          </div>
-        </div>
- -->
 
       </div>
 

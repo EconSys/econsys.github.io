@@ -3,22 +3,25 @@ define(['evolution','employee_controller', 'stats_controller', 'new_hire_solver'
   var app = {
 
     init: function(){
+
       this.evolution = evolution();
+
       this.employee_controller = null; //Intiailized when data is loaded;
-      this.new_employee_controller = employee_controller({ app: this });
+      this.new_employee_controller = employee_controller({ app: this, base_year_data: [] });
 
       this.state_keys = Object.keys(this.evolution.models);
 
       this.grade_stats_controller = stats_controller();
       this.state_stats_controller = stats_controller();
       this.new_hire_stats_controller = stats_controller();
-
-      this.new_hire_solver = new_hire_solver({ iprint: 1 });
+      this.new_hire_solver = new_hire_solver({ iprint: 0 });
 
       this.simulations = [];
       this.years = [0,1,2,3,4,5];
 
-      this.goals = ['','','','','',''];
+      // this.goals = ['','','','','',''];
+      this.goals = ['287','287','287','287','287','287'];
+      // this.goals = ['','','','','',''];
 
       this.target_distribution = {};
       this.current_grade_summary = {};
@@ -68,11 +71,12 @@ define(['evolution','employee_controller', 'stats_controller', 'new_hire_solver'
 
 
     model_and_draw: function(){
+      // There is way too much shit happening here.
       this.app_vue.whats_happening = 'Updating Year ' + this.current_year + ' grade distribution...'
 
       var data = this.employee_controller.model(),
           grade_summary = this.employee_controller.summarize('grade'),
-          grade_means = this.stats_controller.push(this.current_year, 'grade', grade_summary);
+          grade_means = this.grade_stats_controller.push(this.current_year, grade_summary);
 
       // Initialize target dist
       if(Object.keys(this.target_distribution).length == 0){
@@ -90,10 +94,6 @@ define(['evolution','employee_controller', 'stats_controller', 'new_hire_solver'
       }
 
       this.update_max(grade_means);
-
-      // if(this.new_hires.length == 0){
-      //   this.setup_new_hires(grade_summary);
-      // }
 
       if(data.length > this.app_vue.state_summaries_max){
         this.app_vue.state_summaries_max = data.length;
@@ -139,24 +139,26 @@ define(['evolution','employee_controller', 'stats_controller', 'new_hire_solver'
 
 
     hire: function(n, current_distribution){
+      var l = this.current_year - 1;
+      console.log('Optimizing + ' + n + ' + Hires for Years ' + l + ' and ' +  this.current_year);
+
       this.app_vue.whats_happening = 'Optimizing + ' + n + ' + Hires for Year ' + this.current_year + '...'
       
       var new_hires = [];
       
       if(!n > 0){
-        console.log('No gaps. ');
+        // console.log('No gaps.');
         for(var i = 0, l = current_distribution.length; i < l; i++){
           new_hires.push(0);
         }
       } else {
+        // console.log('Optimizing hires.');
         new_hires = this.new_hire_solver.solve(
           this.collect_values(this.target_distribution),
           this.collect_values(current_distribution),
           n
         );
       }
-
-      console.log(new_hires);
 
       var new_hires_summary = this.zip_values(
             Object.keys(current_distribution),
@@ -166,21 +168,20 @@ define(['evolution','employee_controller', 'stats_controller', 'new_hire_solver'
       for(var grade in new_hires_summary){
         for(var i = 0, l = new_hires_summary[grade]; i < l; i++){
           var e = this.evolution.hire({ grade: grade })
-          this.employee_controller.data.push(e);
+          this.new_employee_controller.data.push(e);
         }
       }
 
-      console.log(new_hires_summary);
-
-      var new_hire_means = this.stats_controller.push(this.current_year - 1, 'new_hires', new_hires_summary)
-      if(this.current_year - 1 >= this.new_hire_means.length){
+      var new_hire_means = this.new_hire_stats_controller.push(this.current_year - 1, new_hires_summary)
+      console.log(new_hire_means);
+      if(this.current_year  >= this.new_hire_means.length){
         this.new_hire_means.push(new_hire_means);
       } else {
         this.new_hire_means.$set(this.current_year, new_hire_means);
       }
 
 
-      this.update_max(new_hire_means);
+      // this.update_max(new_hire_means);
     },
 
     collect_values: function(a){
@@ -199,20 +200,19 @@ define(['evolution','employee_controller', 'stats_controller', 'new_hire_solver'
     },
 
     simulate: function(){
+      console.log('Simulating current year ' + this.current_year);
+
       if(this.current_year == 0)
         this.app_vue.trial += 1;
       
-
+      // Draw the starting bar
+      // Draw the grade distribution
+      // The there's a previous year to look at, solve for hires
+      // Simulate and update the bar
+      // Draw the states
+      // Move to next
     
-      if(this.current_year > 0){
-        var goal = parseFloat(this.goals[this.current_year]),
-            gap = this.app_vue.gaps[this.current_year];
-
-        // if(goal > 0 && gap < 0){
-          this.hire(-gap, this.current_grade_summary);
-        // } 
-      }
-
+     
       this.app_vue.whats_happening = 'Simulating Year ' + this.current_year + ' events...'
 
       var data = this.employee_controller.simulate(),
@@ -224,7 +224,7 @@ define(['evolution','employee_controller', 'stats_controller', 'new_hire_solver'
       self.app_vue.whats_happening = 'Summarizing Year ' + self.current_year + ' events...'
 
       var state_summary = self.employee_controller.summarize_states(),
-          state_means = self.stats_controller.push(self.current_year, 'state', state_summary);
+          state_means = self.state_stats_controller.push(self.current_year, state_summary);
 
       
       this.state_summaries.$set(this.current_year, state_summary);
@@ -244,6 +244,17 @@ define(['evolution','employee_controller', 'stats_controller', 'new_hire_solver'
             return;
           
           self.current_year += 1;
+
+         // if(self.current_year > 0){
+          var goal = parseFloat(self.goals[self.current_year]) || 0,
+              gap = self.employee_controller.data.length - goal;
+
+          console.log('Goal ' + goal + ', gap ' + gap);
+          if(goal > 0 && gap < 0){
+            self.hire(-gap, self.current_grade_summary);
+          } 
+        // }
+
           
           self.employee_controller.evolve();
           
@@ -255,13 +266,12 @@ define(['evolution','employee_controller', 'stats_controller', 'new_hire_solver'
             if(self.current_year < 5) {
               self.simulate();
             } else {
-              setTimeout(self.next_trial, 300);
+              setTimeout(self.next_trial, 3000);
             }
-          }, 150);
+          }, 3000);
         }
 
-      }, 150)    
-
+      }, 3000);
 
     },
 
@@ -271,21 +281,12 @@ define(['evolution','employee_controller', 'stats_controller', 'new_hire_solver'
       app.simulate();
     },
 
-    push_stats: function(stat, data){
-      var s = current_simulation();
-
-      data.forEach(function(d){
-        s[stat].trials.push(d.count);
-        s[stat].mean = d3.mean(s[stat].trials);
-        s[stat].total = d3.sum(s[stat].trials);
-      });
-    },
-
     reset: function(){
       var self = this;
 
       this.current_year = 0;
       this.employee_controller.reset();
+      this.new_employee_controller.reset();
     },
 
     run: function(){
@@ -333,7 +334,8 @@ define(['evolution','employee_controller', 'stats_controller', 'new_hire_solver'
       min: 0,
 
       new_hires: app.new_hires,
-      simulations: app.stats_controller.simulations,
+      onboard_stats: app.grade_stats_controller.simulations,
+      new_hire_stats: app.new_hire_stats_controller.simulations,
       trial: 0,
       employee_count: 0,
       whats_happening: '',
@@ -344,13 +346,17 @@ define(['evolution','employee_controller', 'stats_controller', 'new_hire_solver'
       run: function(event){
         this.running = true;
         app.current_year = 0;
-        if(app.stats_controller.simulations[1].total){
-          this.trial = 0;
-          app.employee_controller.reset();
-          app.stats_controller.clear();
-          this.simulations = app.stats_controller.simulations;
-          app.model_and_draw();
-        }
+        // if(app.grade_stats_controller.simulations[1].total){
+        //   this.trial = 0;
+
+        //   app.employee_controller.reset();
+
+        //   app.grade_stats_controller.clear();
+          
+          
+        //   this.simulations = app.grade_stats_controller.simulations;
+        //   app.model_and_draw();
+        // }
         app.simulate();
       },
       pause: function(event){
@@ -361,9 +367,10 @@ define(['evolution','employee_controller', 'stats_controller', 'new_hire_solver'
     },
     computed: {
       gaps: function(){
-        var sims = this.simulations;
+        var self = this;
         return this.goals.map(function(g,i){
-          return sims[i].total - (parseFloat(g) || 0);
+          var total = (self.onboard_stats[i].total || 0) + (self.new_hire_stats[i].total || 0);
+          return total - (parseFloat(g) || 0);
         });
       },
       grade_labels: function(){

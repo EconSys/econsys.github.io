@@ -2,17 +2,21 @@ define(function(){
 
 	Vue.component('data-bars', {
 
-    props: ['bars','max','min','colors','editable'],
+    props: ['bars','max','min','colors','editable','format'],
 
     template: '<div class="data-bar" v-for="item in bar_styles">' + 
-                '<input class="label" v-if="editable" v-bind:style="label_styles[$key]" v-model="bars[$key] | d3-formatter \',.1f\'">' + 
-                '<div class="label" v-else v-bind:style="label_styles[$key]">{{bars[$key] | d3-formatter ",.1f"}}</div>' + 
+                '<input class="label" v-if="editable" v-bind:style="label_styles[$key]" v-model="bars[$key] | d3-formatter number_format">' + 
+                '<div class="label" v-else v-bind:style="label_styles[$key]">{{bars[$key] | d3-formatter number_format}}</div>' + 
                 '<div class="bar-wrapper">' + 
                   '<div class="bar" v-bind:style="item"></div>' + 
                 '</div>' + 
               '</div>',
 
     computed: {
+
+      number_format: function(){
+        return this.format ? this.format : ",.1f";
+      },
 
       bar_keys: function(){
         return Object.keys(this.bars);

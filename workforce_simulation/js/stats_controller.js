@@ -13,7 +13,7 @@ define(function() {
     self.clear = function(){
       self.simulations = [];
       for(var i = 0; i < 6; i++){
-        self.simulations.push({ total: null });
+        self.simulations.push({ total: null, categories: {} });
       }
     };
 
@@ -23,16 +23,13 @@ define(function() {
           new_category_means = {},
           total = 0;
 
-      if(!sim[stat_name])
-        sim[stat_name] = {};
-
       categories.forEach(function(c){
         
-        if(!sim[stat_name][c]){
-          sim[stat_name][c] = { trials: [], mean: null };
+        if(!sim.categories[c]){
+          sim.categories[c] = { trials: [], mean: null };
         }
  
-        var category_stats = sim[stat_name][c];
+        var category_stats = sim.categories[c];
 
         category_stats.trials.push( histogram[c] );
         category_stats.mean = d3.mean(category_stats.trials);
@@ -41,8 +38,7 @@ define(function() {
         total += category_stats.mean;
       });
 
-      if(stat_name == 'grade')
-        sim.total = total;
+      sim.total = total;
 
       return new_category_means;
     };

@@ -42,7 +42,6 @@ define(['helpers/clone','logistic_modeler','logistic_simulator'], function(clone
       var summary = {},
           unique_values = self.get_unique_values(prop_name);
 
-      console.log(unique_values);
       unique_values.forEach(function(u){
         summary[u] = 0;
       });
@@ -56,14 +55,17 @@ define(['helpers/clone','logistic_modeler','logistic_simulator'], function(clone
     };
 
     self.summarize_states = function(){
-      var states = Object.keys(self.app.evolution.models),
-          summary = {};
+      var summary = {};
+
+      for(var s in self.app.evolution.models){
+        summary[s] = 0
+      }
+
       for(var i = 0, l = self.data.length; i < l; i++){
-        for(var j = 0, m = states.length; j < m; j++){
-          var s = states[j];
-          summary[s] = summary[s] ? summary[s] + self.data[i][s] : self.data[i][s];
-        }
-      };
+        for(var s in summary)
+          summary[s] += self.data[i][s];
+      }
+
       return summary;
     };
 
@@ -81,8 +83,8 @@ define(['helpers/clone','logistic_modeler','logistic_simulator'], function(clone
           u = [],
           v;
 
-      for(var i = 0, l = self.base_year_data.length; i < l; i++){
-        v = self.base_year_data[i][prop_name];
+      for(var i = 0, l = self.app.base_year_data.length; i < l; i++){
+        v = self.app.base_year_data[i][prop_name];
         o[v] = v;
       }
 
