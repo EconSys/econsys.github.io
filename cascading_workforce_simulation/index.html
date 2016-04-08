@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<!-- jruby -run -e httpd . -p 9090 -->
+
+<head>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.15/vue.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.22/require.js" data-main="./js/main"></script>
+
+  <style>
+
+    #app {
+      min-width: 960px;
+    }
+
+    .title {
+      border-bottom:1px solid whitesmoke;
+    }
+
+    .section{
+      border-top:1px solid whitesmoke;
+      border-bottom:1px solid whitesmoke;
+      color: gray;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .toolbar {
+      background-color: whitesmoke;
+      padding: 5px;
+    }
+
+    .toolbar button {
+      background-color: white;
+      margin-bottom: 0px;
+    }
+
+    .trial-count {
+      padding-top: 5px;
+      font-size: 18px;
+    }
+
+    .whats-happening{
+      min-height: 22px;
+      font-size: 14px;
+      padding-left: 5px;
+      font-style: italic;
+      color: gray;
+    }
+
+    #years-vue {
+      position: relative;
+      margin: 15px 0px 0px 72px;
+    }
+
+    .years, .goals {
+      text-align: center;
+      font-weight: bold;
+      float: left;
+      width: 148px;
+      font-size: 12px;
+    }
+
+    .goals input{
+      text-align: right;
+    }
+
+    #states-vue {
+      position: relative;
+      min-height: 87px;
+    }
+
+    #grades-vue {
+      position: relative;
+      min-height: 100px;
+    }
+
+    .simulation {
+      margin-left: 72px;
+    }
+
+    h1,h2,h3,h4,h5,h6 {
+      font-weight: normal;
+    }
+
+  </style>
+
+
+<body>
+  
+  <div class="container">
+    <div id="app">
+      <div class="title">
+        <h1>Simulating the Workforce</h1>
+        <p>
+          This visualization shows how we build up projections on important workforce characteristics by repeatedly simulating individual personnel events for the next five years. Trial results are averaged in the Grade and Events sections, showing the expected number of personnel events by type and the expected future grade distributions.
+        </p>
+        <div class="toolbar u-full-width u-cf">
+          <div class="u-pull-left">
+            <button v-if="running" v-on:click="pause"><i class="fa fa-pause"></i> Pause</button>
+            <button v-else v-on:click="run"><i class="fa fa-play"></i> Run</button>
+          </div>
+          <div class="u-pull-right trial-count">Trial {{trial}}</div>
+        </div>
+      </div>
+      <div class="whats-happening">
+        <span v-if="running">{{whats_happening}}</span>
+      </div>
+    
+     
+     
+      <div>
+        <div id="years-vue" class="u-cf">
+          <div class="years" v-for="year in years">
+            {{year}}
+          </div>
+          <div class="goals">&nbsp;</div>
+          <div class="goals" v-for="goal in goals" track-by="$index">
+            <input type="text" v-model="goal" placeholder="">
+          </div>
+        </div>
+        <div class="section">Expected Grade Distribution</div>
+        <div id="grades-vue" class="u-cf"></div>
+        <div class="section">Expected Events</div>
+        <div id="states-vue" class="u-cf"></div>
+        <div class="section">Simulations for {{employee_count}} employees</div>
+        <div class="simulation"></div>
+      </div>
+
+    </div>
+  </div>

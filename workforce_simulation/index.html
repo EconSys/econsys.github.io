@@ -195,7 +195,15 @@
     }
 
 
+    .toolbar h2 {
+      margin-bottom: 10px;
+    }
 
+    .run-button {
+      position: absolute;
+      top: 0px;
+      left: 220px;
+    }
     
 
   </style>
@@ -206,8 +214,11 @@
    <div class="toolbar">
     <div class="container">
       <div class="u-pull-left">
-        <button v-if="running" v-on:click="stop"><i class="fa fa-pause"></i> Stop</button>
-        <button v-else v-on:click="run"><i class="fa fa-play"></i> Run</button>
+      <h2>Workforce Simulator</h2>
+        <div class="run-button">
+          <button v-if="running" v-on:click="stop"><i class="fa fa-pause"></i> Stop</button>
+          <button v-else v-on:click="run"><i class="fa fa-play"></i> Run</button>
+          </div>
       </div>
       <div class="u-pull-right trial-count">Trial {{trial}}</div>
     </div>

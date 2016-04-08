@@ -20,7 +20,7 @@ define(['evolution','employee_controller', 'stats_controller', 'new_hire_solver'
       this.years = [0,1,2,3,4,5];
 
       // this.goals = ['','','','','',''];
-      this.goals = ['287','287','287','287','287','287'];
+      this.goals = ['287','300','325','335','350','375'];
       // this.goals = ['','','','','',''];
 
       this.target_distribution = {};
