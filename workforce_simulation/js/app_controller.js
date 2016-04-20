@@ -41,7 +41,7 @@ define(['app_vue', 'evolutions/ops','employee_controller', 'stats_controller', '
       
       years: [0,1,2,3,4,5],
 
-      goals: ['287','300','325','335','350','375'],
+      goals: ['275','300','325','335','350','375'],
       
       target_distribution: [],
       
