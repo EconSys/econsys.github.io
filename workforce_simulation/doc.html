@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<!-- jruby -run -e httpd . -p 9090 -->
+
+<head>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jstat/1.5.2/jstat.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.min.js"></script>
+
+  <style type="text/css">
+
+    figure p {
+      color: #666;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    figcaption {
+      font-size: 14px;
+      color: #999;
+      font-style: italic;
+    }
+
+    .axis path {
+      fill: none;
+      stroke-width: 1.5;
+      stroke: lightgray;
+    }
+
+    .axis .tick text {
+      font-size: 11px;
+      fill: #999;
+    }
+
+  </style>
+
+
+<body>
+  <div class="container">
+    <h1>Attrition Modeling</h1>
+    <p>
+      To model the attrition of employees, we employ a statistical modeling technique called <a href="https://en.wikipedia.org/wiki/Multinomial_logistic_regression" target="_blank">Multinomial Logistic Regression</a>. This approach uses individual-level employee characteristics such as age, grade, and retirement eligibility to estimate the probability of promotion and three sources of attrition: Voluntary Attrition (Resignations), Involuntary Attrition (Terminations, Expired Appointments, Death), and Retirements (including Disability and Early Retirements).
+    </p>
+    <p>
+      A multinomial model was created for the events above using an extract of PAID Master File and Event data from January 2010 through December 2015. This process results in several mathematical equations that can be combined to estimate the probabilities of each event for each employee. Applying these equations to the data results in a set of five probabilities for each employee, one probability for each event (Promotion, Retirement, Involuntary attrition, and Voluntary attrition) as well as a <i>No Event</i> probability where the employee remains in the same position next year.
+    </p>
+
+    
+    <figure  style="width: 800px; margin: 10px auto;">
+      <p>Figure 1. Example Individual Event Probabilities</p>
+      <svg id="c1" width="400" height="300"></svg>
+
+      <script>
+        (function(){
+          
+          var events = [
+              { e: 'No Event', p: 0.814, c: '#999' }, 
+              { e: 'Promotion', p: 0.042, c: '#74c476'}, 
+              { e: 'Voluntary', p: 0.0126, c: '#fdae6b' }, 
+              { e: 'Involuntary', p: 0.019, c: '#fd8d3c' }, 
+              { e: 'Retirement', p: 0.072, c: '#e6550d' }
+            ],
+            l = 0,
+            svg = d3.select('#c1'),
+            format = d3.format('0%');
+
+
+          var scale = d3.scale.linear()
+                .domain([0,1]).range([0,250]),
+              axis = d3.svg.axis()
+                .scale(scale)
+                .ticks(4)
+                .tickFormat(function(d){
+                  return format(d)
+                });
+
+            svg.append('g')
+              .attr('class', 'axis')
+              .attr('width',250)
+              .attr('height', 20)
+            .append('g')
+              .attr('transform', 'translate(100,105)')
+              .call(axis);
+
+
+            svg.selectAll('rect')
+              .data(events)
+            .enter().append('rect')
+              .attr('x', 100)
+              .attr('y',function(d,i){
+                return i * 20;
+              })
+              .attr('height', 18)
+              .attr('width', function(d,i){
+                return d.p * 250;
+              })
+              .style('fill', function(d){
+                return d.c;
+              });
+
+            svg.selectAll('.bar-label')
+              .data(events)
+            .enter().append('text')
+              .attr('class','bar-label')
+              .attr('x', 90)
+              .attr('y',function(d,i){
+                return (i * 20) + 15;
+              })
+              .text(function(d){
+                return d.e;
+              })
+              .style('fill', function(d){
+                return d.c;
+              })
+              .style('text-anchor','end')
+              .style('font-size','12');
+
+
+            svg.selectAll('.data-label')
+              .data(events)
+            .enter().append('text')
+              .attr('class','data-label')
+              .attr('x', function(d,i){
+                return d.p * 250 + 105;
+              })
+              .attr('y',function(d,i){
+                return (i * 20) + 13;
+              })
+              .text(function(d){
+                return d3.format('.2%')(d.p);
+              })
+              .style('fill', function(d){
+                return d.c;
+              })
+              .style('font-size','10');
+
+
+        })();
+
+      </script>
+
+      <figcaption>
+        Events are modeled for each employee using their individual-level characteristics from PAID as well as external factors, such as the unempoyement rate.
+      </figcaption>
+    </figure>
+
+          
+
+
+  </div>
+
+
+  <!-- 
+
+          svg.selectAll('rect')
+            .data(probs)
+          .enter().append('rect')
+            .attr('height', '60')
+            .attr('width', function(d){
+              return d.p * 100 + '%';
+            })
+            .attr('transform', function(d, i){
+              var left = l * 800;
+              l += d.p;
+              return 'translate(' + left + ',80)';
+            })
+            .style('fill', function(d){
+              return event_colors[d.e]
+            });
+
+          l = 0;
+
+          svg.selectAll('.label')
+            .data(probs)
+          .enter().append('text')
+            .attr('class','label')
+            .text(function(d){
+              var p = d3.format('.2%')(d.p);
+              return d.e + ' ' + p;
+            })
+            .attr('transform', function(d, i){
+              l += d.p;
+              var left = (i > 0) ? (l * 800) : 0;
+              return 'translate(' + left + ',70)';
+            })
+            .attr('text-anchor', function(d,i){
+              return i > 0 ? 'end' : 'start';
+            })
+            .attr('dy', function(d,i){
+              return i > 1 ? (i - 1) * -17 : 0;
+            })
+            .style('fill', function(d){
+              return d3.rgb( event_colors[d.e] ).darker();
+            })
+            .style({ 'font-size': '12px' });
+
+
+          l = 0;
+
+          svg.selectAll('line')
+            .data(probs)
+          .enter().append('line')
+            .attr('x1', function(d, i){
+            l += d.p;
+             return (i > 1) ? (l * 800) : 0;
+            })
+            .attr('y2', function(d, i){
+              return i > 1 ? 70 : 0;
+            })
+            .attr('x2', function(d, i){
+             return (i > 1) ? (l * 800) : 0;
+            })
+            .attr('y1', function(d, i){
+              i > 1 ? (i - 1) * -17 : 0;
+            })
+            .style('stroke', function(d){
+              return event_colors[d.e];
+            });
+ -->

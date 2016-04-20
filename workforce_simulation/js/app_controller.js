@@ -1,4 +1,4 @@
-define(['app_vue', 'evolution','employee_controller', 'stats_controller', 'new_hire_solver', 'filters/d3_formatter','components/data_bars', 'components/stacked_data_bars'], function(app_vue, evolution, employee_controller, stats_controller, new_hire_solver){
+define(['app_vue', 'evolutions/ops','employee_controller', 'stats_controller', 'new_hire_solver', 'filters/d3_formatter','components/data_bars', 'components/stacked_data_bars'], function(app_vue, evolution, employee_controller, stats_controller, new_hire_solver){
 
   var app_controller = function(spec){
     var self = {
@@ -17,17 +17,17 @@ define(['app_vue', 'evolution','employee_controller', 'stats_controller', 'new_h
       state_colors: { 
         none: '#d2d2d2', 
         promotion: '#74c476', 
-        expired_appt: '#fdae6b', 
-        attrite:'#fd8d3c', 
-        quit: '#e6550d'
+        voluntary: '#fdae6b', 
+        involuntary: '#e6550d', 
+        retirement: '#fd8d3c'
       },
 
       state_labels: {
         none: 'None',
         promotion: 'Promotion',
-        expired_appt: 'Expired Appt',
-        attrite: 'Attrite',
-        quit: 'Quit'
+        voluntary: 'Voluntary', 
+        involuntary:'Involuntary', 
+        retirement: 'Retirement'
       },
 
       employee_controller: null,
@@ -68,7 +68,7 @@ define(['app_vue', 'evolution','employee_controller', 'stats_controller', 'new_h
     }
 
     self.app_vue = app_vue({ app: self });
-    self.state_keys = Object.keys(self.evolution.models);
+    self.state_keys = Object.keys(self.evolution.event_models);
 
     
     self.init_with_data = function(d){
@@ -82,12 +82,15 @@ define(['app_vue', 'evolution','employee_controller', 'stats_controller', 'new_h
 
     self.load_data = function(d, callback){
       d3.csv(d, function(error, rows){
-        var numeric = ['age','aptyrs','empid','grade','retirement_eligible_year','run_year','salary','sex'];
+        var numeric = ['age','grade','occ4','tenure','time_in_job','years_retirement_eligible','age_x_tenure'];
 
         rows = rows.map(function(d){
           numeric.forEach(function(n){ d[n] = +d[n]; });
+          d.unemployment_rate = 5.0;
           return d;
         });
+
+        console.log(rows);
 
         self.base_year_data = rows;
         self.employee_controller = employee_controller({ app: self, base_year_data: rows });

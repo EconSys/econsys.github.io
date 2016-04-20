@@ -14,7 +14,7 @@ define(['helpers/clone','logistic_modeler','logistic_simulator'], function(clone
 
     self.model = function(){
       self.data = self.data.map(function(d){
-        var p_s = self.logistic_modeler.model(self.app.evolution.models, d);
+        var p_s = self.logistic_modeler.model(self.app.evolution.event_models, d);
         for(s in p_s){
           d[s] = p_s[s];
         }
@@ -25,7 +25,7 @@ define(['helpers/clone','logistic_modeler','logistic_simulator'], function(clone
 
     self.simulate = function(){
       self.data = self.data.map(function(d){
-        var p_s = self.logistic_simulator.simulate(self.app.evolution.models, d).p_s;
+        var p_s = self.logistic_simulator.simulate(self.app.evolution.event_models, d).p_s;
         for(s in p_s){
           d[s] = p_s[s];
         }
@@ -57,7 +57,7 @@ define(['helpers/clone','logistic_modeler','logistic_simulator'], function(clone
     self.summarize_states = function(){
       var summary = {};
 
-      for(var s in self.app.evolution.models){
+      for(var s in self.app.evolution.event_models){
         summary[s] = 0
       }
 

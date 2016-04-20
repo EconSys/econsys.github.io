@@ -238,21 +238,21 @@
 
         <div class="border-top"></div>
         <div class="u-cf" style="position:relative">
-          <div class="title">FTE Demand</div>
+          <div class="title"><span style="font-weight:bold">Demand</span> (in FTEs)</div>
           <div class="goals" v-for="goal in goals" track-by="$index">
             <input type="text" v-model="goal" placeholder="" :disabled="running">
           </div>
         </div>
 
         <div class="u-cf" style="position:relative">
-          <div class="title">Onboard FTEs</div>
+          <div class="title"><span style="font-weight:bold">Supply</span> (in FTEs)</div>
           <div class="gaps onboard_count" v-for="onboard in onboards" track-by="$index">
             {{onboard | d3-formatter ',f'}}
           </div>
         </div>
 
         <div class="u-cf" style="position:relative">
-          <div class="title">New FTEs</div>
+          <div class="title"><span style="font-weight:bold">Gaps</span> (in FTEs)</div>
           <div class="gaps new_hires_count"></div>
           <div class="gaps new_hires_count" v-for="new_hire in new_hires" track-by="$index">
             {{new_hire | d3-formatter ',f'}}
@@ -280,7 +280,7 @@
         </div>
 
 
-        <div class="border-top">Expected Onboard FTEs by Grade</div>
+        <div class="border-top">Expected FTE Supply by Grade</div>
         <div class="grades-charts clearfix">
           <div class="grade-labels">
             <div class="data-bar-set-label" v-for="label in grade_labels">GS-{{label}}</div>
@@ -292,7 +292,7 @@
 
 
 
-        <div class="border-top">Anticipated Required FTEs By Grade<br/>
+        <div class="border-top">Expected Additional FTE Requirement By Grade<br/>
         <span style="color: orange">Target Grade Distribution</span>
         </div>
         <div class="grades-charts clearfix">
