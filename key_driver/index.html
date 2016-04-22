@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<!-- jruby -run -e httpd . -p 9090 -->
+
+<head>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css">
+  <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Open+Sans:400,300'>
+
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.min.js"></script>
+
+  <style>
+    .nav-bar {
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 300;
+
+      background-color: rgb(43,43,42);
+      color: white;
+      font-size: 22px;
+      line-height: 35px;
+      height: 35px;
+      padding: 10px 20px;
+    }
+
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #999;
+      shape-rendering: crispEdges;
+    }
+    .tick text {
+      fill: #666;
+    }
+  </style>
+
+
+
+<body>
+
+  <div class="nav-bar">
+    <svg width="35" height="35" style="float: left;">
+      <circle r="6" cx="12" cy="12" style="fill: rgb(227, 26, 28);"></circle>
+      <circle r="6" cx="26" cy="12" style="fill: rgb(65, 171, 93);"></circle>
+      <circle r="6" cx="12" cy="26" style="fill: rgb(254, 178, 76);"></circle>
+      <circle r="6" cx="26" cy="26" style="fill: rgb(66, 146, 198);"></circle>
+    </svg>
+    <div style="margin-left: 40px">Key Driver Analysis</div>
+  </div>
+
+  <div style="width: 900px; margin: 50px auto;">
+    <select id="select-an-agency">
+      <option value="af">Department of the Air Force</option>
+      <option value="ag">Department of Agriculture</option>
+      <option value="aj">National Endowment For The Arts</option>
+      <option value="am">U.S. Agency for International Development</option>
+      <option value="ar">Department of the Army</option>
+      <option value="bd">Merit Systems Protection Board</option>
+      <option value="bf">Defense Nuclear Facilities Safety Board</option>
+      <option value="cm">Department of Commerce</option>
+      <option value="dd">DoD 4th Estate</option>
+      <option value="dj">Department of Justice</option>
+      <option value="dl">Department of Labor</option>
+      <option value="dn">Department of Energy</option>
+      <option value="eb">Export Import Bank</option>
+      <option value="ed">Department of Education</option>
+      <option value="ep">Environmental Protection Agency</option>
+      <option value="fc">Federal Communications Commission</option>
+      <option value="fj">Chemical Safety/Hazard Investigation Bd</option>
+      <option value="gg">Office of Government Ethics</option>
+      <option value="gs">General Services Administration</option>
+      <option value="he">Department of Health and Human Services</option>
+      <option value="hf">Federal Housing Finance Agency</option>
+      <option value="hs">Department of Homeland Security</option>
+      <option value="hu">Department of Housing and Urban Development</option>
+      <option value="if">Inter-American Foundation</option>
+      <option value="in">Department of the Interior</option>
+      <option value="ks">Corp For National And Community Service</option>
+      <option value="mc">Federal Maritime Commission</option>
+      <option value="nn">National Aeronautics and Space Administration</option>
+      <option value="nu">Nuclear Regulatory Commission</option>
+      <option value="nv">Department of the Navy</option>
+      <option value="om">Office of Personnel Management</option>
+      <option value="os">Occupational Safety & Health Review Cmsn</option>
+      <option value="se">Securities and Exchange Commission</option>
+      <option value="si">Small Agencies with Too Few Respondents</option>
+      <option value="st">Department of State</option>
+      <option value="sz">Social Security Administration</option>
+      <option value="td">Department of Transportation</option>
+      <option value="tr">Department of the Treasury</option>
+      <option value="va">Department of Veterans Affairs</option>
+      <option value="va01">- VA Central Office</option>
+      <option value="va02">- Veterans Health Administration</option>
+      <option value="va03">- Veterans Benefits Administration</option>
+    </select>
+
+    <svg id="key-driver-graph"></svg>
+  </div>
+
+
+  <script>
+    var draw = function(data){
+
+      var margin = {top: 40, right: 40, bottom: 55, left: 65},
+          width = 940 - margin.left - margin.right,
+          height = 600 - margin.top - margin.bottom;
+      
+
+      var q_mean = d3.mean(data, function(d){
+            return d.mean;
+          }),
+          coeffs_no_zero = data.filter(function(d){
+            return d.coeff > 0;
+          }),
+          coeff_mean = d3.mean(coeffs_no_zero, function(d){
+            return d.coeff;
+          });
+
+      var x_s = data.map(function(d){ return d.mean }),
+          x_scale = d3.scale.linear()
+            .domain([0, 5])
+            .range([0, width]),
+          x_axis = d3.svg.axis().scale(x_scale).orient('bottom');
+
+      var y_s = data.map(function(d){ return d.coeff }),
+          y_max = d3.max(y_s),
+          y_scale = d3.scale.linear()
+            .domain([0, y_max])
+            .range([height, 0])
+          y_axis = d3.svg.axis().scale(y_scale).orient('left');
+
+
+      var svg = d3.select('#key-driver-graph .graph');
+
+      if(svg.empty()){
+        svg = d3.select('#key-driver-graph')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+          .append('g')
+            .attr('class','graph')
+            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(x_axis)
+          .append("text")
+            .attr("class", "label")
+            .attr("x", width/2)
+            .attr("y", 50)
+            .style("text-anchor", "middle")
+            .text("Average Question Score");
+
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(y_axis)
+          .append("text")
+            .attr("class", "label")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -height/2)
+            .attr("y", -65)
+            .attr("dy", ".71em")
+            .style("text-anchor", "middle")
+            .text("Importance");
+      }
+
+      // svg.selectAll('.x.axis').call(x_axis);
+      // svg.selectAll('.y.axis').call(y_axis);
+
+      var q_mean_line = svg.selectAll('line.q_mean')
+        .data([q_mean]);
+
+      q_mean_line.enter().append('line')
+        .attr('class','q_mean')
+        .style({
+          'stroke-width': 2,
+          'stroke': '#666'
+        });
+
+      q_mean_line.transition()
+        .attr('x1', x_scale(q_mean))
+        .attr('y1', y_scale(0))
+        .attr('x2', x_scale(q_mean))
+        .attr('y2', y_scale(y_max));
+
+
+      var coeff_mean_line = svg.selectAll('line.coeff_mean')
+        .data([coeff_mean]);
+
+      coeff_mean_line.enter().append('line')
+        .attr('class','coeff_mean')
+        .style({
+          'stroke-width': 2,
+          'stroke': '#666'
+        });
+
+      coeff_mean_line.transition()
+        .attr('x1', x_scale(0))
+        .attr('y1', y_scale(coeff_mean))
+        .attr('x2', x_scale(5))
+        .attr('y2', y_scale(coeff_mean));
+
+
+      var circle_data = data.filter(function(d){ return d.coeff > 0 });
+
+      var circles = svg.selectAll('circle')
+        .data(circle_data, function(d){ return d.q; });
+        
+      circles.enter().append('circle')
+        .attr('r', 5)
+        // .style('opacity', 0.8)
+        .style('fill','white')
+        .style('fill-opacity',0)
+        .style('stroke-width',2)
+        .style('stroke','#999');
+
+      circles.transition()
+        .attr('cx', function(d){ return x_scale(d.mean) })
+        .attr('cy', function(d){ return y_scale(d.coeff) })
+        .style('stroke', function(d){
+          if(d.mean >+ q_mean && d.coeff >= coeff_mean)
+            return 'rgb(65, 171, 93)';
+          else if(d.mean < q_mean && d.coeff >+ coeff_mean)
+            return 'rgb(227, 26, 28)';
+          else if(d.mean < q_mean && d.coeff < coeff_mean)
+            return 'rgb(254, 178, 76)';
+          else
+            return 'rgb(66, 146, 198)';
+        });
+
+        circles.exit().remove();
+
+
+      var labels = svg.selectAll('.data-label')
+        .data(circle_data, function(d){ console.log(d); return d.q; });
+        
+      labels.enter().append('text')
+        .attr('class','data-label')
+        .attr('dx', 10)
+        .attr('dy', 5)
+        .style('font-size', '12px')
+        .style('opacity',0.7)
+        .style('fill','#999');
+
+      labels.text(function(d){ return d.q.toUpperCase(); })
+        .transition()
+        .attr('x', function(d){ return x_scale(d.mean) })
+        .attr('y', function(d){ return y_scale(d.coeff) })
+        .style('fill', function(d){
+          if(d.mean >+ q_mean && d.coeff >= coeff_mean)
+            return 'rgb(65, 171, 93)';
+          else if(d.mean < q_mean && d.coeff >+ coeff_mean)
+            return 'rgb(227, 26, 28)';
+          else if(d.mean < q_mean && d.coeff < coeff_mean)
+            return 'rgb(254, 178, 76)';
+          else
+            return 'rgb(66, 146, 198)';
+        });
+
+        labels.exit().remove();
+
+
+    };
+
+
+    var get_data = function(){
+
+      var agency = $('#select-an-agency').val();      
+
+      d3.csv('./data/key_driver_' + agency + '.csv', function(data){
+        data.forEach(function(d){
+          Object.keys(d).forEach(function(k){
+            if(k != 'q')
+              d[k] = +d[k];
+          })
+        });
+
+        draw(data);
+      });
+
+    };
+
+    d3.select('#select-an-agency').on('change', get_data);
+
+    get_data();
+
+  </script>
