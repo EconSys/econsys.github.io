@@ -32,8 +32,35 @@
       stroke: #999;
       shape-rendering: crispEdges;
     }
+
     .tick text {
       fill: #666;
+    }
+
+    #key-driver-table {
+      font-size: 14px;
+      line-height: 1.4rem;
+      margin-top: 50px;
+      width: 100%;
+    }
+
+    #key-driver-table th {
+      height: 55px;
+      font-weight: normal;
+      padding: 3px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    #key-driver-table tbody td {
+      border-top: 1px solid whitesmoke;
+      padding: 3px;
+      vertical-align: top;
+    }
+
+    .q-average, 
+    .q-importance {
+      text-align: right;
     }
   </style>
 
@@ -98,6 +125,24 @@
     </select>
 
     <svg id="key-driver-graph"></svg>
+
+    <table id="key-driver-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Question</th>
+          <th></th>
+          <th>
+            <div style="text-align: center">Average</div>
+            <div class="rect-axis"></div>
+          </th>
+          <th style="text-align: right">Importance</th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
   </div>
 
 
@@ -121,9 +166,10 @@
 
       var x_s = data.map(function(d){ return d.mean }),
           x_scale = d3.scale.linear()
-            .domain([0, 5])
+            .domain([0.5, 5.5])
             .range([0, width]),
-          x_axis = d3.svg.axis().scale(x_scale).orient('bottom');
+          x_axis = d3.svg.axis().scale(x_scale).orient('bottom')
+            .tickValues([1,2,3,4,5]);
 
       var y_s = data.map(function(d){ return d.coeff }),
           y_max = d3.max(y_s),
@@ -146,7 +192,6 @@
         svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
-            .call(x_axis)
           .append("text")
             .attr("class", "label")
             .attr("x", width/2)
@@ -156,7 +201,6 @@
 
         svg.append("g")
             .attr("class", "y axis")
-            .call(y_axis)
           .append("text")
             .attr("class", "label")
             .attr("transform", "rotate(-90)")
@@ -167,8 +211,8 @@
             .text("Importance");
       }
 
-      // svg.selectAll('.x.axis').call(x_axis);
-      // svg.selectAll('.y.axis').call(y_axis);
+      svg.selectAll('.x.axis').transition().call(x_axis);
+      svg.selectAll('.y.axis').transition().call(y_axis);
 
       var q_mean_line = svg.selectAll('line.q_mean')
         .data([q_mean]);
@@ -198,9 +242,9 @@
         });
 
       coeff_mean_line.transition()
-        .attr('x1', x_scale(0))
+        .attr('x1', x_scale(0.5))
         .attr('y1', y_scale(coeff_mean))
-        .attr('x2', x_scale(5))
+        .attr('x2', x_scale(5.5))
         .attr('y2', y_scale(coeff_mean));
 
 
@@ -242,7 +286,7 @@
         .attr('dx', 10)
         .attr('dy', 5)
         .style('font-size', '12px')
-        .style('opacity',0.7)
+        // .style('opacity',0.7)
         .style('fill','#999');
 
       labels.text(function(d){ return d.q.toUpperCase(); })
@@ -261,6 +305,110 @@
         });
 
         labels.exit().remove();
+
+
+      var rows = d3.select('#key-driver-table tbody').selectAll('tr')
+            .data(data, function(d){
+              return d.q;
+            }),
+          svg_width = 160,
+          svg_height = 20,
+          rect_height = 10,
+          rect_width = 150,
+          rect_y = (svg_height - rect_height)/2;
+
+
+      if(d3.select('.rect-axis svg').empty()){
+        var rect_axis_svg = d3.select('.rect-axis').append('svg')
+              .attr({ width: svg_width, height: 20})
+              .style('font-size','10px');
+
+        var rect_scale = d3.scale.linear()
+              .domain([1,5])
+              .range([0, rect_width]),
+            rect_axis = d3.svg.axis().scale(rect_scale).orient('top')
+              .tickValues([1,2,3,4,5])
+              .tickFormat(d3.format('0f'));
+
+          rect_axis_svg.append("g")
+            .attr("class", "x axis")
+            .attr('transform','translate(5,20)')
+          rect_axis_svg.selectAll('.x.axis').transition().call(rect_axis);
+      }
+
+      rows.enter().append('tr')
+        .each(function(d){
+          var r = d3.select(this);
+
+          r.append('td').attr('class', 'q-number');
+          r.append('td').attr('class', 'q-text');
+          r.append('td').attr('class', 'q-average');
+          r.append('td').attr('class', 'q-average-svg')
+            .append('svg')
+              .attr({ width: svg_width, height: svg_height })
+            .append('g')
+              .attr('transform','translate(5,0)')
+              .attr('class','graph');
+          r.append('td').attr('class', 'q-importance');
+
+        });
+      
+      var dist_colors = ['#d7191c','#fdae61','#ffffbf','#a6d96a','#1a9641'],
+          format = d3.format('.2f');
+
+      rows.each(function(d){
+          var r = d3.select(this),
+              x0 = 0,
+              dist = [1,2,3,4,5].map(function(i){ 
+                var value = d[i]/d.n
+                return { value: value,  x0: x0, x1: x0 += value }; 
+              });
+
+          r.select('.q-number').text(d.q.toUpperCase());
+          r.select('.q-text').text(questions[d.q]);
+          r.select('.q-average').text(format(d.mean));
+          if(d.coeff > 0)
+            r.select('.q-importance').text(format(d.coeff));
+
+          var rects = r.select('.q-average-svg g.graph').selectAll('rect')
+            .data(dist, function(d,i){ return i; });
+
+          rects.enter().append('rect')
+            .attr('y', rect_y)
+            .attr('height', rect_height)
+            .style('fill', function(d,i){ 
+              return dist_colors[i]; 
+            })
+            .style('opacity', 0.7);
+
+          rects.transition()
+            .attr('width', function(d){
+              return rect_width * d.value;
+            })
+            .attr('x', function(d){
+              return rect_width * d.x0;
+            });
+
+          var means = r.select('.q-average-svg svg').selectAll('line')
+            .data([d.mean]);
+
+          means.enter().append('line')
+            .attr('y1', 0)
+            .attr('y2', svg_height)
+            .style('stroke-width', 1.5)
+            .style('stroke','rgb(43,43,42)');
+
+
+           means.transition()
+            .attr('x1', function(d){
+              return (d - 1) / 4 * rect_width;
+            })
+            .attr('x2', function(d){
+              return (d - 1) / 4 * rect_width;
+            })
+
+        });
+
 
 
     };
@@ -285,6 +433,11 @@
 
     d3.select('#select-an-agency').on('change', get_data);
 
-    get_data();
+
+    d3.json('./data/question_text.json', function(data){
+      window.questions = data;
+      get_data();
+    });
+    
 
   </script>

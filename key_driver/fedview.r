@@ -1,5 +1,6 @@
 library(reshape2)
 library(glmnet)
+library(splitstackshape)
 
 
 setwd('~/Data/FedView/FEVS2015_PRDF_CSV/')
@@ -65,6 +66,7 @@ head(data)
 
 
 
+
 key_driver_by <- function(data, column){
   agencies <- sort( unique(data[[column]]) )
 
@@ -76,10 +78,10 @@ key_driver_by <- function(data, column){
 
     summary_data <- summarize_qs(data_a)
 
-    data_a.model <-  na.omit( data_a[,c(1,5:75)] )
-    model_matrix <- model.matrix(q71 ~ . - postwt, data=data_a.model)
+    data_a.model <-  na.omit( data_a[,c(1,5:73)] )
+    model_matrix <- model.matrix(q69 ~ . - postwt, data=data_a.model)
     model_matrix <- model_matrix[,2:dim(model_matrix)[2]]
-    cvfit <- cv.glmnet(model_matrix, data_a.model$q71, data_a.model$postwt, family='gaussian')
+    cvfit <- cv.glmnet(model_matrix, data_a.model$q69, data_a.model$postwt, family='gaussian')
 
     reg <- coef(cvfit, s='lambda.1se', exact=TRUE)
     reg <- as.data.frame(as.matrix(reg))
@@ -96,9 +98,34 @@ key_driver_by <- function(data, column){
       all.y = F
     )
 
-    write.csv(key_driver_i, file=paste('key_driver_', tolower(a),'.csv', sep=''), row.names = FALSE, na = '')
+    write.csv(key_driver_i, file=paste('~/GitHub/econsys.github.io/key_driver/data/','key_driver_', tolower(a),'.csv', sep=''), row.names = FALSE, na = '')
   }
 }
 
 
+key_driver_by(data, 'agency')
 key_driver_by(data, 'plevel1')
+
+
+
+
+
+
+agencies <- sort( unique(data$agency) )
+data_a <- subset(data, agency %in% 'VA')
+data_a.model <-  na.omit( data_a[,c(1,5:75)] )
+
+data_a.model_expanded <-  expandRows(data_a.model, 'postwt')
+
+data_a.factor <- data_a.model_expanded[,!names(data_a.model_expanded) %in% c('q69') ]
+
+fit <- princomp(data_a.factor, cor=TRUE)
+fit <- principal(data_a.factor, nfactors=10, rotate="varimax")
+
+ev <- eigen(cor(data_a.factor )) # get eigenvalues
+ap <- parallel(subject=nrow(data_a.factor ),var=ncol(data_a.factor ),rep=100,cent=.05)
+nS <- nScree(x=ev$values, aparallel=ap$eigen$qevpea)
+plotnScree(nS)
+
+fact_fit <- 
+
