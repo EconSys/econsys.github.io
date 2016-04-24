@@ -31,7 +31,7 @@ summarize_qs <- function(data){
 
     c <- names(data)[j]
 
-    d <- as.data.frame( table(data[[c]]) )
+    d <- as.data.frame( xtabs( data$postwt ~ data[[c]]) )
     names(d)[1] <- 'val'
     d$val <- as.numeric(d$val)
 
@@ -65,15 +65,12 @@ data <- remove_non_numeric(data)
 head(data)
 
 
-
-
 key_driver_by <- function(data, column){
   agencies <- sort( unique(data[[column]]) )
 
-  for(i in i:length(agencies)){
+  for(i in 1:length(agencies)){
     a <- agencies[i]
 
-    # data_a <- subset(data, agency %in% a )
     data_a <- data[ data[[column]] == a ,]
 
     summary_data <- summarize_qs(data_a)

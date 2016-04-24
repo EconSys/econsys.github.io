@@ -6,6 +6,7 @@
 
 <head>
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css">
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"> -->
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css">
   <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Open+Sans:400,300'>
 
@@ -17,8 +18,8 @@
       font-family: 'Open Sans', sans-serif;
       font-weight: 300;
 
-      background-color: rgb(43,43,42);
-      color: white;
+      background-color: whitesmoke;
+      color: rgb(43,43,42);
       font-size: 22px;
       line-height: 35px;
       height: 35px;
@@ -37,30 +38,40 @@
       fill: #666;
     }
 
-    #key-driver-table {
+    #question-table {
+      border-collapse: collapse;
       font-size: 14px;
       line-height: 1.4rem;
       margin-top: 50px;
       width: 100%;
     }
 
-    #key-driver-table th {
+    #question-table th {
       height: 55px;
       font-weight: normal;
-      padding: 3px;
+      padding: 4px;
       text-align: left;
       vertical-align: top;
     }
 
-    #key-driver-table tbody td {
-      border-top: 1px solid whitesmoke;
-      padding: 3px;
+    #question-table tbody td {
+      border-bottom: 1px solid whitesmoke;
+      padding: 4px;
       vertical-align: top;
+    }
+
+    .row-header {
+      background-color: whitesmoke;
+      font-weight: bold;
     }
 
     .q-average, 
     .q-importance {
       text-align: right;
+    }
+
+    .no-data {
+      color: #999;
     }
   </style>
 
@@ -78,38 +89,141 @@
     <div style="margin-left: 40px">Key Driver Analysis</div>
   </div>
 
+
   <div style="width: 900px; margin: 50px auto;">
+    <p>
+     Key driver analysis explains overarching employee outcomes like engagement, satisfaction, or intent to leave. Here we apply multivariate regression to identify the largest contributors overall satisfaction for the <a href="https://www.fedview.opm.gov/" target="_blank">2015 Federal Employee Viewpoint Survey</a>. To help select the questions with the largest effects on overall satisfaction and to help reduce potential issues of multicollinearity, we employ <a href="https://en.wikipedia.org/wiki/Lasso_(statistics)" target=_"blank">LASSO regression</a>.
+    </p>
+
+    <label>Select an agency: </label>
     <select id="select-an-agency">
       <option value="af">Department of the Air Force</option>
+      <option value="af0d">- AFE - US Air Forces in Europe</option>
+      <option value="af0j">- AET - Air Education & Training Command</option>
+      <option value="af0m">- AFR - HQ Air Force Reserve Command</option>
+      <option value="af0r">- PAF - Pacific Air Forces</option>
+      <option value="af0v">- SOC - Air Force Special Operations Command</option>
+      <option value="af17">- IMS - AF Installation and Mission Support</option>
+      <option value="af1c">- ACC - Air Combat Command</option>
+      <option value="af1l">- AMC - Air Mobility Command</option>
+      <option value="af1m">- MTC - Air Force Materiel Command</option>
+      <option value="af1s">- SPC - HQ Air Force Space Command</option>
+      <option value="afgs">- GBS - Global Strike Command</option>
+      <option value="afhq">- USAF Headquarters</option>
       <option value="ag">Department of Agriculture</option>
+      <option value="ag01">- Farm and Foreign Agriculture Services (FFAS)</option>
+      <option value="ag04">- Food Safety (FS)</option>
+      <option value="ag05">- Natural Resources and Environment (NRE)</option>
+      <option value="ag07">- Food Nutrition and Consumer Services (FNCS)</option>
+      <option value="ag09">- Rural Development (RD)</option>
+      <option value="ag10">- Research Education and Economics (REE)</option>
+      <option value="ag14">- Marketing and Regulatory Programs (MRP)</option>
       <option value="aj">National Endowment For The Arts</option>
       <option value="am">U.S. Agency for International Development</option>
+      <option value="am02">- Overseas</option>
       <option value="ar">Department of the Army</option>
+      <option value="araa">- U. S. Army Accession Command (ARAA)</option>
+      <option value="arae">- U.S. Army Acquisition Support Center (ARAE)</option>
+      <option value="aras">- U.S. Army Intelligence and Security Command (ARAS)</option>
+      <option value="arat">- US Army Test and Evaluation Command (ARAT)</option>
+      <option value="arba">- U.S. Army Installation Management Command (ARBA)</option>
+      <option value="arce">- U.S. Army Corps of Engineers</option>
+      <option value="arfc">- U.S. Army Forces Command (ARFC)</option>
+      <option value="arg6">- US Army Network Enterprise Tech Cmnd (ARG6)</option>
+      <option value="arhr">- U.S. Army Reserve Command (ARHR)</option>
+      <option value="armc">- U.S. Army Medical Command (ARMC)</option>
+      <option value="arse">- HQDA Field Operating Agencies and Staff Support Agencies (ARSE)</option>
+      <option value="artc">- U.S. Army Training and Doctrine Command (ARTC)</option>
+      <option value="arx0">- U.S. Army Material Command (ARX*)</option>
       <option value="bd">Merit Systems Protection Board</option>
       <option value="bf">Defense Nuclear Facilities Safety Board</option>
       <option value="cm">Department of Commerce</option>
+      <option value="cm03">- Census Bureau</option>
+      <option value="cm08">- National Institute of Standards and Technology</option>
+      <option value="cm09">- National Oceanic and Atmospheric Administration</option>
+      <option value="cm14">- U.S. Patent & Trademark Office</option>
       <option value="dd">DoD 4th Estate</option>
+      <option value="dd01">- WHS and Serviced Agencies</option>
+      <option value="dd04">- Defense Information Systems Agency</option>
+      <option value="dd07">- Defense Logistics Agency</option>
+      <option value="dd10">- Defense Contract Audit Agency</option>
+      <option value="dd27">- Missile Defense Agency</option>
+      <option value="dd34">- Defense Commissary Agency</option>
+      <option value="dd35">- Defense Finance and Accounting Service</option>
+      <option value="dd60">- Defense Health Agency</option>
+      <option value="dd63">- Defense Contract Management Agency</option>
       <option value="dj">Department of Justice</option>
+      <option value="dj02">- Federal Bureau of Investigation</option>
+      <option value="dj03">- Bureau of Prisons</option>
+      <option value="dj08">- U.S. Marshals Service</option>
+      <option value="dj09">- Office of the U.S. Attorneys</option>
+      <option value="dj15">- Bureau of Alcohol, Tobacco, Firearms & Explosives</option>
+      <option value="djea">- Drug Enforcement Administration</option>
       <option value="dl">Department of Labor</option>
+      <option value="dl03">- Bureau of Labor Statistics</option>
       <option value="dn">Department of Energy</option>
+      <option value="dn15">- Bonneville Power Administration</option>
       <option value="eb">Export Import Bank</option>
       <option value="ed">Department of Education</option>
       <option value="ep">Environmental Protection Agency</option>
+      <option value="ep11">- Office of Research and Development</option>
+      <option value="ep19">- Region 06</option>
       <option value="fc">Federal Communications Commission</option>
       <option value="fj">Chemical Safety/Hazard Investigation Bd</option>
       <option value="gg">Office of Government Ethics</option>
       <option value="gs">General Services Administration</option>
+      <option value="gs03">- Public Buildings Service (GS03)</option>
+      <option value="gs30">- Federal Acquisition Service (GS30)</option>
       <option value="he">Department of Health and Human Services</option>
+      <option value="he04">- Centers for Disease Control & Prevention</option>
+      <option value="he05">- Centers for Medicare And Medicaid Services</option>
+      <option value="he06">- Food And Drug Administration</option>
+      <option value="he08">- Indian Health Service</option>
+      <option value="he09">- National Institutes of Health</option>
+      <option value="he10">- Office of the Secretary</option>
+      <option value="he12">- Office of Inspector General</option>
       <option value="hf">Federal Housing Finance Agency</option>
       <option value="hs">Department of Homeland Security</option>
+      <option value="hs01">- Citizenship and Immigration Services (CIS)</option>
+      <option value="hs02">- U.S. Customs and Border Protection (CBP)</option>
+      <option value="hs03">- United States Coast Guard (USCG)</option>
+      <option value="hs04">- Federal Emergency Management Agency (FEMA)</option>
+      <option value="hs06">- Immigration and Customs Enforcement (ICE)</option>
+      <option value="hs12">- U.S. Secret Service (USSS)</option>
+      <option value="hs14">- Transportation Security Administration (TSA)</option>
       <option value="hu">Department of Housing and Urban Development</option>
       <option value="if">Inter-American Foundation</option>
       <option value="in">Department of the Interior</option>
+      <option value="in01">- Bureau of Land Management</option>
+      <option value="in02">- Bureau of Reclamation</option>
+      <option value="in03">- Bureau of Indian Affairs</option>
+      <option value="in05">- United States Geological Survey</option>
+      <option value="in06">- National Park Service</option>
+      <option value="in07">- Fish and Wildlife Service</option>
       <option value="ks">Corp For National And Community Service</option>
       <option value="mc">Federal Maritime Commission</option>
       <option value="nn">National Aeronautics and Space Administration</option>
+      <option value="nn22">- Glenn Research Center</option>
+      <option value="nn23">- Langley Research Center</option>
+      <option value="nn51">- Goddard Space Flight Center</option>
+      <option value="nn62">- Marshall Space Flight Center</option>
+      <option value="nn72">- Lyndon B. Johnson Space Center</option>
+      <option value="nn76">- John F. Kennedy Space Center</option>
       <option value="nu">Nuclear Regulatory Commission</option>
       <option value="nv">Department of the Navy</option>
+      <option value="nv11">- Chief of Naval Operations, Immediate Office (NV11)</option>
+      <option value="nv12">- DON, Assistant for Administration (NV12)</option>
+      <option value="nv18">- Bureau of Medicine and Surgery (NV18)</option>
+      <option value="nv19">- Naval Air Systems Command (NV19)</option>
+      <option value="nv22">- Chief of Bureau of Naval Personnel (NV22)</option>
+      <option value="nv23">- Naval Supply Systems Command (NV23)</option>
+      <option value="nv24">- Naval Sea Systems Command (NV24)</option>
+      <option value="nv25">- Naval Facilities Engineering Command (NV25)</option>
+      <option value="nv39">- Space and Naval Warfare Systems Command (NV39)</option>
+      <option value="nv52">- Commander, Navy Installations (NV52)</option>
+      <option value="nv60">- U.S. Fleet Forces Command (NV60)</option>
+      <option value="nv70">- U.S. Pacific Fleet Command (NV70)</option>
+      <option value="nvmr">- U.S. Marine Corps</option>
       <option value="om">Office of Personnel Management</option>
       <option value="os">Occupational Safety & Health Review Cmsn</option>
       <option value="se">Securities and Exchange Commission</option>
@@ -117,7 +231,13 @@
       <option value="st">Department of State</option>
       <option value="sz">Social Security Administration</option>
       <option value="td">Department of Transportation</option>
+      <option value="td03">- Federal Aviation Administration (FAA)</option>
+      <option value="td04">- Federal Highway Administration (FHWA)</option>
       <option value="tr">Department of the Treasury</option>
+      <option value="tr93">- Internal Revenue Service</option>
+      <option value="traj">- Office of the Comptroller of the Currency</option>
+      <option value="trcc">- IRS Chief Counsel</option>
+      <option value="trfs">- Fiscal Service</option>
       <option value="va">Department of Veterans Affairs</option>
       <option value="va01">- VA Central Office</option>
       <option value="va02">- Veterans Health Administration</option>
@@ -126,7 +246,7 @@
 
     <svg id="key-driver-graph"></svg>
 
-    <table id="key-driver-table">
+    <table id="question-table">
       <thead>
         <tr>
           <th>#</th>
@@ -139,10 +259,33 @@
           <th style="text-align: right">Importance</th>
         </tr>
       </thead>
-      <tbody>
-
+      <tbody class="successes">
+        <tr class="row-header" style="color: rgb(65,171,93);">
+          <td colspan="5">Successes</td>
+        </tr>
+      </tbody>
+      <tbody class="critical_improvements">
+        <tr class="row-header" style="color: rgb(227,26,28);">
+          <td colspan="5">Critical Improvements</td>
+        </tr>
+      </tbody>
+      <tbody class="basics">
+         <tr class="row-header" style="color: rgb(66,146,198);">
+          <td colspan="5">Basics</td>
+        </tr>
+      </tbody>
+      <tbody class="low_yields">
+         <tr class="row-header" style="color: rgb(254,178,76);">
+          <td colspan="5">Low Yields</td>
+        </tr>
+      </tbody>
+      <tbody class="remaining_questions">
+         <tr class="row-header" style="color: rgb(43,43,42);">
+          <td colspan="5">Remaining Questions</td>
+        </tr>
       </tbody>
     </table>
+
   </div>
 
 
@@ -157,14 +300,63 @@
       var q_mean = d3.mean(data, function(d){
             return d.mean;
           }),
+          q_se = d3.deviation(data, function(d){
+            return d.mean;
+          }) / Math.sqrt(data.length),
           coeffs_no_zero = data.filter(function(d){
             return d.coeff > 0;
           }),
           coeff_mean = d3.mean(coeffs_no_zero, function(d){
             return d.coeff;
-          });
+          })
+          coeff_se = d3.deviation(coeffs_no_zero, function(d){
+            return d.coeff;
+          }) / Math.sqrt(coeffs_no_zero.length);
+
+      var key_drivers = {
+        successes: { data: [], color: 'rgb(65,171,93)' },
+        critical_improvements: { data: [], color: 'rgb(227,26,28)' },
+        low_yields: { data: [], color: 'rgb(254,178,76)' },
+        basics: { data: [], color: 'rgb(66,146,198)' },
+        remaining_questions: { data: [], color: 'rgb(43,43,42)' },
+      };
+
+
+      data.forEach(function(d){
+        if(d.coeff == 0) {
+          d.key_driver = 'remaining_questions';
+          key_drivers.remaining_questions.data.push(d);
+          return;
+        }
+
+        if(d.mean >= q_mean && d.coeff >= coeff_mean){
+          d.key_driver = 'successes';
+          key_drivers.successes.data.push(d);
+        }
+        else if(d.mean < q_mean && d.coeff >= coeff_mean){
+          d.key_driver = 'critical_improvements';
+          key_drivers.critical_improvements.data.push(d);
+        }
+        else if(d.mean < q_mean && d.coeff < coeff_mean){
+          d.key_driver = 'low_yields';
+          key_drivers.low_yields.data.push(d);
+        }
+        else {
+          d.key_driver = 'basics';
+          key_drivers.basics.data.push(d);
+        } 
+      });
+
+
+      Object.keys(key_drivers).forEach(function(k){
+        key_drivers[k].data = key_drivers[k].data.sort(function(a,b){
+          return d3.descending(a.mean,b.mean);
+        });
+      });
+
 
       var x_s = data.map(function(d){ return d.mean }),
+          x_max = d3.max(x_s),
           x_scale = d3.scale.linear()
             .domain([0.5, 5.5])
             .range([0, width]),
@@ -214,14 +406,44 @@
       svg.selectAll('.x.axis').transition().call(x_axis);
       svg.selectAll('.y.axis').transition().call(y_axis);
 
+      // var q_se_rect = svg.selectAll('rect.q_se')
+      //   .data([q_mean]);
+
+      // q_se_rect.enter().append('rect')
+      //   .attr('class','q_se')
+      //   .style({
+      //     'fill': 'whitesmoke'
+      //   });
+
+      // q_se_rect.transition()
+      //   .attr('width', x_scale(q_mean + 1.96 * q_se) -  x_scale(q_mean - 1.96 * q_se))
+      //   .attr('height', y_scale(0))
+      //   .attr('x', x_scale(q_mean - (1.96 * q_se)))
+      //   .attr('y',0);
+
+      // var coeff_se_rect = svg.selectAll('rect.coeff_se')
+      //   .data([q_mean]);
+
+      // coeff_se_rect.enter().append('rect')
+      //   .attr('class','coeff_se')
+      //   .style({
+      //     'fill': 'whitesmoke'
+      //   });
+
+      // coeff_se_rect.transition()
+      //   .attr('height', y_scale(q_mean - 1.96 * coeff_se) - y_scale(q_mean + 1.96 * coeff_se))
+      //   .attr('width', x_scale(5.5))
+      //   .attr('y', y_scale(coeff_mean + (1.96 * coeff_se)))
+      //   .attr('x',0);
+
       var q_mean_line = svg.selectAll('line.q_mean')
         .data([q_mean]);
 
       q_mean_line.enter().append('line')
         .attr('class','q_mean')
         .style({
-          'stroke-width': 2,
-          'stroke': '#666'
+          'stroke-width': 1.5,
+          'stroke': 'rgb(187,187,187)'
         });
 
       q_mean_line.transition()
@@ -237,8 +459,8 @@
       coeff_mean_line.enter().append('line')
         .attr('class','coeff_mean')
         .style({
-          'stroke-width': 2,
-          'stroke': '#666'
+          'stroke-width': 1.5,
+          'stroke': 'rgb(187,187,187)'
         });
 
       coeff_mean_line.transition()
@@ -265,28 +487,20 @@
         .attr('cx', function(d){ return x_scale(d.mean) })
         .attr('cy', function(d){ return y_scale(d.coeff) })
         .style('stroke', function(d){
-          if(d.mean >+ q_mean && d.coeff >= coeff_mean)
-            return 'rgb(65, 171, 93)';
-          else if(d.mean < q_mean && d.coeff >+ coeff_mean)
-            return 'rgb(227, 26, 28)';
-          else if(d.mean < q_mean && d.coeff < coeff_mean)
-            return 'rgb(254, 178, 76)';
-          else
-            return 'rgb(66, 146, 198)';
+          return key_drivers[d.key_driver].color;
         });
 
         circles.exit().remove();
 
 
       var labels = svg.selectAll('.data-label')
-        .data(circle_data, function(d){ console.log(d); return d.q; });
+        .data(circle_data, function(d){ return d.q; });
         
       labels.enter().append('text')
         .attr('class','data-label')
         .attr('dx', 10)
         .attr('dy', 5)
         .style('font-size', '12px')
-        // .style('opacity',0.7)
         .style('fill','#999');
 
       labels.text(function(d){ return d.q.toUpperCase(); })
@@ -294,28 +508,19 @@
         .attr('x', function(d){ return x_scale(d.mean) })
         .attr('y', function(d){ return y_scale(d.coeff) })
         .style('fill', function(d){
-          if(d.mean >+ q_mean && d.coeff >= coeff_mean)
-            return 'rgb(65, 171, 93)';
-          else if(d.mean < q_mean && d.coeff >+ coeff_mean)
-            return 'rgb(227, 26, 28)';
-          else if(d.mean < q_mean && d.coeff < coeff_mean)
-            return 'rgb(254, 178, 76)';
-          else
-            return 'rgb(66, 146, 198)';
+          return key_drivers[d.key_driver].color;
         });
 
         labels.exit().remove();
 
 
-      var rows = d3.select('#key-driver-table tbody').selectAll('tr')
-            .data(data, function(d){
-              return d.q;
-            }),
-          svg_width = 160,
+      var svg_width = 160,
           svg_height = 20,
           rect_height = 10,
           rect_width = 150,
-          rect_y = (svg_height - rect_height)/2;
+          rect_y = (svg_height - rect_height)/2,
+          dist_colors = ['#d7191c','#fdae61','#ffffbf','#a6d96a','#1a9641'],
+          format = d3.format('.2f');
 
 
       if(d3.select('.rect-axis svg').empty()){
@@ -336,80 +541,101 @@
           rect_axis_svg.selectAll('.x.axis').transition().call(rect_axis);
       }
 
-      rows.enter().append('tr')
-        .each(function(d){
-          var r = d3.select(this);
+      var insert_rows = function(row_data, category){
+        var tbody = d3.select('tbody.' + category),
+            rows = tbody.selectAll('tr.data')
+              .data(row_data);
 
-          r.append('td').attr('class', 'q-number');
-          r.append('td').attr('class', 'q-text');
-          r.append('td').attr('class', 'q-average');
-          r.append('td').attr('class', 'q-average-svg')
-            .append('svg')
-              .attr({ width: svg_width, height: svg_height })
-            .append('g')
-              .attr('transform','translate(5,0)')
-              .attr('class','graph');
-          r.append('td').attr('class', 'q-importance');
+        tbody.selectAll('.no-data').remove();
 
-        });
-      
-      var dist_colors = ['#d7191c','#fdae61','#ffffbf','#a6d96a','#1a9641'],
-          format = d3.format('.2f');
+          if(row_data.length == 0){
+            tbody.append('tr')
+              .attr('class','no-data')
+              .append('td')
+                .attr('colspan','5')
+                .text('No ' + category.replace('_',' ').toLowerCase() + '.');
+          }
 
-      rows.each(function(d){
-          var r = d3.select(this),
-              x0 = 0,
-              dist = [1,2,3,4,5].map(function(i){ 
-                var value = d[i]/d.n
-                return { value: value,  x0: x0, x1: x0 += value }; 
+          rows.enter().append('tr')
+            .attr('class','data')
+            .each(function(d){
+              var r = d3.select(this);
+
+              r.append('td').attr('class', 'q-number');
+              r.append('td').attr('class', 'q-text');
+              r.append('td').attr('class', 'q-average');
+              r.append('td').attr('class', 'q-average-svg')
+                .append('svg')
+                  .attr({ width: svg_width, height: svg_height })
+                .append('g')
+                  .attr('transform','translate(5,0)')
+                  .attr('class','graph');
+              r.append('td').attr('class', 'q-importance');
+
+            });
+          
+         
+          rows.each(function(d){
+            var r = d3.select(this),
+                x0 = 0,
+                dist = [1,2,3,4,5].map(function(i){ 
+                  var value = d[i]/d.n
+                  return { value: value,  x0: x0, x1: x0 += value }; 
+                });
+
+            r.select('.q-number').text(d.q.toUpperCase());
+            r.select('.q-text').text(questions[d.q]);
+            r.select('.q-average').text(format(d.mean));
+
+            if(d.coeff > 0){
+              r.select('.q-importance').text(format(d.coeff));
+            }
+
+            var rects = r.select('.q-average-svg g.graph').selectAll('rect')
+              .data(dist, function(d,i){ return i; });
+
+            rects.enter().append('rect')
+              .attr('y', rect_y)
+              .attr('height', rect_height)
+              .style('fill', function(d,i){ 
+                return dist_colors[i]; 
+              })
+              .style('opacity', 0.7);
+
+            rects.transition()
+              .attr('width', function(d){
+                return rect_width * d.value;
+              })
+              .attr('x', function(d){
+                return rect_width * d.x0;
               });
 
-          r.select('.q-number').text(d.q.toUpperCase());
-          r.select('.q-text').text(questions[d.q]);
-          r.select('.q-average').text(format(d.mean));
-          if(d.coeff > 0)
-            r.select('.q-importance').text(format(d.coeff));
+            var means = r.select('.q-average-svg svg').selectAll('line')
+                  .data([d.mean]);
 
-          var rects = r.select('.q-average-svg g.graph').selectAll('rect')
-            .data(dist, function(d,i){ return i; });
-
-          rects.enter().append('rect')
-            .attr('y', rect_y)
-            .attr('height', rect_height)
-            .style('fill', function(d,i){ 
-              return dist_colors[i]; 
-            })
-            .style('opacity', 0.7);
-
-          rects.transition()
-            .attr('width', function(d){
-              return rect_width * d.value;
-            })
-            .attr('x', function(d){
-              return rect_width * d.x0;
-            });
-
-          var means = r.select('.q-average-svg svg').selectAll('line')
-            .data([d.mean]);
-
-          means.enter().append('line')
-            .attr('y1', 0)
-            .attr('y2', svg_height)
-            .style('stroke-width', 1.5)
-            .style('stroke','rgb(43,43,42)');
+            means.enter().append('line')
+              .attr('y1', 0)
+              .attr('y2', svg_height)
+              .style('stroke-width', 1.5)
+              .style('stroke','rgb(43,43,42)');
 
 
-           means.transition()
-            .attr('x1', function(d){
-              return (d - 1) / 4 * rect_width;
-            })
-            .attr('x2', function(d){
-              return (d - 1) / 4 * rect_width;
-            })
+            means.transition()
+              .attr('x1', function(d){
+                return (d - 1) / 4 * rect_width;
+              })
+              .attr('x2', function(d){
+                return (d - 1) / 4 * rect_width;
+              });
 
-        });
+          });
 
+          rows.exit().remove();
+      };
 
+      Object.keys(key_drivers).forEach(function(k){
+        insert_rows(key_drivers[k].data, k);
+      });
 
     };
 
