@@ -5,8 +5,7 @@
 <!-- jruby -run -e httpd . -p 9090 -->
 
 <head>
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css">
-  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css">
   <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Open+Sans:400,300'>
 
@@ -14,7 +13,11 @@
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.min.js"></script>
 
   <style>
-    .nav-bar {
+    body {
+      font-size: 16px;
+    }
+
+    .nav-header {
       font-family: 'Open Sans', sans-serif;
       font-weight: 300;
 
@@ -22,7 +25,7 @@
       color: rgb(43,43,42);
       font-size: 22px;
       line-height: 35px;
-      height: 35px;
+      height: 55px;
       padding: 10px 20px;
     }
 
@@ -41,7 +44,6 @@
     #question-table {
       border-collapse: collapse;
       font-size: 14px;
-      line-height: 1.4rem;
       margin-top: 50px;
       width: 100%;
     }
@@ -79,24 +81,50 @@
 
 <body>
 
-  <div class="nav-bar">
-    <svg width="35" height="35" style="float: left;">
-      <circle r="6" cx="12" cy="12" style="fill: rgb(227, 26, 28);"></circle>
-      <circle r="6" cx="26" cy="12" style="fill: rgb(65, 171, 93);"></circle>
-      <circle r="6" cx="12" cy="26" style="fill: rgb(254, 178, 76);"></circle>
-      <circle r="6" cx="26" cy="26" style="fill: rgb(66, 146, 198);"></circle>
-    </svg>
-    <div style="margin-left: 40px">Key Driver Analysis</div>
+  <div class="nav-header">
+    <div>
+      <svg width="35" height="35" style="float: left;">
+        <circle r="6" cx="12" cy="12" style="fill: rgb(227, 26, 28);"></circle>
+        <circle r="6" cx="26" cy="12" style="fill: rgb(65, 171, 93);"></circle>
+        <circle r="6" cx="12" cy="26" style="fill: rgb(254, 178, 76);"></circle>
+        <circle r="6" cx="26" cy="26" style="fill: rgb(66, 146, 198);"></circle>
+      </svg>
+      <div style="margin-left: 40px">Key Driver Analysis</div>
+    </div>
   </div>
 
 
   <div style="width: 900px; margin: 50px auto;">
     <p>
-     Key driver analysis explains overarching employee outcomes like engagement, satisfaction, or intent to leave. Here we apply multivariate regression to identify the largest contributors overall satisfaction for the <a href="https://www.fedview.opm.gov/" target="_blank">2015 Federal Employee Viewpoint Survey</a>. To help select the questions with the largest effects on overall satisfaction and to help reduce potential issues of multicollinearity, we employ <a href="https://en.wikipedia.org/wiki/Lasso_(statistics)" target=_"blank">LASSO regression</a>.
+     Key Driver Analysis explains overarching employee outcomes like engagement, satisfaction, or intent to leave. Here we apply multivariate regression to identify the largest contributors to overall employee satisfaction for the <a href="https://www.fedview.opm.gov/" target="_blank">2015 Federal Employee Viewpoint Survey</a>. To help select the questions with the largest effects on overall satisfaction and to help reduce potential issues of multicollinearity, we employ <a href="https://en.wikipedia.org/wiki/Lasso_(statistics)" target=_"blank">LASSO regression</a>.
+    </p>
+    <p>
+      The key point of this analysis is that the items with the lowest relative responses aren’t necessary the ones that management should focus on to improve overall satisfaction. If lower scoring items aren't associated with higher  satisfaction, choosing to focus on them may yield little to no gains.
     </p>
 
+    <p>
+      The results of the Key Driver Analysis are illustrated in the plot below, which is divided into four quadrants based on the average question score and average importance:
+    </p>
+
+    <ul style="margin-bottom: 35px;">
+      <li>
+        <span style="color: rgb(65, 171, 93); font-weight: bold;">Successes</span> in the upper right quadrant (High Score, High Importance) are items  where the organization scored relatively high that are also strongly associated with overall satisfaction.
+      </li>
+      <li>
+        <span style="color: rgb(227, 26, 28); font-weight: bold;">Critical Improvements</span> in the upper left quadrant (Low Score, High Importance) represent items where the organization scored relatively low, but are strongly associated with overall satisfaction. These are areas the organzation might focus.
+      </li>
+      <li>
+        <span style="color: rgb(66, 146, 198); font-weight: bold;">Basics</span> in the lower right quadrant (High Score, Low Importance) are areas where the organization scored high but have relatively lower correlations to overall satisfaction levels.
+      </li>
+      <li>
+        <span style="color: rgb(254, 178, 76); font-weight: bold;">Low Yields</span> in the lower left quadrant (Low Score, Low Importance) are the organization's lowest scoring items with the lowest importance.
+      </li>
+    </ul>
+
+
+
     <label>Select an agency: </label>
-    <select id="select-an-agency">
+    <select id="select-an-agency" class="form-control">
       <option value="af">Department of the Air Force</option>
       <option value="af0d">- AFE - US Air Forces in Europe</option>
       <option value="af0j">- AET - Air Education & Training Command</option>
@@ -244,7 +272,25 @@
       <option value="va03">- Veterans Benefits Administration</option>
     </select>
 
-    <svg id="key-driver-graph"></svg>
+    <svg id="key-driver-graph">
+      <defs>
+        <filter id="drop-shadow">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="blur"/>
+          <feColorMatrix type="matrix" values=
+                      "0 0 0 0 255
+                       0 0 0 0 255
+                       0 0 0 0 255
+                       0 0 0 0 0.75"/>
+            <feOffset in="bluralpha" dx="3" dy="3" result="offsetBlur"/>
+            <feMerge>
+              <feMergeNode in="offsetBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+
+        <!-- <filter id="drop-shadow" height="130%"><feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur"></feGaussianBlur><feOffset in="blur" dx="0" dy="0" result="offsetBlur"></feOffset><feMerge><feMergeNode in="offsetBlur"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter> -->
+      </defs>
+    </svg>
 
     <table id="question-table">
       <thead>
@@ -354,6 +400,8 @@
         });
       });
 
+      var format = d3.format('.2f');
+
 
       var x_s = data.map(function(d){ return d.mean }),
           x_max = d3.max(x_s),
@@ -381,26 +429,72 @@
             .attr('class','graph')
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-        svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
-          .append("text")
-            .attr("class", "label")
-            .attr("x", width/2)
-            .attr("y", 50)
-            .style("text-anchor", "middle")
-            .text("Average Question Score");
+        svg.append('g')
+            .attr('class', 'x axis')
+            .attr('transform', 'translate(0,' + height + ')')
+          .append('text')
+            .attr('class', 'label')
+            .attr('x', width/2)
+            .attr('y', 50)
+            .style('text-anchor', 'middle')
+            .text('Average Question Score');
 
-        svg.append("g")
-            .attr("class", "y axis")
-          .append("text")
-            .attr("class", "label")
-            .attr("transform", "rotate(-90)")
-            .attr("x", -height/2)
-            .attr("y", -65)
-            .attr("dy", ".71em")
-            .style("text-anchor", "middle")
-            .text("Importance");
+        svg.append('g')
+            .attr('class', 'y axis')
+          .append('text')
+            .attr('class', 'label')
+            .attr('transform', 'rotate(-90)')
+            .attr('x', -height/2)
+            .attr('y', -65)
+            .attr('dy', '.71em')
+            .style('text-anchor', 'middle')
+            .text('Importance');
+
+        svg.append('text')
+          .text('Successes')
+          .attr('x', width)
+          .attr('y', 0)
+          .attr('dy', '.71em')
+          .style('text-anchor', 'end')
+          .style('fill','rgb(65,171,93)')
+          .style('opacity', 0.75);
+
+        svg.append('text')
+          .text('Critical Improvements')
+          .attr('x', 10)
+          .attr('y', 0)
+          .attr('dy', '.71em')
+          .style('text-anchor', 'start')
+          .style('fill','rgb(227,26,28)')
+          .style('opacity', 0.75);
+
+        svg.append('text')
+          .text('Low Yields')
+          .attr('x', 10)
+          .attr('y', height)
+          .attr('dy', '-.71em')
+          .style('text-anchor', 'start')
+          .style('fill','rgb(254,178,76)')
+          .style('opacity', 0.75);
+
+        svg.append('text')
+          .text('Basics')
+          .attr('x', width)
+          .attr('y', height)
+          .attr('dy', '-.71em')
+          .style('text-anchor', 'end')
+          .style('fill','rgb(66,146,198)')
+          .style('opacity', 0.75);
+
+        svg.append('g')
+          .attr('class', 'line-layer')
+
+        svg.append('g')
+          .attr('class', 'label-layer')
+
+        svg.append('g')
+          .attr('class', 'circle-layer')
+
       }
 
       svg.selectAll('.x.axis').transition().call(x_axis);
@@ -436,7 +530,7 @@
       //   .attr('y', y_scale(coeff_mean + (1.96 * coeff_se)))
       //   .attr('x',0);
 
-      var q_mean_line = svg.selectAll('line.q_mean')
+      var q_mean_line = svg.select('.line-layer').selectAll('line.q_mean')
         .data([q_mean]);
 
       q_mean_line.enter().append('line')
@@ -452,8 +546,27 @@
         .attr('x2', x_scale(q_mean))
         .attr('y2', y_scale(y_max));
 
+      var q_mean_label = svg.select('.line-layer').selectAll('text.q_mean')
+        .data([q_mean]);
 
-      var coeff_mean_line = svg.selectAll('line.coeff_mean')
+      q_mean_label.enter().append('text')
+        .attr('class','q_mean')
+        .attr('dy', '-0.71em')
+        .style({
+          'font-size': '12px',
+          'fill': 'darkgray',
+          'text-anchor': 'middle'
+        });
+
+      q_mean_label.transition()
+        .text(function(d){
+          return 'Average Question Score = ' + format(d);
+        })
+        .attr('x', x_scale(q_mean))
+        .attr('y', y_scale(y_max))
+
+
+      var coeff_mean_line = svg.select('.line-layer').selectAll('line.coeff_mean')
         .data([coeff_mean]);
 
       coeff_mean_line.enter().append('line')
@@ -470,14 +583,58 @@
         .attr('y2', y_scale(coeff_mean));
 
 
+      var coeff_mean_label = svg.select('.line-layer').selectAll('text.coeff_mean')
+        .data([coeff_mean]);
+
+      coeff_mean_label.enter().append('text')
+        .attr('class','coeff_mean')
+        .attr('dy', '-0.71em')
+        .style({
+          'font-size': '12px',
+          'fill': 'darkgray',
+          'text-anchor': 'end'
+        });
+
+      coeff_mean_label.transition()
+        .text(function(d){
+          return 'Average Importance = ' + format(d);
+        })
+        // .attr('x1', x_scale(0.5))
+        // .attr('y1', y_scale(coeff_mean))
+        .attr('x', x_scale(5.5))
+        .attr('y', y_scale(coeff_mean));
+
       var circle_data = data.filter(function(d){ return d.coeff > 0 });
 
-      var circles = svg.selectAll('circle')
+      var labels = svg.select('.label-layer').selectAll('.data-label')
+        .data(circle_data, function(d){ return d.q; });
+        
+      labels.enter().append('text')
+        .attr('class','data-label')
+        .attr('dx', 10)
+        .attr('dy', 5)
+        .style('font-size', '12px')
+        .style('fill','#999')
+        .style('filter','url(#drop-shadow)')
+        .style('opacity',0.7);
+
+      labels.text(function(d){ return d.q.toUpperCase(); })
+        .transition()
+        .attr('x', function(d){ return x_scale(d.mean) })
+        .attr('y', function(d){ return y_scale(d.coeff) })
+        .style('fill', function(d){
+          return key_drivers[d.key_driver].color;
+        });
+
+        labels.exit().remove();
+
+
+
+      var circles = svg.select('.circle-layer').selectAll('circle')
         .data(circle_data, function(d){ return d.q; });
         
       circles.enter().append('circle')
-        .attr('r', 5)
-        // .style('opacity', 0.8)
+        .attr('r',5)
         .style('fill','white')
         .style('fill-opacity',0)
         .style('stroke-width',2)
@@ -493,25 +650,7 @@
         circles.exit().remove();
 
 
-      var labels = svg.selectAll('.data-label')
-        .data(circle_data, function(d){ return d.q; });
-        
-      labels.enter().append('text')
-        .attr('class','data-label')
-        .attr('dx', 10)
-        .attr('dy', 5)
-        .style('font-size', '12px')
-        .style('fill','#999');
 
-      labels.text(function(d){ return d.q.toUpperCase(); })
-        .transition()
-        .attr('x', function(d){ return x_scale(d.mean) })
-        .attr('y', function(d){ return y_scale(d.coeff) })
-        .style('fill', function(d){
-          return key_drivers[d.key_driver].color;
-        });
-
-        labels.exit().remove();
 
 
       var svg_width = 160,
@@ -519,8 +658,7 @@
           rect_height = 10,
           rect_width = 150,
           rect_y = (svg_height - rect_height)/2,
-          dist_colors = ['#d7191c','#fdae61','#ffffbf','#a6d96a','#1a9641'],
-          format = d3.format('.2f');
+          dist_colors = ['#d7191c','#fdae61','#ffffbf','#a6d96a','#1a9641'];
 
 
       if(d3.select('.rect-axis svg').empty()){
