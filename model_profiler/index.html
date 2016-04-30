@@ -65,8 +65,9 @@
   <div style="width: 960px; margin: 50px auto;">
   
     <p class="lead">Retirement Model</p>
-    <p></p>
-    <svg id="model-profiler"></svg>
+    <div id="model-profiler-parent" style="position: relative;">
+      <svg id="model-profiler"></svg>
+    </div>
 
   </div>
 
@@ -100,7 +101,8 @@
 
 
   var svg = d3.select('svg#model-profiler')
-        .attr({ height: svg_height, width: 960 });
+        .attr({ height: svg_height, width: 960 }),
+      svg_parent = d3.select('div#model-profiler-parent');
 
   var y = d3.scale.linear()
         .domain([model.y.min, model.y.max])
@@ -120,22 +122,22 @@
     return t;
   };
 
-      var updateCharts = function(current_means, changed_v){
-      variables.forEach(function(v){
-        var v_i = model.variables[v];
-        // if(v_i.type == 'continuous'){
-          var plot_data = get_plot_data(current_means, v),
-              plot = d3.select('.' + v);
-          plot.selectAll('path.response-curve')
-            .attr('d', v_i.path_generator(plot_data));
+  var updateCharts = function(current_means, changed_v){
+    console.log('updating charts');
+    console.log(current_means);
+    variables.forEach(function(v){
+      var v_i = model.variables[v],
+          plot_data = get_plot_data(current_means, v),
+          plot = d3.select('.' + v);
+      plot.selectAll('path.response-curve')
+        .attr('d', v_i.path_generator(plot_data));
 
-          plot.selectAll('circle')
-            .attr('cx', v_i.x(current_means[v]))
-            .attr('cy', y(model.equation(current_means)))
+      plot.selectAll('circle')
+        .attr('cx', v_i.x(current_means[v]))
+        .attr('cy', y(model.equation(current_means)))
 
-        // }
-      });
-    };
+    });
+  };
 
 
     var get_plot_data = function(current_means, v){
@@ -167,6 +169,7 @@
     };
 
   var current_means = get_means();
+  window.current_means = current_means;
     
   variables.forEach(function(v,i){
     var v_i = model.variables[v];
@@ -214,22 +217,72 @@
     }
 
 
-    g.append('g')
+    var g_x_axis = g.append('g')
       .attr('class', 'x axis')
       .attr('transform', 'translate(0,' + graph_height + ')')
         .call(v_i.x_axis)
-        .append('text')
-          .text(v_i.title)
-          .attr({ x: graph_height / 2 })
-          .attr('dy', 45)
-          .attr('text-anchor','middle')
-          .style({ 'fill': 'darkgray', 'font-size': '14px' });
+      .append('text')
+      .text(v_i.title)
+        .attr({ x: graph_height / 2 })
+        .attr('dy', 85)
+        .attr('text-anchor','middle')
+        .style({ 'fill': 'darkgray', 'font-size': '14px' });
+
+    var g_input = svg_parent.append('div')
+      .style('position','absolute')
+      .style('top', top  + graph_height + 30 + 'px')
+      .style('left', left + 50 + 'px')
+
+    if(v_i.type == 'continuous'){
+      g_input.append('input')
+        .attr('type','text')
+        .attr('value',v_i.mean)
+        .attr('class','form-control input-' + v)
+        .style('width',graph_height - 100 + 'px')
+        .style('text-align', 'center')
+        .on('input', function(d){
+
+          var value = parseFloat(this.value),
+              domain = v_i.x.domain();
+          console.log(domain)
+          value = value < domain[0] ? domain[0] : value;
+          value = value > domain[1] ? domain[1] : value;
+          current_means[v] = value;
+          updateCharts(current_means, v);
+        });
+    } else {
+      g_input.append('select')
+        .on('change', function(d){
+          current_means[v] = this.value;
+          updateCharts(current_means, v);
+        })
+        .attr('class','form-control input-' + v)
+        .style('width', graph_height - 100 + 'px')
+          .selectAll('option')
+            .data(v_i.values)
+          .enter().append('option')
+            .text(function(d){ return d; })
+            .attr('value', function(d){ return d; })
+            .property('selected', function(d){ 
+              // console.log(d);
+              // console.log(current_means[v]);
+              // console.log(d == current_means[v]);
+              return d == current_means[v] 
+            });
+    }
+
+      
+      // .attr('text-anchor','middle')
+      // .style({ 'fill': 'darkgray', 'font-size': '14px' });
+
+
+
 
 
     v_i.path_generator = d3.svg.line()
         .x(function(d) { return v_i.x(d.x); })
         .y(function(d) { return y(d.y); })
-        .interpolate('basis');
+        .interpolate('linear');
 
    
  
@@ -269,11 +322,12 @@
         }
        
 
+        current_means[v] = t[v];
+
         d3.select(this)
           .attr('cx', v_i.x(t[v]))
           .attr('cy', y(model.equation(t)));
 
-        current_means[v] = t[v];
         updateCharts(current_means, v);
       }) );
 
