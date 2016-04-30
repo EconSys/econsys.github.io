@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<!-- jruby -run -e httpd . -p 9090 -->
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css">
+  <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Open+Sans:400,300'>
+
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.min.js"></script>
+
+  <script type="text/javascript" src="./model_formula.js"></script>
+
+  <style>
+    body {
+      font-size: 16px;
+    }
+
+    .nav-header {
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 300;
+
+      background-color: whitesmoke;
+      color: rgb(43,43,42);
+      font-size: 22px;
+      line-height: 35px;
+      height: 55px;
+      padding: 10px 20px;
+    }
+
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #999;
+      shape-rendering: crispEdges;
+    }
+
+    .tick text {
+      fill: #666;
+    }
+
+  </style>
+
+
+
+<body>
+
+  <div class="nav-header">
+    <div>
+      <svg width="35" height="35" style="float: left;">
+        <circle r="6" cx="12" cy="12" style="fill: rgb(227, 26, 28);"></circle>
+        <circle r="6" cx="26" cy="12" style="fill: rgb(65, 171, 93);"></circle>
+        <circle r="6" cx="12" cy="26" style="fill: rgb(254, 178, 76);"></circle>
+        <circle r="6" cx="26" cy="26" style="fill: rgb(66, 146, 198);"></circle>
+      </svg>
+      <div style="margin-left: 40px">Model Profiler</div>
+    </div>
+  </div>
+
+
+  <div style="width: 960px; margin: 50px auto;">
+  
+    <svg id="model-profiler"></svg>
+
+  </div>
+
+
+  <script>
+  var vamcs = ['VAMC Albuquerque, NM','VAMC Alexandria, LA','VAMC All Others','VAMC Altoona, PA','VAMC Amarillo, TX','VAMC Anchorage, AK','VAMC Ann Arbor, MI','VAMC Asheville, NC','VAMC Atlanta {Decatur}, GA','VAMC Augusta, GA','VAMC Baltimore HCS, MD','VAMC Battle Creek, MI','VAMC Bay Pines, FL','VAMC Beckley, WV','VAMC Bedford, MA','VAMC Big Spring, TX','VAMC Biloxi, MS','VAMC Birmingham, AL','VAMC Black Hills HCS, SD','VAMC Boise, ID','VAMC Boston HCS, MA','VAMC Bronx, NY','VAMC Buffalo, NY','VAMC Butler, PA','VAMC Central Texas HCS, TX','VAMC Charleston, SC','VAMC Cheyenne, WY','VAMC Chicago HCS, IL','VAMC Chillicothe, OH','VAMC Cincinnati, OH','VAMC Clarksburg, WV','VAMC Cleveland, OH','VAMC Coatesville, PA','VAMC Columbia, SC','VAMC Columbus, OH','VAMC Connecticut HCS, CT','VAMC Dallas, TX','VAMC Danville, IL','VAMC Dayton, OH','VAMC Denver, CO','VAMC Detroit, MI','VAMC Dublin, GA','VAMC Durham, NC','VAMC El Paso, TX','VAMC Erie, PA','VAMC Fargo, ND','VAMC Fayetteville, AR','VAMC Fayetteville, NC','VAMC Fresno, CA','VAMC Gainesville, FL','VAMC Grand Junction, CO','VAMC Hampton, VA','VAMC Hines, IL','VAMC Honolulu, HI','VAMC Houston, TX','VAMC Hudson Valley HCS, NY','VAMC Huntington, WV','VAMC Indianapolis, IN','VAMC Iron Mountain, MI','VAMC Jackson, MS','VAMC Kansas City, MO','VAMC Las Vegas, NV','VAMC Lebanon, PA','VAMC Lexington, KY','VAMC Little Rock, AR','VAMC Loma Linda, CA','VAMC Long Beach, CA','VAMC Los Angeles HCS, CA','VAMC Louisville, KY','VAMC Madison, WI','VAMC Manchester, NH','VAMC Manila, PI','VAMC Martinsburg, WV','VAMC Memphis, TN','VAMC Miami, FL','VAMC Mid Tenn. HCS, TN','VAMC Milwaukee, WI','VAMC Minneapolis, MN','VAMC Montana HCS, MT','VAMC Montgomery, AL','VAMC Mountain Home, TN','VAMC Muskogee, OK','VAMC NY Harbor HCS, NY','VAMC Nebraska-W Iowa, NE','VAMC New Jersey HCS, NJ','VAMC New Orleans, LA','VAMC North Arizona HCS, AZ','VAMC North Calif HCS, CA','VAMC North Chicago, IL','VAMC North Indiana HCS, IN','VAMC Northampton, MA','VAMC Northport, NY','VAMC Oklahoma City, OK','VAMC Orlando, FL','VAMC Palo Alto, CA','VAMC Philadelphia, PA','VAMC Phoenix, AZ','VAMC Pittsburgh, PA','VAMC Portland, OR','VAMC Providence, RI','VAMC Puget Sound HCS, WA','VAMC Reno, NV','VAMC Richmond, VA','VAMC Roseburg, OR','VAMC Saginaw, MI','VAMC Salem, VA','VAMC Salisbury, NC','VAMC Salt Lake City, UT','VAMC San Diego, CA','VAMC San Francisco, CA','VAMC San Juan, PR','VAMC Sheridan, WY','VAMC Shreveport, LA','VAMC Sioux Falls, SD','VAMC South Arizona HCS, AZ','VAMC South Texas HCS, TX','VAMC Spokane, WA','VAMC St. Cloud, MN','VAMC St. Louis, MO','VAMC Tampa, FL','VAMC Texas Valley Coast HCS','VAMC Togus, ME','VAMC Tomah, WI','VAMC Tuscaloosa, AL','VAMC Walla Walla, WA','VAMC Washington, DC','VAMC West Palm Beach, FL','VAMC White City, OR','VAMC White River Jct., VT','VAMC Wilkes-Barre, PA'];
+
+  var model = {
+    equation: model_formula,
+    y: { type: 'continuous', min: 0, max: 1 },
+    variables: {
+      age: { type: 'continuous', min: 45, max: 85, mean: 62, title: 'Age', increment: 1 },
+      tenure: { type: 'continuous', min: 0, max: 60, mean: 25, title: 'Tenure', increment: 1 },
+      step: { type: 'ordinal', values: ['01','02','03','04','05','06','07','08','09','10','11','12','13','XX'], mode: '12', title: 'Step' },
+      // review: { type: 'ordinal', values: ['Low','Moderate','High'], mode: 'Moderate', title: 'Review' },
+      grade: { type: 'ordinal', values: [1,2,3,4,5,6,7,99], mode: 2, title: 'Grade' },
+      // vamc: { type: 'nominal', values: vamcs, mode: 'VAMC Pittsburgh, PA', title: 'VA Medical Center' },
+      // occ: { type: 'nominal', values: ['610','620','621'], title: 'Occupational Series' },
+      // unemployment: { type: 'continuous', min: 0.05, max: 0.26, mean: 0.07, title: 'Unemployment' }
+    }
+  };
+
+  var variables = Object.keys(model.variables);
+
+
+  var margin = { left: 204, top: 100, bottom: 50, right: 50 },
+      graph_height = 232,
+      svg_height = variables.length * (graph_height + 50) + margin.top + 150;
+
+  var percent_format = d3.format('0%');
+
+
+  var svg = d3.select('svg#model-profiler')
+        .attr({ height: svg_height, width: 960 });
+
+  var y = d3.scale.linear()
+        .domain([model.y.min, model.y.max])
+        .range([graph_height, 0]),
+      y_axis = d3.svg.axis()
+        .scale(y).orient('left')
+        .tickFormat(percent_format)
+        .tickValues([0,.2,.4,.6,.8,1]);
+
+
+  var get_means = function(){
+    var t = {};
+    variables.map(function(v){
+      var mean = model.variables[v].mean;
+      t[v] = mean ? mean : model.variables[v].mode;
+    })
+    return t;
+  };
+
+  var current_means = get_means();
+    
+  variables.forEach(function(v,i){
+    var v_i = model.variables[v];
+
+    var mod = i%3,
+        left = mod * (graph_height + 50) + 75,
+        top = Math.floor(i/3) * (graph_height + margin.top) + margin.top;
+    var g = svg.append('g')
+      .attr('class', v)
+      .attr('transform','translate(' + left + ',' + top + ')');
+
+    if(mod % 3 === 0){
+      g.append('g')
+        .attr('class', 'y axis')
+        .call(y_axis);
+    }
+
+
+    if(v_i.type == 'continuous'){
+      v_i.x = d3.scale.linear()
+        .domain([v_i.min,v_i.max])
+        .range([0, graph_height]);
+
+      v_i.x_axis = d3.svg.axis()
+        .scale(v_i.x)
+        .orient('bottom')
+        .ticks(6);
+
+    } else if(['ordinal','nominal'].indexOf(v_i.type) >= 0){
+      v_i.x = d3.scale.ordinal()
+        .domain(v_i.values)
+        .rangeRoundBands([0, graph_height], .2);
+      
+       v_i.x_axis = d3.svg.axis()
+        .scale(v_i.x)
+        .orient('bottom');
+
+      if(v_i.values.length > 6){
+         v_i.x_axis.tickValues([]);
+      } else if(v_i.values.length > 6){
+        x_axis.tickValues(v_i.x.domain().filter(function(d,i){
+          return !(i % Math.floor(v_i.values.length / 6))
+        }));
+      }
+    }
+
+
+    g.append('g')
+      .attr('class', 'x axis')
+      .attr('transform', 'translate(0,' + graph_height + ')')
+        .call(v_i.x_axis)
+        .append('text')
+          .text(v_i.title)
+          .attr({ x: graph_height / 2 })
+          .attr('dy', 45)
+          .attr('text-anchor','middle')
+          .style({ 'fill': 'darkgray', 'font-size': '14px' });
+
+
+    v_i.path_generator = d3.svg.line()
+        .x(function(d) { return v_i.x(d.x); })
+        .y(function(d) { return y(d.y); })
+        .interpolate('basis');
+
+   
+ 
+    var t = get_means(),
+        plot_data = [];
+
+    if(v_i.type == 'continuous'){
+
+      var mean = [v_i.x(t[v]), y(model.equation(t))],
+          domain = v_i.x.domain(),
+          i = domain[0];
+      while(i < domain[1]){
+        t[v] = i;
+        plot_data.push({ x: t[v], y: model.equation(t) });
+        i += v_i.increment;
+      }
+
+      g.append('path')
+        .attr('class','response-curve')
+        .attr('d', v_i.path_generator(plot_data))
+        .style('stroke-width',3)
+        .style('stroke','red')
+        .style('fill','none')
+
+
+      g.selectAll('circle').data([mean])
+          .enter().append('circle')
+        .attr('cx',function(d){ return d[0] })
+        .attr('cy',function(d){ return d[1] })
+        .attr('r', 6)
+        .style('stroke-width',3)
+        .style('stroke','red')
+        .style('fill','white')
+          .attr("cursor", "move")
+      .call( d3.behavior.drag().on('drag', function(d,i){
+        t[v] = v_i.x.invert((d[0] += d3.event.dx));
+        t[v] = t[v] < domain[0] ? domain[0] : t[v];
+        t[v] = t[v] > domain[1] ? domain[1] : t[v];
+
+        // You don't just have to move the circle, but recompute all the other plots.
+        d3.select(this)
+          .attr('cx', v_i.x(t[v]))
+          .attr('cy', y(model.equation(t)));
+
+        current_means[v] = t[v];
+        updateCharts(current_means, v);
+      }) );
+    }
+
+    var updateCharts = function(current_means, changed_v){
+      variables.forEach(function(v){
+        var v_i = model.variables[v];
+        if(v_i.type == 'continuous'){
+          var plot_data = get_plot_data(current_means, v),
+              plot = d3.select('.' + v);
+          plot.selectAll('path.response-curve')
+            .attr('d', v_i.path_generator(plot_data));
+
+          plot.selectAll('circle')
+            .attr('cx', v_i.x(current_means[v]))
+            .attr('cy', y(model.equation(current_means)))
+
+        }
+      });
+    };
+
+
+    var get_plot_data = function(current_means, v){
+      var t = {};
+     
+      Object.keys(current_means).forEach(function(k){
+        t[k] = current_means[k];
+      });
+
+      var v_i = model.variables[v],
+          domain = v_i.x.domain(),
+          i = domain[0],
+          plot_data = [];
+      while(i < domain[1]){
+        t[v] = i;
+        plot_data.push({ x: t[v], y: model.equation(t) });
+        i += v_i.increment;
+      }
+      return plot_data;
+    }
+
+
+
+  });
+
+
+  </script>
+
+  <style>
+  </style>
