@@ -64,6 +64,8 @@
 
   <div style="width: 960px; margin: 50px auto;">
   
+    <p class="lead">Retirement Model</p>
+    <p></p>
     <svg id="model-profiler"></svg>
 
   </div>
@@ -117,6 +119,52 @@
     })
     return t;
   };
+
+      var updateCharts = function(current_means, changed_v){
+      variables.forEach(function(v){
+        var v_i = model.variables[v];
+        // if(v_i.type == 'continuous'){
+          var plot_data = get_plot_data(current_means, v),
+              plot = d3.select('.' + v);
+          plot.selectAll('path.response-curve')
+            .attr('d', v_i.path_generator(plot_data));
+
+          plot.selectAll('circle')
+            .attr('cx', v_i.x(current_means[v]))
+            .attr('cy', y(model.equation(current_means)))
+
+        // }
+      });
+    };
+
+
+    var get_plot_data = function(current_means, v){
+      var t = {};
+     
+      Object.keys(current_means).forEach(function(k){
+        t[k] = current_means[k];
+      });
+
+      var v_i = model.variables[v],
+          domain = v_i.x.domain(),
+          plot_data = [];
+
+      if(v_i.type == 'continuous'){
+        var inc = domain[0];
+        while(inc < domain[1]){
+          t[v] = inc;
+          plot_data.push({ x: t[v], y: model.equation(t) });
+          inc += v_i.increment;
+        }
+      } else {
+        domain.forEach(function(d){
+          t[v] = d;
+          plot_data.push({ x: t[v], y: model.equation(t) });
+        });
+      }
+      
+      return plot_data;
+    };
 
   var current_means = get_means();
     
@@ -186,18 +234,11 @@
    
  
     var t = get_means(),
-        plot_data = [];
+        plot_data = get_plot_data(t, v),
+        mean = [v_i.x(t[v]), y(model.equation(t))],
+        domain = v_i.x.domain(),
+        range = v_i.x.range();
 
-    if(v_i.type == 'continuous'){
-
-      var mean = [v_i.x(t[v]), y(model.equation(t))],
-          domain = v_i.x.domain(),
-          i = domain[0];
-      while(i < domain[1]){
-        t[v] = i;
-        plot_data.push({ x: t[v], y: model.equation(t) });
-        i += v_i.increment;
-      }
 
       g.append('path')
         .attr('class','response-curve')
@@ -212,16 +253,22 @@
         .attr('cx',function(d){ return d[0] })
         .attr('cy',function(d){ return d[1] })
         .attr('r', 6)
+        .attr('tabindex','0')
         .style('stroke-width',3)
         .style('stroke','red')
         .style('fill','white')
           .attr("cursor", "move")
       .call( d3.behavior.drag().on('drag', function(d,i){
-        t[v] = v_i.x.invert((d[0] += d3.event.dx));
-        t[v] = t[v] < domain[0] ? domain[0] : t[v];
-        t[v] = t[v] > domain[1] ? domain[1] : t[v];
 
-        // You don't just have to move the circle, but recompute all the other plots.
+        if(v_i.type == 'continuous'){
+          t[v] = v_i.x.invert((d[0] += d3.event.dx));
+          t[v] = t[v] < domain[0] ? domain[0] : t[v];
+          t[v] = t[v] > domain[1] ? domain[1] : t[v];
+        } else {
+          t[v] = domain[d3.bisect(range, d3.event.x) - 1];
+        }
+       
+
         d3.select(this)
           .attr('cx', v_i.x(t[v]))
           .attr('cy', y(model.equation(t)));
@@ -229,44 +276,6 @@
         current_means[v] = t[v];
         updateCharts(current_means, v);
       }) );
-    }
-
-    var updateCharts = function(current_means, changed_v){
-      variables.forEach(function(v){
-        var v_i = model.variables[v];
-        if(v_i.type == 'continuous'){
-          var plot_data = get_plot_data(current_means, v),
-              plot = d3.select('.' + v);
-          plot.selectAll('path.response-curve')
-            .attr('d', v_i.path_generator(plot_data));
-
-          plot.selectAll('circle')
-            .attr('cx', v_i.x(current_means[v]))
-            .attr('cy', y(model.equation(current_means)))
-
-        }
-      });
-    };
-
-
-    var get_plot_data = function(current_means, v){
-      var t = {};
-     
-      Object.keys(current_means).forEach(function(k){
-        t[k] = current_means[k];
-      });
-
-      var v_i = model.variables[v],
-          domain = v_i.x.domain(),
-          i = domain[0],
-          plot_data = [];
-      while(i < domain[1]){
-        t[v] = i;
-        plot_data.push({ x: t[v], y: model.equation(t) });
-        i += v_i.increment;
-      }
-      return plot_data;
-    }
 
 
 
