@@ -41,6 +41,7 @@
 
     .tick text {
       fill: #666;
+      font-size: 15px;
     }
 
   </style>
@@ -77,10 +78,10 @@
 
   var model = {
     equation: model_formula,
-    y: { type: 'continuous', min: 0, max: 1 },
+    y: { type: 'continuous', min: 0, max: 1, title: 'Predicted Retirement Probability', format: d3.format('.1%') },
     variables: {
-      age: { type: 'continuous', min: 45, max: 85, mean: 62, title: 'Age', increment: 1 },
-      tenure: { type: 'continuous', min: 0, max: 60, mean: 25, title: 'Tenure', increment: 1 },
+      age: { type: 'continuous', min: 45, max: 85, mean: 62, title: 'Age', increment: 1, format: d3.format('0f') },
+      tenure: { type: 'continuous', min: 0, max: 60, mean: 25, title: 'Tenure', increment: 1, format: d3.format('0f') },
       step: { type: 'ordinal', values: ['01','02','03','04','05','06','07','08','09','10','11','12','13','XX'], mode: '12', title: 'Step' },
       // review: { type: 'ordinal', values: ['Low','Moderate','High'], mode: 'Moderate', title: 'Review' },
       grade: { type: 'ordinal', values: [1,2,3,4,5,6,7,99], mode: 2, title: 'Grade' },
@@ -90,18 +91,21 @@
     }
   };
 
-  var variables = Object.keys(model.variables);
+  var variables = Object.keys(model.variables),
+      current_means;
 
 
-  var margin = { left: 204, top: 100, bottom: 50, right: 50 },
+  var margin = { left: 150, top: 100, bottom: 50, right: 50 },
       graph_height = 232,
-      svg_height = variables.length * (graph_height + 50) + margin.top + 150;
+      svg_height = Math.ceil(variables.length / 3) * (graph_height + 50) + margin.top + 150,
+      svg_width = 960;
 
   var percent_format = d3.format('0%');
 
 
   var svg = d3.select('svg#model-profiler')
-        .attr({ height: svg_height, width: 960 }),
+        .attr({ height: svg_height, width: svg_width }),
+          // .append('g').attr('transform','translate(100,0)'),
       svg_parent = d3.select('div#model-profiler-parent');
 
   var y = d3.scale.linear()
@@ -112,8 +116,19 @@
         .tickFormat(percent_format)
         .tickValues([0,.2,.4,.6,.8,1]);
 
+  var title = svg.append('text')
+    .attr('class','title')
+    .attr('x', 200)
+    .attr('y', 60)
+    .attr('dy', '1em')
+    .attr('text-anchor','middle')
 
-  var get_means = function(){
+  var updateTitle = function(y){
+    title.text(model.y.title + ': ' + model.y.format(y));
+  }
+
+
+  var collect_means = function(){
     var t = {};
     variables.map(function(v){
       var mean = model.variables[v].mean;
@@ -122,9 +137,21 @@
     return t;
   };
 
+
+  var updateInputs = function(current_means, changed_v){
+    var v_i = model.variables[changed_v],
+        value = current_means[changed_v];
+    if(v_i.type == 'continuous'){
+      value = v_i.format(value);
+    }
+    d3.select('#input-' + changed_v)[0][0].value = value;
+  };
+
+
   var updateCharts = function(current_means, changed_v){
-    console.log('updating charts');
-    console.log(current_means);
+    var predicted_p = model.equation(current_means),
+        predicted_y = y(predicted_p);
+
     variables.forEach(function(v){
       var v_i = model.variables[v],
           plot_data = get_plot_data(current_means, v),
@@ -134,49 +161,70 @@
 
       plot.selectAll('circle')
         .attr('cx', v_i.x(current_means[v]))
-        .attr('cy', y(model.equation(current_means)))
-
+        .attr('cy', predicted_y);
     });
+
+    d3.selectAll('line.predicted-p')
+      .attr('y1', predicted_y)
+      .attr('y2', predicted_y);
+
+    d3.selectAll('text.predicted-p')
+      .text(model.y.format(predicted_p))
+      .attr('y', predicted_y);
   };
 
 
-    var get_plot_data = function(current_means, v){
-      var t = {};
-     
-      Object.keys(current_means).forEach(function(k){
-        t[k] = current_means[k];
-      });
+  var updateContinuousMean = function(x_value){
+    if(v_i.type == 'continuous'){
+      var x_value = v_i.x.invert((cx += d3.event.dx));
+      current_means[v] = x_value;
+      current_means[v] = current_means[v] < domain[0] ? domain[0] : current_means[v];
+      current_means[v] = current_means[v] > domain[1] ? domain[1] : current_means[v];
+    } else {
+      current_means[v] = domain[d3.bisect(range, d3.event.x) - 1];
+    }
+  }
 
-      var v_i = model.variables[v],
-          domain = v_i.x.domain(),
-          plot_data = [];
 
-      if(v_i.type == 'continuous'){
-        var inc = domain[0];
-        while(inc < domain[1]){
-          t[v] = inc;
-          plot_data.push({ x: t[v], y: model.equation(t) });
-          inc += v_i.increment;
-        }
-      } else {
-        domain.forEach(function(d){
-          t[v] = d;
-          plot_data.push({ x: t[v], y: model.equation(t) });
-        });
+
+
+  var get_plot_data = function(current_means, v){
+    var t = {};
+   
+    Object.keys(current_means).forEach(function(k){
+      t[k] = current_means[k];
+    });
+
+    var v_i = model.variables[v],
+        domain = v_i.x.domain(),
+        plot_data = [];
+
+    if(v_i.type == 'continuous'){
+      var inc = domain[0];
+      while(inc < domain[1]){
+        t[v] = inc;
+        plot_data.push({ x: t[v], y: model.equation(t) });
+        inc += v_i.increment;
       }
-      
-      return plot_data;
-    };
+    } else {
+      domain.forEach(function(d){
+        t[v] = d;
+        plot_data.push({ x: t[v], y: model.equation(t) });
+      });
+    }
 
-  var current_means = get_means();
-  window.current_means = current_means;
+    return plot_data;
+  };
+
+  current_means = collect_means();
     
   variables.forEach(function(v,i){
     var v_i = model.variables[v];
 
     var mod = i%3,
-        left = mod * (graph_height + 50) + 75,
+        left = mod * (graph_height + 50) + margin.left,
         top = Math.floor(i/3) * (graph_height + margin.top) + margin.top;
+
     var g = svg.append('g')
       .attr('class', v)
       .attr('transform','translate(' + left + ',' + top + ')');
@@ -184,7 +232,13 @@
     if(mod % 3 === 0){
       g.append('g')
         .attr('class', 'y axis')
-        .call(y_axis);
+        .call(y_axis)
+          .append('text')
+            .attr('text-anchor','middle')
+            .text(model.y.title)
+            .attr('transform','rotate(-90) translate(-110,-130)')
+            .style('fill','#888')
+            .style('font-size','14px');
     }
 
 
@@ -237,14 +291,15 @@
       g_input.append('input')
         .attr('type','text')
         .attr('value',v_i.mean)
-        .attr('class','form-control input-' + v)
+        .attr('class','form-control')
+        .attr('id', 'input-' + v)
         .style('width',graph_height - 100 + 'px')
         .style('text-align', 'center')
         .on('input', function(d){
 
           var value = parseFloat(this.value),
               domain = v_i.x.domain();
-          console.log(domain)
+
           value = value < domain[0] ? domain[0] : value;
           value = value > domain[1] ? domain[1] : value;
           current_means[v] = value;
@@ -256,26 +311,18 @@
           current_means[v] = this.value;
           updateCharts(current_means, v);
         })
-        .attr('class','form-control input-' + v)
+        .attr('class','form-control')
+        .attr('id', 'input-' + v)
         .style('width', graph_height - 100 + 'px')
           .selectAll('option')
             .data(v_i.values)
           .enter().append('option')
             .text(function(d){ return d; })
             .attr('value', function(d){ return d; })
-            .property('selected', function(d){ 
-              // console.log(d);
-              // console.log(current_means[v]);
-              // console.log(d == current_means[v]);
+            .property('selected', function(d){
               return d == current_means[v] 
             });
     }
-
-      
-      // .attr('text-anchor','middle')
-      // .style({ 'fill': 'darkgray', 'font-size': '14px' });
-
-
 
 
 
@@ -286,19 +333,47 @@
 
    
  
-    var t = get_means(),
+    var t = collect_means(),
         plot_data = get_plot_data(t, v),
-        mean = [v_i.x(t[v]), y(model.equation(t))],
+        predicted_p = model.equation(t),
+        mean = [v_i.x(t[v]), y(predicted_p)],
         domain = v_i.x.domain(),
         range = v_i.x.range();
 
+      g.append('line')
+        .attr('class','predicted-p')
+        .attr('x1', function(){
+          var x1 = v_i.x(domain[0]);
+          return mod == 0 ? x1 : x1 - 75;
+        })
+        .attr('y1',mean[1])
+        .attr('x2', v_i.x( domain[domain.length - 1] ))
+        .attr('y2',mean[1])
+        .style('stroke-width', 1.5)
+        .style('stroke','lightgray')
+        .style('fill','none');
+
+      if(mod == 0){
+        g.append('text')
+        .attr('class','predicted-p')
+        .attr('x', function(){
+          var x1 = v_i.x(domain[0]);
+        })
+        .attr('y',mean[1])
+        .attr('dx','-110')
+        .attr('dy','0.3em')
+        .text(model.y.format(predicted_p))
+        .style('fill','red');
+      }
 
       g.append('path')
         .attr('class','response-curve')
         .attr('d', v_i.path_generator(plot_data))
-        .style('stroke-width',3)
+        .style('stroke-width', 3.5)
         .style('stroke','red')
-        .style('fill','none')
+        .style('fill','none');
+
+
 
 
       g.selectAll('circle').data([mean])
@@ -307,29 +382,34 @@
         .attr('cy',function(d){ return d[1] })
         .attr('r', 6)
         .attr('tabindex','0')
-        .style('stroke-width',3)
+        .style('stroke-width',3.5)
         .style('stroke','red')
         .style('fill','white')
           .attr("cursor", "move")
-      .call( d3.behavior.drag().on('drag', function(d,i){
+      .call(
+        d3.behavior.drag().on('drag', function(d,i){
+          if(v_i.type == 'continuous'){
+            var x_value = +d3.select(this).attr('cx') + d3.event.dx;
 
-        if(v_i.type == 'continuous'){
-          t[v] = v_i.x.invert((d[0] += d3.event.dx));
-          t[v] = t[v] < domain[0] ? domain[0] : t[v];
-          t[v] = t[v] > domain[1] ? domain[1] : t[v];
-        } else {
-          t[v] = domain[d3.bisect(range, d3.event.x) - 1];
-        }
-       
+            x_value = v_i.x.invert((x_value));
+            current_means[v] = x_value;
+            current_means[v] = current_means[v] < domain[0] ? domain[0] : current_means[v];
+            current_means[v] = current_means[v] > domain[1] ? domain[1] : current_means[v];
+          } else {
+            current_means[v] = domain[d3.bisect(range, d3.event.x) - 1];
+          }
 
-        current_means[v] = t[v];
+          var predicted_p = model.equation(current_means),
+              predicted_y = y(predicted_p);
 
-        d3.select(this)
-          .attr('cx', v_i.x(t[v]))
-          .attr('cy', y(model.equation(t)));
+          d3.select(this)
+            .attr('cx', v_i.x(current_means[v]) )
+            .attr('cy', predicted_y);
 
-        updateCharts(current_means, v);
-      }) );
+          updateInputs(current_means, v);
+          updateCharts(current_means, v);
+        })
+      );
 
 
 
