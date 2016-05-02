@@ -291,7 +291,8 @@ var draw = function(model){
         .attr('dx','-110')
         .attr('dy','0.3em')
         .text(model.y.format(predicted_p))
-        .style('fill','red');
+        .style('fill','red')
+        .style('font-weight','bold');
       }
 
       foreground_layer.append('path')
