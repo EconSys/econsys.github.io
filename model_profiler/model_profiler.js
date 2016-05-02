@@ -5,7 +5,7 @@ var vamcs = ['Albuquerque, NM','Alexandria, LA','All Others','Altoona, PA','Amar
 var models = {
   retirement:  {
     equation: model_formula,
-    y: { type: 'continuous', min: 0, max: 1, title: 'Predicted Retirement Probability', format: d3.format('.1%') },
+    y: { type: 'continuous', min: 0, max: 1, title: 'Predicted Retirement Probability', format: d3.format('.8%') },
     variables: {
       age: { type: 'continuous', min: 45, max: 85, mean: 62, title: 'Age', increment: 1, format: d3.format('0f') },
       tenure: { type: 'continuous', min: 0, max: 60, mean: 25, title: 'Tenure', increment: 1, format: d3.format('0f') },
@@ -310,7 +310,6 @@ var draw = function(model){
         .attr('cx',function(d){ return d[0] })
         .attr('cy',function(d){ return d[1] })
         .attr('r', 6)
-        .attr('tabindex','0')
         .style('stroke-width',3.5)
         .style('stroke','red')
         .style('fill','white')
@@ -323,13 +322,9 @@ var draw = function(model){
         .attr('width',graph_height)
         .attr('height',graph_height)
         .style('fill','rgb(250,250,250)');
-      
-      var interaction_layers = g.selectAll('.background-layer, .foreground-layer')
-        .selectAll('circle, rect, path');
 
-    
-
-      interaction_layers.call(
+      g.selectAll('.background-layer, .foreground-layer')
+        .selectAll('circle, rect, path').call(
         d3.behavior.drag().on('dragstart', function(d,i){
           d3.event.sourceEvent.stopPropagation(); 
           
@@ -341,8 +336,6 @@ var draw = function(model){
             .duration(100)
             .attr('r', 6);
         }).on('drag', function(d,i){
-            
-            circle.node().focus();
             if(v_i.type == 'continuous'){
 
               var x_value = +circle.attr('cx') + d3.event.dx;
