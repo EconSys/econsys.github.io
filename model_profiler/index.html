@@ -12,7 +12,7 @@
   <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.min.js"></script>
 
-  <script type="text/javascript" src="./model_formula.js"></script>
+  <script type="text/javascript" src="./retirement_model_full.js"></script>
 
   <style>
     body {
@@ -65,7 +65,7 @@
 
   <div style="width: 960px; margin: 50px auto;">
   
-    <p class="lead">Retirement Model</p>
+    <p>The Model Profiler allows you to explore multivariate regression effects. Click and drag the points for each plot to explore how the variables interact across the model.</p>
     <div id="model-profiler-parent" style="position: relative;">
       <svg id="model-profiler"></svg>
     </div>
@@ -74,7 +74,7 @@
 
 
   <script>
-  var vamcs = ['VAMC Albuquerque, NM','VAMC Alexandria, LA','VAMC All Others','VAMC Altoona, PA','VAMC Amarillo, TX','VAMC Anchorage, AK','VAMC Ann Arbor, MI','VAMC Asheville, NC','VAMC Atlanta {Decatur}, GA','VAMC Augusta, GA','VAMC Baltimore HCS, MD','VAMC Battle Creek, MI','VAMC Bay Pines, FL','VAMC Beckley, WV','VAMC Bedford, MA','VAMC Big Spring, TX','VAMC Biloxi, MS','VAMC Birmingham, AL','VAMC Black Hills HCS, SD','VAMC Boise, ID','VAMC Boston HCS, MA','VAMC Bronx, NY','VAMC Buffalo, NY','VAMC Butler, PA','VAMC Central Texas HCS, TX','VAMC Charleston, SC','VAMC Cheyenne, WY','VAMC Chicago HCS, IL','VAMC Chillicothe, OH','VAMC Cincinnati, OH','VAMC Clarksburg, WV','VAMC Cleveland, OH','VAMC Coatesville, PA','VAMC Columbia, SC','VAMC Columbus, OH','VAMC Connecticut HCS, CT','VAMC Dallas, TX','VAMC Danville, IL','VAMC Dayton, OH','VAMC Denver, CO','VAMC Detroit, MI','VAMC Dublin, GA','VAMC Durham, NC','VAMC El Paso, TX','VAMC Erie, PA','VAMC Fargo, ND','VAMC Fayetteville, AR','VAMC Fayetteville, NC','VAMC Fresno, CA','VAMC Gainesville, FL','VAMC Grand Junction, CO','VAMC Hampton, VA','VAMC Hines, IL','VAMC Honolulu, HI','VAMC Houston, TX','VAMC Hudson Valley HCS, NY','VAMC Huntington, WV','VAMC Indianapolis, IN','VAMC Iron Mountain, MI','VAMC Jackson, MS','VAMC Kansas City, MO','VAMC Las Vegas, NV','VAMC Lebanon, PA','VAMC Lexington, KY','VAMC Little Rock, AR','VAMC Loma Linda, CA','VAMC Long Beach, CA','VAMC Los Angeles HCS, CA','VAMC Louisville, KY','VAMC Madison, WI','VAMC Manchester, NH','VAMC Manila, PI','VAMC Martinsburg, WV','VAMC Memphis, TN','VAMC Miami, FL','VAMC Mid Tenn. HCS, TN','VAMC Milwaukee, WI','VAMC Minneapolis, MN','VAMC Montana HCS, MT','VAMC Montgomery, AL','VAMC Mountain Home, TN','VAMC Muskogee, OK','VAMC NY Harbor HCS, NY','VAMC Nebraska-W Iowa, NE','VAMC New Jersey HCS, NJ','VAMC New Orleans, LA','VAMC North Arizona HCS, AZ','VAMC North Calif HCS, CA','VAMC North Chicago, IL','VAMC North Indiana HCS, IN','VAMC Northampton, MA','VAMC Northport, NY','VAMC Oklahoma City, OK','VAMC Orlando, FL','VAMC Palo Alto, CA','VAMC Philadelphia, PA','VAMC Phoenix, AZ','VAMC Pittsburgh, PA','VAMC Portland, OR','VAMC Providence, RI','VAMC Puget Sound HCS, WA','VAMC Reno, NV','VAMC Richmond, VA','VAMC Roseburg, OR','VAMC Saginaw, MI','VAMC Salem, VA','VAMC Salisbury, NC','VAMC Salt Lake City, UT','VAMC San Diego, CA','VAMC San Francisco, CA','VAMC San Juan, PR','VAMC Sheridan, WY','VAMC Shreveport, LA','VAMC Sioux Falls, SD','VAMC South Arizona HCS, AZ','VAMC South Texas HCS, TX','VAMC Spokane, WA','VAMC St. Cloud, MN','VAMC St. Louis, MO','VAMC Tampa, FL','VAMC Texas Valley Coast HCS','VAMC Togus, ME','VAMC Tomah, WI','VAMC Tuscaloosa, AL','VAMC Walla Walla, WA','VAMC Washington, DC','VAMC West Palm Beach, FL','VAMC White City, OR','VAMC White River Jct., VT','VAMC Wilkes-Barre, PA'];
+  var vamcs = ['Albuquerque, NM','Alexandria, LA','All Others','Altoona, PA','Amarillo, TX','Anchorage, AK','Ann Arbor, MI','Asheville, NC','Atlanta {Decatur}, GA','Augusta, GA','Baltimore HCS, MD','Battle Creek, MI','Bay Pines, FL','Beckley, WV','Bedford, MA','Big Spring, TX','Biloxi, MS','Birmingham, AL','Black Hills HCS, SD','Boise, ID','Boston HCS, MA','Bronx, NY','Buffalo, NY','Butler, PA','Central Texas HCS, TX','Charleston, SC','Cheyenne, WY','Chicago HCS, IL','Chillicothe, OH','Cincinnati, OH','Clarksburg, WV','Cleveland, OH','Coatesville, PA','Columbia, SC','Columbus, OH','Connecticut HCS, CT','Dallas, TX','Danville, IL','Dayton, OH','Denver, CO','Detroit, MI','Dublin, GA','Durham, NC','El Paso, TX','Erie, PA','Fargo, ND','Fayetteville, AR','Fayetteville, NC','Fresno, CA','Gainesville, FL','Grand Junction, CO','Hampton, VA','Hines, IL','Honolulu, HI','Houston, TX','Hudson Valley HCS, NY','Huntington, WV','Indianapolis, IN','Iron Mountain, MI','Jackson, MS','Kansas City, MO','Las Vegas, NV','Lebanon, PA','Lexington, KY','Little Rock, AR','Loma Linda, CA','Long Beach, CA','Los Angeles HCS, CA','Louisville, KY','Madison, WI','Manchester, NH','Manila, PI','Martinsburg, WV','Memphis, TN','Miami, FL','Mid Tenn. HCS, TN','Milwaukee, WI','Minneapolis, MN','Montana HCS, MT','Montgomery, AL','Mountain Home, TN','Muskogee, OK','NY Harbor HCS, NY','Nebraska-W Iowa, NE','New Jersey HCS, NJ','New Orleans, LA','North Arizona HCS, AZ','North Calif HCS, CA','North Chicago, IL','North Indiana HCS, IN','Northampton, MA','Northport, NY','Oklahoma City, OK','Orlando, FL','Palo Alto, CA','Philadelphia, PA','Phoenix, AZ','Pittsburgh, PA','Portland, OR','Providence, RI','Puget Sound HCS, WA','Reno, NV','Richmond, VA','Roseburg, OR','Saginaw, MI','Salem, VA','Salisbury, NC','Salt Lake City, UT','San Diego, CA','San Francisco, CA','San Juan, PR','Sheridan, WY','Shreveport, LA','Sioux Falls, SD','South Arizona HCS, AZ','South Texas HCS, TX','Spokane, WA','St. Cloud, MN','St. Louis, MO','Tampa, FL','Texas Valley Coast HCS','Togus, ME','Tomah, WI','Tuscaloosa, AL','Walla Walla, WA','Washington, DC','West Palm Beach, FL','White City, OR','White River Jct., VT','Wilkes-Barre, PA'];
 
   var model = {
     equation: model_formula,
@@ -83,11 +83,11 @@
       age: { type: 'continuous', min: 45, max: 85, mean: 62, title: 'Age', increment: 1, format: d3.format('0f') },
       tenure: { type: 'continuous', min: 0, max: 60, mean: 25, title: 'Tenure', increment: 1, format: d3.format('0f') },
       step: { type: 'ordinal', values: ['01','02','03','04','05','06','07','08','09','10','11','12','13','XX'], mode: '12', title: 'Step' },
-      // review: { type: 'ordinal', values: ['Low','Moderate','High'], mode: 'Moderate', title: 'Review' },
+      review: { type: 'ordinal', values: ['Low','Moderate','High'], mode: 'Moderate', title: 'Review' },
       grade: { type: 'ordinal', values: [1,2,3,4,5,6,7,99], mode: 2, title: 'Grade' },
-      // vamc: { type: 'nominal', values: vamcs, mode: 'VAMC Pittsburgh, PA', title: 'VA Medical Center' },
-      // occ: { type: 'nominal', values: ['610','620','621'], title: 'Occupational Series' },
-      // unemployment: { type: 'continuous', min: 0.05, max: 0.26, mean: 0.07, title: 'Unemployment' }
+      vamc: { type: 'nominal', values: vamcs, mode: 'Pittsburgh, PA', title: 'VA Medical Center' },
+      occ: { type: 'nominal', values: ['610','620','621'], mode: '610', title: 'Occupational Series' },
+      unemployment: { type: 'continuous', min: 0.05, max: 0.26, mean: 0.07, increment: 0.01, title: 'Unemployment', format: d3.format('.1%') }
     }
   };
 
@@ -105,7 +105,6 @@
 
   var svg = d3.select('svg#model-profiler')
         .attr({ height: svg_height, width: svg_width }),
-          // .append('g').attr('transform','translate(100,0)'),
       svg_parent = d3.select('div#model-profiler-parent');
 
   var y = d3.scale.linear()
@@ -250,7 +249,8 @@
       v_i.x_axis = d3.svg.axis()
         .scale(v_i.x)
         .orient('bottom')
-        .ticks(6);
+        .ticks(6)
+        .tickFormat(v_i.format);
 
     } else if(['ordinal','nominal'].indexOf(v_i.type) >= 0){
       v_i.x = d3.scale.ordinal()
@@ -290,7 +290,7 @@
     if(v_i.type == 'continuous'){
       g_input.append('input')
         .attr('type','text')
-        .attr('value',v_i.mean)
+        .attr('value', v_i.format(v_i.mean))
         .attr('class','form-control')
         .attr('id', 'input-' + v)
         .style('width',graph_height - 100 + 'px')
