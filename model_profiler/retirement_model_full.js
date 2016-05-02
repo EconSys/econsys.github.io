@@ -2,11 +2,11 @@ var model_formula = function(d){
   var c = -28.93320997;
 
   if(d.vamc == 'ALL OTHER'){
-  	if(d.occ == 610){
+  	if(d.occ == '610'){
   		c += 0.83439235;
   		c += d.tenure * 0.015451692;
   	}
-  	else if (d.occ == 620){
+  	else if (d.occ == '620'){
   		c += 0.833713794;
   		c += d.tenure * 0.01323057;
   	} else {
