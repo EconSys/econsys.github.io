@@ -929,11 +929,11 @@ var model_formula = function(d){
 
 
   c += d.age * 0.520537481;
-  c += (d.age * d.age) * -0.001971271;
-  c += d.unemployment * -0.03562674;
+  c += d.age * d.age * -0.001971271;
+  c += d.unemployment * 100 * -0.03562674;
   c += d.tenure * 0.366612123;
-  c += (d.tenure * d.age) * -0.004264868;
-  c += (d.tenure * d.tenure) * -0.001450424;
+  c += d.tenure * d.age * -0.004264868;
+  c += d.tenure * d.tenure * -0.001450424;
 
 
   return 1/(1 + Math.exp(-c));

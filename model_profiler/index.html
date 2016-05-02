@@ -255,11 +255,12 @@
     } else if(['ordinal','nominal'].indexOf(v_i.type) >= 0){
       v_i.x = d3.scale.ordinal()
         .domain(v_i.values)
-        .rangeRoundBands([0, graph_height], .2);
+        .rangePoints([0, graph_height]);
       
        v_i.x_axis = d3.svg.axis()
         .scale(v_i.x)
-        .orient('bottom');
+        .orient('bottom')
+        .outerTickSize(0);
 
       if(v_i.values.length > 6){
          v_i.x_axis.tickValues([]);
@@ -344,7 +345,7 @@
         .attr('class','predicted-p')
         .attr('x1', function(){
           var x1 = v_i.x(domain[0]);
-          return mod == 0 ? x1 : x1 - 75;
+          return mod == 0 ? x1 : x1 - 50;
         })
         .attr('y1',mean[1])
         .attr('x2', v_i.x( domain[domain.length - 1] ))
@@ -369,7 +370,7 @@
       g.append('path')
         .attr('class','response-curve')
         .attr('d', v_i.path_generator(plot_data))
-        .style('stroke-width', 3.5)
+        .style('stroke-width', 3)
         .style('stroke','red')
         .style('fill','none');
 
