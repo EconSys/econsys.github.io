@@ -388,6 +388,8 @@
         .style('fill','white')
           .attr("cursor", "move");
 
+      var transition_circle = 
+
       g.append('rect')
         .attr('x',-20)
         .attr('y',-20)
@@ -400,8 +402,20 @@
           .duration(100)
           .attr('r', 12);
         })
+        .on('touchstart',function(){
+          circle.transition()
+          .duration(100)
+          .attr('r', 12);
+        })
         .on('mouseup',function(){
-         
+          circle.transition()
+          .duration(100)
+          .attr('r', 6);
+        })
+        .on('touchend',function(){
+          circle.transition()
+          .duration(100)
+          .attr('r', 6);
         })
         .on('mouseout',function(){
           circle.transition()
@@ -442,3 +456,6 @@
 
 
   </script>
+
+  <style>
+  </style>
