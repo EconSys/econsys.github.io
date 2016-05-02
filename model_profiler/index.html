@@ -388,42 +388,24 @@
         .style('fill','white')
           .attr("cursor", "move");
 
-      var transition_circle = 
 
-      g.append('rect')
+      var rect = g.append('rect')
         .attr('x',-20)
         .attr('y',-20)
         .attr('width',graph_height + 40)
         .attr('height',graph_height + 40)
         .style('fill','white')
         .style('fill-opacity',0)
-        .on('mousedown',function(){
+      .call(d3.behavior.drag().on('dragstart', function(d,i){
+          d3.event.sourceEvent.stopPropagation(); 
           circle.transition()
-          .duration(100)
-          .attr('r', 12);
-        })
-        .on('touchstart',function(){
+            .duration(100)
+            .attr('r', 12);
+        }).on('dragend', function(d,i){
           circle.transition()
-          .duration(100)
-          .attr('r', 12);
-        })
-        .on('mouseup',function(){
-          circle.transition()
-          .duration(100)
-          .attr('r', 6);
-        })
-        .on('touchend',function(){
-          circle.transition()
-          .duration(100)
-          .attr('r', 6);
-        })
-        .on('mouseout',function(){
-          circle.transition()
-          .duration(100)
-          .attr('r', 6);
-        })
-        .call(
-          d3.behavior.drag().on('drag', function(d,i){
+            .duration(100)
+            .attr('r', 6);
+        }).on('drag', function(d,i){
             if(v_i.type == 'continuous'){
               var x_value = +circle.attr('cx') + d3.event.dx;
 
@@ -446,9 +428,8 @@
 
             updateInputs(current_means, v);
             updateCharts(current_means, v);
-          })
-      );
-
+        }));
+      
 
 
 
