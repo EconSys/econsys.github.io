@@ -377,7 +377,7 @@
 
 
 
-      g.selectAll('circle').data([mean])
+      var circle = g.selectAll('circle').data([mean])
           .enter().append('circle')
         .attr('cx',function(d){ return d[0] })
         .attr('cy',function(d){ return d[1] })
@@ -386,31 +386,55 @@
         .style('stroke-width',3.5)
         .style('stroke','red')
         .style('fill','white')
-          .attr("cursor", "move")
-      .call(
-        d3.behavior.drag().on('drag', function(d,i){
-          if(v_i.type == 'continuous'){
-            var x_value = +d3.select(this).attr('cx') + d3.event.dx;
+          .attr("cursor", "move");
 
-            x_value = v_i.x.invert((x_value));
-            current_means[v] = x_value;
-            current_means[v] = current_means[v] < domain[0] ? domain[0] : current_means[v];
-            current_means[v] = current_means[v] > domain[1] ? domain[1] : current_means[v];
-          } else {
-            current_means[v] = domain[d3.bisect(range, d3.event.x) - 1];
-          }
-
-          var predicted_p = model.equation(current_means),
-              predicted_y = y(predicted_p);
-
-          d3.select(this)
-            .attr('cx', v_i.x(current_means[v]) )
-            .attr('cy', predicted_y);
-
-          updateInputs(current_means, v);
-          updateCharts(current_means, v);
+      g.append('rect')
+        .attr('x',-20)
+        .attr('y',-20)
+        .attr('width',graph_height + 40)
+        .attr('height',graph_height + 40)
+        .style('fill','white')
+        .style('fill-opacity',0)
+        .on('mousedown',function(){
+          circle.transition()
+          .duration(100)
+          .attr('r', 12);
         })
+        .on('mouseup',function(){
+         
+        })
+        .on('mouseout',function(){
+          circle.transition()
+          .duration(100)
+          .attr('r', 6);
+        })
+        .call(
+          d3.behavior.drag().on('drag', function(d,i){
+            if(v_i.type == 'continuous'){
+              var x_value = +circle.attr('cx') + d3.event.dx;
+
+              x_value = v_i.x.invert((x_value));
+              current_means[v] = x_value;
+              current_means[v] = current_means[v] < domain[0] ? domain[0] : current_means[v];
+              current_means[v] = current_means[v] > domain[1] ? domain[1] : current_means[v];
+            } else {
+              var x_i = d3.bisect(range, d3.event.x) - 1;
+              x_i = x_i < 0 ? 0 : x_i;
+              current_means[v] = domain[x_i];
+            }
+
+            var predicted_p = model.equation(current_means),
+                predicted_y = y(predicted_p);
+
+            circle
+              .attr('cx', v_i.x(current_means[v]) )
+              .attr('cy', predicted_y);
+
+            updateInputs(current_means, v);
+            updateCharts(current_means, v);
+          })
       );
+
 
 
 
@@ -418,6 +442,3 @@
 
 
   </script>
-
-  <style>
-  </style>
