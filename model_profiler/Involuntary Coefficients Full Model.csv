@@ -1,0 +1,384 @@
+_NAME_,_LABEL_, sample_inv_coeffs , test_inv_coeffs , total_inv_coeffs 
+GRADE_BY_STEP4ALL_OTHER_610, ALL OTHER 610, 3.8530 , 3.8750 , 3.7997 
+GRADE_BY_STEP4ALL_OTHER_610TIJ_c, ALL OTHER 610 * Time_in_job = aptyrs,-0.3427 ,-0.4210 ,-0.3388 
+GRADE_BY_STEP4ALL_OTHER_620, ALL OTHER 620, 0.4424 , 0.8572 , 0.6397 
+GRADE_BY_STEP4ALL_OTHER_620TIJ_c, ALL OTHER 620 * Time_in_job = aptyrs, 0.0120 ,-0.0424 ,-0.0109 
+GRADE_BY_STEP4ALL_OTHER_621, ALL OTHER 621, 2.1005 , 2.1120 , 2.0477 
+GRADE_BY_STEP4ALL_OTHER_621TIJ_c, ALL OTHER 621 * Time_in_job = aptyrs,-0.0855 ,-0.0617 ,-0.0563 
+GRADE_BY_STEP4occ_610_grade_1_10, occ_610_grade_1_step_10, 0.4489 , 0.4230 , 0.3365 
+GRADE_BY_STEP4occ_610_grade_1_11, occ_610_grade_1_step_11, 0.1632 , 0.1203 , 0.1217 
+GRADE_BY_STEP4occ_610_grade_1_12, occ_610_grade_1_step_12, 0.6151 , 0.6104 , 0.5558 
+GRADE_BY_STEP4occ_610_grade_1_13, occ_610_grade_1_step_13, 0.0421 , 0.1667 , 0.0247 
+GRADE_BY_STEP4occ_610_grade_1_14, occ_610_grade_1_step_14, 0.2990 , 0.3688 , 0.2722 
+GRADE_BY_STEP4occ_610_grade_1_15, occ_610_grade_1_step_X, 0.6581 , 0.7872 , 0.6731 
+GRADE_BY_STEP4occ_610_grade_1_16, occ_610_grade_1_step_01 * Time_in_job = aptyrs, 0.1604 , 0.1514 , 0.1708 
+GRADE_BY_STEP4occ_610_grade_1_17, occ_610_grade_1_step_02 * Time_in_job = aptyrs, 0.0683 , 0.0566 , 0.0670 
+GRADE_BY_STEP4occ_610_grade_1_18, occ_610_grade_1_step_03 * Time_in_job = aptyrs, 0.1431 , 0.1080 , 0.1335 
+GRADE_BY_STEP4occ_610_grade_1_19, occ_610_grade_1_step_04 * Time_in_job = aptyrs, 0.1053 , 0.0838 , 0.1031 
+GRADE_BY_STEP4occ_610_grade_1_20, occ_610_grade_1_step_05 * Time_in_job = aptyrs, 0.1428 , 0.1204 , 0.1381 
+GRADE_BY_STEP4occ_610_grade_1_21, occ_610_grade_1_step_06 * Time_in_job = aptyrs, 0.0384 ,-0.0107 , 0.0277 
+GRADE_BY_STEP4occ_610_grade_1_22, occ_610_grade_1_step_07 * Time_in_job = aptyrs, 0.0394 , 0.0468 , 0.0597 
+GRADE_BY_STEP4occ_610_grade_1_23, occ_610_grade_1_step_08 * Time_in_job = aptyrs,-0.0267 ,-0.0291 ,-0.0176 
+GRADE_BY_STEP4occ_610_grade_1_24, occ_610_grade_1_step_09 * Time_in_job = aptyrs, 0.0494 , 0.0516 , 0.0511 
+GRADE_BY_STEP4occ_610_grade_1_25, occ_610_grade_1_step_10 * Time_in_job = aptyrs, 0.0758 , 0.0691 , 0.0958 
+GRADE_BY_STEP4occ_610_grade_1_26, occ_610_grade_1_step_11 * Time_in_job = aptyrs, 0.0843 , 0.0998 , 0.1114 
+GRADE_BY_STEP4occ_610_grade_1_27, occ_610_grade_1_step_12 * Time_in_job = aptyrs, 0.0636 , 0.0576 , 0.0676 
+GRADE_BY_STEP4occ_610_grade_1_28, occ_610_grade_1_step_13 * Time_in_job = aptyrs, 0.0890 , 0.1059 , 0.1277 
+GRADE_BY_STEP4occ_610_grade_1_29, occ_610_grade_1_step_14 * Time_in_job = aptyrs, 0.0599 , 0.0200 , 0.0577 
+GRADE_BY_STEP4occ_610_grade_1_30, occ_610_grade_1_step_X * Time_in_job = aptyrs, 0.0111 ,-0.0227 , 0.0135 
+GRADE_BY_STEP4occ_610_grade_1_s2, occ_610_grade_1_step_02,-0.0973 , 0.2620 , 0.0555 
+GRADE_BY_STEP4occ_610_grade_1_s3, occ_610_grade_1_step_03,-0.1311 , 0.0616 ,-0.1044 
+GRADE_BY_STEP4occ_610_grade_1_s4, occ_610_grade_1_step_04,-0.0489 ,-0.1022 ,-0.0613 
+GRADE_BY_STEP4occ_610_grade_1_s5, occ_610_grade_1_step_05, 0.2628 , 0.2185 , 0.2202 
+GRADE_BY_STEP4occ_610_grade_1_s6, occ_610_grade_1_step_06, 0.0684 , 0.2259 , 0.1214 
+GRADE_BY_STEP4occ_610_grade_1_s7, occ_610_grade_1_step_07, 0.1566 , 0.0887 , 0.1076 
+GRADE_BY_STEP4occ_610_grade_1_s8, occ_610_grade_1_step_08, 0.2130 , 0.3689 , 0.2755 
+GRADE_BY_STEP4occ_610_grade_1_s9, occ_610_grade_1_step_09, 0.4318 , 0.4324 , 0.4146 
+GRADE_BY_STEP4occ_610_grade_1_st, occ_610_grade_1_step_01, 0.0739 , 0.1658 , 0.0484 
+GRADE_BY_STEP4occ_610_grade_2_10, occ_610_grade_2_step_10,-0.2558 ,-0.1563 ,-0.1991 
+GRADE_BY_STEP4occ_610_grade_2_11, occ_610_grade_2_step_11,-0.3640 ,-0.5629 ,-0.5008 
+GRADE_BY_STEP4occ_610_grade_2_12, occ_610_grade_2_step_12,-0.0630 , 0.0668 ,-0.0316 
+GRADE_BY_STEP4occ_610_grade_2_13, occ_610_grade_2_step_13,-0.7630 , 0.1925 ,-0.0161 
+GRADE_BY_STEP4occ_610_grade_2_14, occ_610_grade_2_step_14,-0.0487 , 0.0918 , 0.1486 
+GRADE_BY_STEP4occ_610_grade_2_15, occ_610_grade_2_step_X,-1.2891 ,-1.2737 ,-1.3625 
+GRADE_BY_STEP4occ_610_grade_2_16, occ_610_grade_2_step_01 * Time_in_job = aptyrs, 0.0609 , 0.0754 , 0.0629 
+GRADE_BY_STEP4occ_610_grade_2_17, occ_610_grade_2_step_02 * Time_in_job = aptyrs, 0.1041 , 0.0686 , 0.0845 
+GRADE_BY_STEP4occ_610_grade_2_18, occ_610_grade_2_step_03 * Time_in_job = aptyrs, 0.0025 ,-0.1059 ,-0.0146 
+GRADE_BY_STEP4occ_610_grade_2_19, occ_610_grade_2_step_04 * Time_in_job = aptyrs, 0.0365 , 0.0261 , 0.0471 
+GRADE_BY_STEP4occ_610_grade_2_20, occ_610_grade_2_step_05 * Time_in_job = aptyrs, 0.0565 , 0.0752 , 0.0745 
+GRADE_BY_STEP4occ_610_grade_2_21, occ_610_grade_2_step_06 * Time_in_job = aptyrs, 0.0663 , 0.0496 , 0.0719 
+GRADE_BY_STEP4occ_610_grade_2_22, occ_610_grade_2_step_07 * Time_in_job = aptyrs, 0.0740 , 0.0542 , 0.0801 
+GRADE_BY_STEP4occ_610_grade_2_23, occ_610_grade_2_step_08 * Time_in_job = aptyrs, 0.0589 , 0.0269 , 0.0471 
+GRADE_BY_STEP4occ_610_grade_2_24, occ_610_grade_2_step_09 * Time_in_job = aptyrs, 0.0666 , 0.0511 , 0.0694 
+GRADE_BY_STEP4occ_610_grade_2_25, occ_610_grade_2_step_10 * Time_in_job = aptyrs, 0.0663 , 0.0548 , 0.0712 
+GRADE_BY_STEP4occ_610_grade_2_26, occ_610_grade_2_step_11 * Time_in_job = aptyrs, 0.0385 , 0.0581 , 0.0665 
+GRADE_BY_STEP4occ_610_grade_2_27, occ_610_grade_2_step_12 * Time_in_job = aptyrs, 0.0451 , 0.0305 , 0.0465 
+GRADE_BY_STEP4occ_610_grade_2_28, occ_610_grade_2_step_13 * Time_in_job = aptyrs, 0.0999 , 0.0370 , 0.0654 
+GRADE_BY_STEP4occ_610_grade_2_29, occ_610_grade_2_step_14 * Time_in_job = aptyrs, 0.0670 , 0.0377 , 0.0591 
+GRADE_BY_STEP4occ_610_grade_2_30, occ_610_grade_2_step_X * Time_in_job = aptyrs, 0.0775 , 0.0886 , 0.0993 
+GRADE_BY_STEP4occ_610_grade_2_s2, occ_610_grade_2_step_02,-0.1920 ,-0.0153 ,-0.0789 
+GRADE_BY_STEP4occ_610_grade_2_s3, occ_610_grade_2_step_03, 0.0517 , 0.2038 , 0.0504 
+GRADE_BY_STEP4occ_610_grade_2_s4, occ_610_grade_2_step_04, 0.1787 , 0.0213 , 0.0515 
+GRADE_BY_STEP4occ_610_grade_2_s5, occ_610_grade_2_step_05, 0.0505 ,-0.1038 ,-0.0513 
+GRADE_BY_STEP4occ_610_grade_2_s6, occ_610_grade_2_step_06, 0.0472 , 0.0569 ,-0.0289 
+GRADE_BY_STEP4occ_610_grade_2_s7, occ_610_grade_2_step_07,-0.3279 ,-0.1462 ,-0.3193 
+GRADE_BY_STEP4occ_610_grade_2_s8, occ_610_grade_2_step_08,-0.1878 ,-0.0671 ,-0.0940 
+GRADE_BY_STEP4occ_610_grade_2_s9, occ_610_grade_2_step_09,-0.0354 , 0.0916 ,-0.0318 
+GRADE_BY_STEP4occ_610_grade_2_st, occ_610_grade_2_step_01,-0.0940 , 0.1076 , 0.0576 
+GRADE_BY_STEP4occ_610_grade_3_10, occ_610_grade_3_step_10,-0.0020 , 0.1897 , 0.0223 
+GRADE_BY_STEP4occ_610_grade_3_11, occ_610_grade_3_step_11, 0.1801 , 0.1137 , 0.1243 
+GRADE_BY_STEP4occ_610_grade_3_12, occ_610_grade_3_step_12,-0.0341 , 0.0090 ,-0.0659 
+GRADE_BY_STEP4occ_610_grade_3_13, occ_610_grade_3_step_13,-0.4586 , 0.3936 ,-0.0444 
+GRADE_BY_STEP4occ_610_grade_3_14, occ_610_grade_3_step_14,-0.1840 ,-0.1576 ,-0.2182 
+GRADE_BY_STEP4occ_610_grade_3_15, occ_610_grade_3_step_X,-2.8211 ,-2.2239 ,-2.4110 
+GRADE_BY_STEP4occ_610_grade_3_16, occ_610_grade_3_step_01 * Time_in_job = aptyrs, 0.0019 , 0.0281 , 0.0487 
+GRADE_BY_STEP4occ_610_grade_3_17, occ_610_grade_3_step_02 * Time_in_job = aptyrs, 0.0332 , 0.0190 , 0.0260 
+GRADE_BY_STEP4occ_610_grade_3_18, occ_610_grade_3_step_03 * Time_in_job = aptyrs, 0.1324 , 0.1778 , 0.1611 
+GRADE_BY_STEP4occ_610_grade_3_19, occ_610_grade_3_step_04 * Time_in_job = aptyrs,-0.0495 ,-0.1596 ,-0.1104 
+GRADE_BY_STEP4occ_610_grade_3_20, occ_610_grade_3_step_05 * Time_in_job = aptyrs, 0.0743 , 0.0676 , 0.0678 
+GRADE_BY_STEP4occ_610_grade_3_21, occ_610_grade_3_step_06 * Time_in_job = aptyrs,-0.0062 , 0.0003 , 0.0178 
+GRADE_BY_STEP4occ_610_grade_3_22, occ_610_grade_3_step_07 * Time_in_job = aptyrs, 0.0845 , 0.0341 , 0.0613 
+GRADE_BY_STEP4occ_610_grade_3_23, occ_610_grade_3_step_08 * Time_in_job = aptyrs, 0.0456 , 0.0355 , 0.0572 
+GRADE_BY_STEP4occ_610_grade_3_24, occ_610_grade_3_step_09 * Time_in_job = aptyrs,-0.0023 , 0.0057 , 0.0217 
+GRADE_BY_STEP4occ_610_grade_3_25, occ_610_grade_3_step_10 * Time_in_job = aptyrs, 0.0753 , 0.0306 , 0.0708 
+GRADE_BY_STEP4occ_610_grade_3_26, occ_610_grade_3_step_11 * Time_in_job = aptyrs,-0.0009 ,-0.0194 , 0.0004 
+GRADE_BY_STEP4occ_610_grade_3_27, occ_610_grade_3_step_12 * Time_in_job = aptyrs, 0.0412 , 0.0332 , 0.0479 
+GRADE_BY_STEP4occ_610_grade_3_28, occ_610_grade_3_step_13 * Time_in_job = aptyrs, 0.0374 ,-0.0590 , 0.0044 
+GRADE_BY_STEP4occ_610_grade_3_29, occ_610_grade_3_step_14 * Time_in_job = aptyrs, 0.0678 , 0.0459 , 0.0671 
+GRADE_BY_STEP4occ_610_grade_3_30, occ_610_grade_3_step_X * Time_in_job = aptyrs, 0.1676 , 0.1153 , 0.1496 
+GRADE_BY_STEP4occ_610_grade_3_s2, occ_610_grade_3_step_02, 0.3448 , 0.6085 , 0.3621 
+GRADE_BY_STEP4occ_610_grade_3_s3, occ_610_grade_3_step_03,-1.0873 ,-1.8526 ,-1.5274 
+GRADE_BY_STEP4occ_610_grade_3_s4, occ_610_grade_3_step_04,-0.2226 , 0.1100 ,-0.0959 
+GRADE_BY_STEP4occ_610_grade_3_s5, occ_610_grade_3_step_05,-1.1212 ,-1.0069 ,-0.9691 
+GRADE_BY_STEP4occ_610_grade_3_s6, occ_610_grade_3_step_06, 0.2278 , 0.2545 , 0.1912 
+GRADE_BY_STEP4occ_610_grade_3_s7, occ_610_grade_3_step_07,-0.7755 ,-0.2508 ,-0.4889 
+GRADE_BY_STEP4occ_610_grade_3_s8, occ_610_grade_3_step_08, 0.2663 , 0.3351 , 0.2307 
+GRADE_BY_STEP4occ_610_grade_3_s9, occ_610_grade_3_step_09, 0.2195 , 0.0547 , 0.0740 
+GRADE_BY_STEP4occ_610_grade_3_st, occ_610_grade_3_step_01,-0.5130 ,-0.7373 ,-0.7958 
+GRADE_BY_STEP4occ_610_grade_4_10, occ_610_grade_4_step_10, 1.8029 , 0.3471 , 1.4565 
+GRADE_BY_STEP4occ_610_grade_4_11, occ_610_grade_4_step_11, 0.0858 , 0.8672 , 0.1942 
+GRADE_BY_STEP4occ_610_grade_4_12, occ_610_grade_4_step_12,-0.3081 , 1.0239 , 0.6225 
+GRADE_BY_STEP4occ_610_grade_4_13, occ_610_grade_4_step_13,-4.3033 ,-4.1923 ,-5.3633 
+GRADE_BY_STEP4occ_610_grade_4_14, occ_610_grade_4_step_14,-4.9046 ,-4.7977 ,-5.9963 
+GRADE_BY_STEP4occ_610_grade_4_15, occ_610_grade_4_step_X,-4.4203 ,-4.3634 ,-5.5184 
+GRADE_BY_STEP4occ_610_grade_4_16, occ_610_grade_4_step_01 * Time_in_job = aptyrs,-0.2562 ,-0.2786 ,-0.2667 
+GRADE_BY_STEP4occ_610_grade_4_17, occ_610_grade_4_step_02 * Time_in_job = aptyrs,-0.5486 ,-0.6072 ,-0.5277 
+GRADE_BY_STEP4occ_610_grade_4_18, occ_610_grade_4_step_03 * Time_in_job = aptyrs, 0.0530 , 0.0384 , 0.0564 
+GRADE_BY_STEP4occ_610_grade_4_19, occ_610_grade_4_step_04 * Time_in_job = aptyrs,-0.7650 , 0.0574 ,-0.0057 
+GRADE_BY_STEP4occ_610_grade_4_20, occ_610_grade_4_step_05 * Time_in_job = aptyrs,-0.0060 , 0.0019 , 0.0118 
+GRADE_BY_STEP4occ_610_grade_4_21, occ_610_grade_4_step_06 * Time_in_job = aptyrs, 0.0032 ,-0.0147 , 0.0079 
+GRADE_BY_STEP4occ_610_grade_4_22, occ_610_grade_4_step_07 * Time_in_job = aptyrs, 0.0683 , 0.0288 , 0.0650 
+GRADE_BY_STEP4occ_610_grade_4_23, occ_610_grade_4_step_08 * Time_in_job = aptyrs, 0.0510 ,-0.0542 ,-0.0372 
+GRADE_BY_STEP4occ_610_grade_4_24, occ_610_grade_4_step_09 * Time_in_job = aptyrs, 0.0581 , 0.0586 , 0.0650 
+GRADE_BY_STEP4occ_610_grade_4_25, occ_610_grade_4_step_10 * Time_in_job = aptyrs,-0.5638 ,-0.3463 ,-0.6952 
+GRADE_BY_STEP4occ_610_grade_4_26, occ_610_grade_4_step_11 * Time_in_job = aptyrs,-0.1248 ,-0.0383 ,-0.0386 
+GRADE_BY_STEP4occ_610_grade_4_27, occ_610_grade_4_step_12 * Time_in_job = aptyrs, 0.0139 ,-0.0821 ,-0.0315 
+GRADE_BY_STEP4occ_610_grade_4_28, occ_610_grade_4_step_13 * Time_in_job = aptyrs, 0.0679 , 0.0558 , 0.0693 
+GRADE_BY_STEP4occ_610_grade_4_29, occ_610_grade_4_step_14 * Time_in_job = aptyrs, 0.0904 , 0.0757 , 0.0921 
+GRADE_BY_STEP4occ_610_grade_4_30, occ_610_grade_4_step_X * Time_in_job = aptyrs, 0.0632 , 0.0493 , 0.0671 
+GRADE_BY_STEP4occ_610_grade_4_s2, occ_610_grade_4_step_02, 2.5303 , 1.7659 , 2.1258 
+GRADE_BY_STEP4occ_610_grade_4_s3, occ_610_grade_4_step_03,-5.6259 ,-5.5007 ,-6.6040 
+GRADE_BY_STEP4occ_610_grade_4_s4, occ_610_grade_4_step_04, 0.3972 ,-0.9843 ,-0.2884 
+GRADE_BY_STEP4occ_610_grade_4_s5, occ_610_grade_4_step_05, 1.3353 , 1.0600 , 1.1025 
+GRADE_BY_STEP4occ_610_grade_4_s6, occ_610_grade_4_step_06, 1.1249 , 0.5524 , 0.8844 
+GRADE_BY_STEP4occ_610_grade_4_s7, occ_610_grade_4_step_07, 0.2539 , 0.3609 ,-0.0816 
+GRADE_BY_STEP4occ_610_grade_4_s8, occ_610_grade_4_step_08,-5.7988 ,-0.3937 ,-0.4251 
+GRADE_BY_STEP4occ_610_grade_4_s9, occ_610_grade_4_step_09,-0.0439 , 0.4053 , 0.2774 
+GRADE_BY_STEP4occ_610_grade_4_st, occ_610_grade_4_step_01, 0.2484 ,-0.1759 ,-0.0004 
+GRADE_BY_STEP4occ_620_grade_4_10, occ_620_grade_4_step_10, 0.6964 , 1.2711 , 1.0103 
+GRADE_BY_STEP4occ_620_grade_4_11, occ_620_grade_4_step_01 * Time_in_job = aptyrs,-0.3028 ,-0.1163 ,-0.0972 
+GRADE_BY_STEP4occ_620_grade_4_12, occ_620_grade_4_step_02 * Time_in_job = aptyrs,-0.8823 ,-1.3551 ,-0.7762 
+GRADE_BY_STEP4occ_620_grade_4_13, occ_620_grade_4_step_03 * Time_in_job = aptyrs,-0.0716 ,-0.3134 ,-0.1970 
+GRADE_BY_STEP4occ_620_grade_4_14, occ_620_grade_4_step_04 * Time_in_job = aptyrs, 0.1098 , 0.1446 , 0.1550 
+GRADE_BY_STEP4occ_620_grade_4_15, occ_620_grade_4_step_05 * Time_in_job = aptyrs,-0.0725 ,-0.1328 ,-0.1186 
+GRADE_BY_STEP4occ_620_grade_4_16, occ_620_grade_4_step_06 * Time_in_job = aptyrs, 0.0727 , 0.1069 , 0.0926 
+GRADE_BY_STEP4occ_620_grade_4_17, occ_620_grade_4_step_07 * Time_in_job = aptyrs, 0.2624 ,-0.0583 , 0.0806 
+GRADE_BY_STEP4occ_620_grade_4_18, occ_620_grade_4_step_08 * Time_in_job = aptyrs, 0.0130 , 0.0977 , 0.0841 
+GRADE_BY_STEP4occ_620_grade_4_19, occ_620_grade_4_step_09 * Time_in_job = aptyrs, 0.0602 , 0.0477 , 0.0639 
+GRADE_BY_STEP4occ_620_grade_4_20, occ_620_grade_4_step_10 * Time_in_job = aptyrs,-0.2506 ,-0.2790 ,-0.2745 
+GRADE_BY_STEP4occ_620_grade_4_s2, occ_620_grade_4_step_02, 1.0317 , 0.8494 , 0.8527 
+GRADE_BY_STEP4occ_620_grade_4_s3, occ_620_grade_4_step_03, 0.9172 , 1.0305 , 0.9341 
+GRADE_BY_STEP4occ_620_grade_4_s4, occ_620_grade_4_step_04, 0.5865 , 0.5523 , 0.5718 
+GRADE_BY_STEP4occ_620_grade_4_s5, occ_620_grade_4_step_05, 1.0343 , 0.8166 , 0.9388 
+GRADE_BY_STEP4occ_620_grade_4_s6, occ_620_grade_4_step_06, 0.3996 , 0.5691 , 0.4740 
+GRADE_BY_STEP4occ_620_grade_4_s7, occ_620_grade_4_step_07,-1.5552 , 0.4481 ,-0.0435 
+GRADE_BY_STEP4occ_620_grade_4_s8, occ_620_grade_4_step_08, 0.7026 , 1.3350 , 0.9561 
+GRADE_BY_STEP4occ_620_grade_4_s9, occ_620_grade_4_step_09,-4.9791 ,-4.7853 ,-5.9705 
+GRADE_BY_STEP4occ_620_grade_4_st, occ_620_grade_4_step_01, 0.6703 , 0.6549 , 0.5908 
+GRADE_BY_STEP4occ_620_grade_5_10, occ_620_grade_5_step_10, 0.1288 , 0.2203 , 0.0534 
+GRADE_BY_STEP4occ_620_grade_5_11, occ_620_grade_5_step_01 * Time_in_job = aptyrs,-0.1621 ,-0.2083 ,-0.2457 
+GRADE_BY_STEP4occ_620_grade_5_12, occ_620_grade_5_step_02 * Time_in_job = aptyrs, 0.0762 ,-0.1604 ,-0.0230 
+GRADE_BY_STEP4occ_620_grade_5_13, occ_620_grade_5_step_03 * Time_in_job = aptyrs,-0.2894 ,-0.2235 ,-0.2065 
+GRADE_BY_STEP4occ_620_grade_5_14, occ_620_grade_5_step_04 * Time_in_job = aptyrs,-0.0723 ,-0.0572 ,-0.0719 
+GRADE_BY_STEP4occ_620_grade_5_15, occ_620_grade_5_step_05 * Time_in_job = aptyrs, 0.0731 , 0.0916 , 0.1262 
+GRADE_BY_STEP4occ_620_grade_5_16, occ_620_grade_5_step_06 * Time_in_job = aptyrs, 0.1160 , 0.1081 , 0.1041 
+GRADE_BY_STEP4occ_620_grade_5_17, occ_620_grade_5_step_07 * Time_in_job = aptyrs, 0.0956 , 0.1117 , 0.1097 
+GRADE_BY_STEP4occ_620_grade_5_18, occ_620_grade_5_step_08 * Time_in_job = aptyrs, 0.0036 ,-0.1259 ,-0.0373 
+GRADE_BY_STEP4occ_620_grade_5_19, occ_620_grade_5_step_09 * Time_in_job = aptyrs,-0.1125 ,-0.2741 ,-0.1473 
+GRADE_BY_STEP4occ_620_grade_5_20, occ_620_grade_5_step_10 * Time_in_job = aptyrs, 0.0709 , 0.0698 , 0.0825 
+GRADE_BY_STEP4occ_620_grade_5_s2, occ_620_grade_5_step_02, 0.6729 , 0.8216 , 0.7055 
+GRADE_BY_STEP4occ_620_grade_5_s3, occ_620_grade_5_step_03, 0.4215 , 0.6425 , 0.4318 
+GRADE_BY_STEP4occ_620_grade_5_s4, occ_620_grade_5_step_04, 0.8430 , 0.9296 , 0.8345 
+GRADE_BY_STEP4occ_620_grade_5_s5, occ_620_grade_5_step_05, 0.5151 , 0.6802 , 0.4955 
+GRADE_BY_STEP4occ_620_grade_5_s6, occ_620_grade_5_step_06, 0.4163 , 0.3432 , 0.3987 
+GRADE_BY_STEP4occ_620_grade_5_s7, occ_620_grade_5_step_07, 0.5409 , 0.3278 , 0.3438 
+GRADE_BY_STEP4occ_620_grade_5_s8, occ_620_grade_5_step_08, 0.5979 , 0.8864 , 0.6681 
+GRADE_BY_STEP4occ_620_grade_5_s9, occ_620_grade_5_step_09, 1.2232 , 1.2475 , 1.1670 
+GRADE_BY_STEP4occ_620_grade_5_st, occ_620_grade_5_step_01, 0.8915 , 0.9401 , 0.9492 
+GRADE_BY_STEP4occ_620_grade_6_10, occ_620_grade_6_step_10,-0.1499 , 0.0871 ,-0.0294 
+GRADE_BY_STEP4occ_620_grade_6_11, occ_620_grade_6_step_01 * Time_in_job = aptyrs, 0.1988 , 0.1721 , 0.1530 
+GRADE_BY_STEP4occ_620_grade_6_12, occ_620_grade_6_step_02 * Time_in_job = aptyrs,-0.0618 ,-0.3115 ,-0.1869 
+GRADE_BY_STEP4occ_620_grade_6_13, occ_620_grade_6_step_03 * Time_in_job = aptyrs,-0.3324 ,-0.2647 ,-0.2662 
+GRADE_BY_STEP4occ_620_grade_6_14, occ_620_grade_6_step_04 * Time_in_job = aptyrs,-0.0054 ,-0.1488 ,-0.0692 
+GRADE_BY_STEP4occ_620_grade_6_15, occ_620_grade_6_step_05 * Time_in_job = aptyrs, 0.0625 , 0.0137 , 0.0594 
+GRADE_BY_STEP4occ_620_grade_6_16, occ_620_grade_6_step_06 * Time_in_job = aptyrs, 0.0330 , 0.0066 , 0.0320 
+GRADE_BY_STEP4occ_620_grade_6_17, occ_620_grade_6_step_07 * Time_in_job = aptyrs, 0.0708 , 0.0315 , 0.0524 
+GRADE_BY_STEP4occ_620_grade_6_18, occ_620_grade_6_step_08 * Time_in_job = aptyrs, 0.0586 , 0.0321 , 0.0648 
+GRADE_BY_STEP4occ_620_grade_6_19, occ_620_grade_6_step_09 * Time_in_job = aptyrs, 0.0657 , 0.0661 , 0.0750 
+GRADE_BY_STEP4occ_620_grade_6_20, occ_620_grade_6_step_10 * Time_in_job = aptyrs, 0.0649 , 0.0414 , 0.0613 
+GRADE_BY_STEP4occ_620_grade_6_s2, occ_620_grade_6_step_02, 0.2252 , 0.3171 , 0.1972 
+GRADE_BY_STEP4occ_620_grade_6_s3, occ_620_grade_6_step_03, 0.8786 , 0.5848 , 0.6823 
+GRADE_BY_STEP4occ_620_grade_6_s4, occ_620_grade_6_step_04, 0.2448 , 0.4944 , 0.3985 
+GRADE_BY_STEP4occ_620_grade_6_s5, occ_620_grade_6_step_05, 0.4449 , 0.5415 , 0.4474 
+GRADE_BY_STEP4occ_620_grade_6_s6, occ_620_grade_6_step_06, 0.3886 , 0.4653 , 0.3983 
+GRADE_BY_STEP4occ_620_grade_6_s7, occ_620_grade_6_step_07, 0.3033 , 0.5047 , 0.4102 
+GRADE_BY_STEP4occ_620_grade_6_s8, occ_620_grade_6_step_08, 0.0891 , 0.4461 , 0.1822 
+GRADE_BY_STEP4occ_620_grade_6_s9, occ_620_grade_6_step_09,-0.1070 ,-0.0898 ,-0.1296 
+GRADE_BY_STEP4occ_620_grade_6_st, occ_620_grade_6_step_01, 0.2542 , 0.0558 , 0.3414 
+GRADE_BY_STEP4occ_621_grade_4_10, occ_621_grade_4_step_10, 0.9979 , 0.4367 , 0.8272 
+GRADE_BY_STEP4occ_621_grade_4_11, occ_621_grade_4_step_X,-4.4165 ,-4.2931 ,-5.4913 
+GRADE_BY_STEP4occ_621_grade_4_12, occ_621_grade_4_step_01 * Time_in_job = aptyrs, 0.4248 , 0.3143 , 0.3648 
+GRADE_BY_STEP4occ_621_grade_4_13, occ_621_grade_4_step_02 * Time_in_job = aptyrs, 0.3216 , 0.1630 , 0.2250 
+GRADE_BY_STEP4occ_621_grade_4_14, occ_621_grade_4_step_03 * Time_in_job = aptyrs, 0.0548 , 0.1596 , 0.0902 
+GRADE_BY_STEP4occ_621_grade_4_15, occ_621_grade_4_step_04 * Time_in_job = aptyrs, 0.0776 , 0.0432 , 0.0731 
+GRADE_BY_STEP4occ_621_grade_4_16, occ_621_grade_4_step_05 * Time_in_job = aptyrs,-0.0660 ,-0.0403 ,-0.0479 
+GRADE_BY_STEP4occ_621_grade_4_17, occ_621_grade_4_step_06 * Time_in_job = aptyrs,-0.0697 , 0.0463 , 0.0338 
+GRADE_BY_STEP4occ_621_grade_4_18, occ_621_grade_4_step_07 * Time_in_job = aptyrs, 0.2246 , 0.1573 , 0.1791 
+GRADE_BY_STEP4occ_621_grade_4_19, occ_621_grade_4_step_08 * Time_in_job = aptyrs, 0.0326 , 0.1120 , 0.0940 
+GRADE_BY_STEP4occ_621_grade_4_20, occ_621_grade_4_step_09 * Time_in_job = aptyrs,-0.0165 ,-0.0004 ,-0.0129 
+GRADE_BY_STEP4occ_621_grade_4_21, occ_621_grade_4_step_10 * Time_in_job = aptyrs, 0.0758 , 0.0900 , 0.0869 
+GRADE_BY_STEP4occ_621_grade_4_22, occ_621_grade_4_step_X * Time_in_job = aptyrs, 0.0737 , 0.0467 , 0.0705 
+GRADE_BY_STEP4occ_621_grade_4_s2, occ_621_grade_4_step_02, 0.6983 , 0.9439 , 0.8136 
+GRADE_BY_STEP4occ_621_grade_4_s3, occ_621_grade_4_step_03, 1.2770 , 0.8355 , 1.0726 
+GRADE_BY_STEP4occ_621_grade_4_s4, occ_621_grade_4_step_04, 0.6322 , 0.3604 , 0.3977 
+GRADE_BY_STEP4occ_621_grade_4_s5, occ_621_grade_4_step_05, 1.7290 , 1.1967 , 1.4212 
+GRADE_BY_STEP4occ_621_grade_4_s6, occ_621_grade_4_step_06, 0.8363 , 0.0653 , 0.1781 
+GRADE_BY_STEP4occ_621_grade_4_s7, occ_621_grade_4_step_07,-1.3597 ,-0.7316 ,-0.8802 
+GRADE_BY_STEP4occ_621_grade_4_s8, occ_621_grade_4_step_08, 0.3324 ,-0.3289 ,-0.2300 
+GRADE_BY_STEP4occ_621_grade_4_s9, occ_621_grade_4_step_09, 2.0754 , 2.1892 , 2.4455 
+GRADE_BY_STEP4occ_621_grade_4_st, occ_621_grade_4_step_01, 1.6702 , 1.7384 , 1.6928 
+GRADE_BY_STEP4occ_621_grade_5_10, occ_621_grade_5_step_10,-0.2721 ,-0.0184 ,-0.1007 
+GRADE_BY_STEP4occ_621_grade_5_11, occ_621_grade_5_step_01 * Time_in_job = aptyrs, 0.1007 , 0.1537 , 0.1329 
+GRADE_BY_STEP4occ_621_grade_5_12, occ_621_grade_5_step_02 * Time_in_job = aptyrs, 0.2075 , 0.2267 , 0.2222 
+GRADE_BY_STEP4occ_621_grade_5_13, occ_621_grade_5_step_03 * Time_in_job = aptyrs, 0.1629 , 0.1468 , 0.1738 
+GRADE_BY_STEP4occ_621_grade_5_14, occ_621_grade_5_step_04 * Time_in_job = aptyrs, 0.1619 , 0.1331 , 0.1545 
+GRADE_BY_STEP4occ_621_grade_5_15, occ_621_grade_5_step_05 * Time_in_job = aptyrs, 0.0603 , 0.0477 , 0.0801 
+GRADE_BY_STEP4occ_621_grade_5_16, occ_621_grade_5_step_06 * Time_in_job = aptyrs,-0.0252 ,-0.0039 , 0.0096 
+GRADE_BY_STEP4occ_621_grade_5_17, occ_621_grade_5_step_07 * Time_in_job = aptyrs, 0.0314 , 0.0265 , 0.0462 
+GRADE_BY_STEP4occ_621_grade_5_18, occ_621_grade_5_step_08 * Time_in_job = aptyrs, 0.0754 , 0.0674 , 0.0897 
+GRADE_BY_STEP4occ_621_grade_5_19, occ_621_grade_5_step_09 * Time_in_job = aptyrs, 0.1656 , 0.1345 , 0.1564 
+GRADE_BY_STEP4occ_621_grade_5_20, occ_621_grade_5_step_10 * Time_in_job = aptyrs, 0.0898 , 0.0686 , 0.0881 
+GRADE_BY_STEP4occ_621_grade_5_s2, occ_621_grade_5_step_02, 0.1350 , 0.2940 , 0.1937 
+GRADE_BY_STEP4occ_621_grade_5_s3, occ_621_grade_5_step_03, 0.7215 , 0.7164 , 0.6697 
+GRADE_BY_STEP4occ_621_grade_5_s4, occ_621_grade_5_step_04, 0.2075 , 0.3212 , 0.2483 
+GRADE_BY_STEP4occ_621_grade_5_s5, occ_621_grade_5_step_05, 0.6521 , 0.6666 , 0.5248 
+GRADE_BY_STEP4occ_621_grade_5_s6, occ_621_grade_5_step_06, 1.1256 , 0.9775 , 0.9576 
+GRADE_BY_STEP4occ_621_grade_5_s7, occ_621_grade_5_step_07, 0.9485 , 0.8463 , 0.7506 
+GRADE_BY_STEP4occ_621_grade_5_s8, occ_621_grade_5_step_08, 0.2827 , 0.0396 ,-0.0023 
+GRADE_BY_STEP4occ_621_grade_5_s9, occ_621_grade_5_step_09,-1.8411 ,-1.3005 ,-1.4917 
+GRADE_BY_STEP4occ_621_grade_5_st, occ_621_grade_5_step_01, 1.3733 , 1.4110 , 1.3607 
+GRADE_BY_STEP4occ_621_grade_6_10, occ_621_grade_6_step_01 * Time_in_job = aptyrs,-0.0479 , 0.1070 , 0.0937 
+GRADE_BY_STEP4occ_621_grade_6_11, occ_621_grade_6_step_02 * Time_in_job = aptyrs, 0.2417 , 0.0502 , 0.2249 
+GRADE_BY_STEP4occ_621_grade_6_12, occ_621_grade_6_step_03 * Time_in_job = aptyrs,-2.5217 , 0.0440 ,-3.2111 
+GRADE_BY_STEP4occ_621_grade_6_13, occ_621_grade_6_step_04 * Time_in_job = aptyrs, 0.2945 , 0.2848 , 0.2968 
+GRADE_BY_STEP4occ_621_grade_6_14, occ_621_grade_6_step_05 * Time_in_job = aptyrs, 0.1184 , 0.0505 , 0.0705 
+GRADE_BY_STEP4occ_621_grade_6_15, occ_621_grade_6_step_06 * Time_in_job = aptyrs, 0.1836 , 0.1317 , 0.1819 
+GRADE_BY_STEP4occ_621_grade_6_16, occ_621_grade_6_step_07 * Time_in_job = aptyrs, 0.1149 , 0.0717 , 0.1037 
+GRADE_BY_STEP4occ_621_grade_6_17, occ_621_grade_6_step_08 * Time_in_job = aptyrs,-0.1977 ,-0.3991 ,-0.2180 
+GRADE_BY_STEP4occ_621_grade_6_18, occ_621_grade_6_step_09 * Time_in_job = aptyrs, 0.1243 , 0.1046 , 0.1297 
+GRADE_BY_STEP4occ_621_grade_6_s2, occ_621_grade_6_step_02,-0.4572 ,-5.8071 ,-1.2208 
+GRADE_BY_STEP4occ_621_grade_6_s3, occ_621_grade_6_step_03, 2.7152 ,-5.7222 , 3.1443 
+GRADE_BY_STEP4occ_621_grade_6_s4, occ_621_grade_6_step_04,-0.2813 ,-0.3378 ,-0.4782 
+GRADE_BY_STEP4occ_621_grade_6_s5, occ_621_grade_6_step_05, 0.3588 , 0.6620 , 0.5117 
+GRADE_BY_STEP4occ_621_grade_6_s6, occ_621_grade_6_step_06,-1.5664 ,-1.2588 ,-1.5265 
+GRADE_BY_STEP4occ_621_grade_6_s7, occ_621_grade_6_step_07,-0.2734 ,-0.8213 ,-0.4508 
+GRADE_BY_STEP4occ_621_grade_6_s8, occ_621_grade_6_step_08, 3.5901 , 4.7436 , 3.5559 
+GRADE_BY_STEP4occ_621_grade_6_s9, occ_621_grade_6_step_09,-1.7437 ,-2.9723 ,-2.1175 
+GRADE_BY_STEP4occ_621_grade_6_st, occ_621_grade_6_step_01,-0.2309 ,-0.4231 ,-0.2591 
+Intercept,Intercept: Involuntary_flag=1,-4.5833 ,-4.5564 ,-4.5338 
+Performance_ModHigh,"Perf = 4,5",-1.2071 ,-1.2043 ,-1.2195 
+Performance_ModLow,"Perf = 1,2", 1.4025 , 1.3896 , 1.3899 
+Performance_ModModerate,Perf = 3,-0.2381 ,-0.2367 ,-0.2412 
+TIJ_capped,Time in Job = aptyrs,-0.0814 ,-0.0690 ,-0.0845 
+VAMCAlbuquerque__NM,"VAMC Albuquerque, NM", 0.0251 ,-0.0486 , 0.0494 
+VAMCAlexandria__LA,"VAMC Alexandria, LA", 0.3915 , 0.4025 , 0.3575 
+VAMCAll_Others,VAMC All Others,-1.0005 ,-0.7331 ,-0.8163 
+VAMCAltoona__PA,"VAMC Altoona, PA",-1.1283 ,-1.4858 ,-1.2983 
+VAMCAmarillo__TX,"VAMC Amarillo, TX", 0.0559 , 0.0563 , 0.1470 
+VAMCAnchorage__AK,"VAMC Anchorage, AK", 0.7877 , 0.9571 , 0.8633 
+VAMCAnn_Arbor__MI,"VAMC Ann Arbor, MI", 0.6100 , 0.5099 , 0.5493 
+VAMCAsheville__NC,"VAMC Asheville, NC",-0.2485 ,-0.4166 ,-0.3586 
+VAMCAtlanta__Decatur___GA,"VAMC Atlanta {Decatur}, GA",-0.3807 ,-0.5494 ,-0.4398 
+VAMCAugusta__GA,"VAMC Augusta, GA", 0.6214 , 0.3762 , 0.4585 
+VAMCBaltimore_HCS__MD,"VAMC Baltimore HCS, MD", 0.7385 , 0.7832 , 0.7261 
+VAMCBattle_Creek__MI,"VAMC Battle Creek, MI", 0.9137 , 0.9935 , 0.9377 
+VAMCBay_Pines__FL,"VAMC Bay Pines, FL",-0.3237 ,-0.1286 ,-0.1747 
+VAMCBeckley__WV,"VAMC Beckley, WV",-0.0098 , 0.2546 , 0.1205 
+VAMCBedford__MA,"VAMC Bedford, MA",-0.0884 , 0.0379 ,-0.0115 
+VAMCBig_Spring__TX,"VAMC Big Spring, TX",-0.0712 , 0.0694 ,-0.0980 
+VAMCBiloxi__MS,"VAMC Biloxi, MS", 0.0858 , 0.0947 , 0.0578 
+VAMCBirmingham__AL,"VAMC Birmingham, AL", 0.4329 , 0.4457 , 0.4169 
+VAMCBlack_Hills_HCS__SD,"VAMC Black Hills HCS, SD",-0.3329 ,-0.2360 ,-0.2091 
+VAMCBoise__ID,"VAMC Boise, ID",-0.0549 , 0.2070 , 0.1144 
+VAMCBoston_HCS__MA,"VAMC Boston HCS, MA",-0.3320 ,-0.3119 ,-0.2486 
+VAMCBronx__NY,"VAMC Bronx, NY", 0.2444 , 0.3159 , 0.3130 
+VAMCBuffalo__NY,"VAMC Buffalo, NY", 0.3281 , 0.4301 , 0.3671 
+VAMCButler__PA,"VAMC Butler, PA", 0.0646 ,-0.0442 , 0.0451 
+VAMCCentral_Texas_HCS__TX,"VAMC Central Texas HCS, TX", 0.2285 , 0.1163 , 0.1973 
+VAMCCharleston__SC,"VAMC Charleston, SC", 0.2419 , 0.1614 , 0.2254 
+VAMCCheyenne__WY,"VAMC Cheyenne, WY", 0.8850 , 0.7303 , 0.7848 
+VAMCChicago_HCS__IL,"VAMC Chicago HCS, IL",-0.1071 ,-0.1896 ,-0.1274 
+VAMCChillicothe__OH,"VAMC Chillicothe, OH",-0.1165 ,-0.3423 ,-0.2100 
+VAMCCincinnati__OH,"VAMC Cincinnati, OH", 0.7031 , 0.5739 , 0.6867 
+VAMCClarksburg__WV,"VAMC Clarksburg, WV",-0.1685 ,-0.0628 ,-0.0864 
+VAMCCleveland__OH,"VAMC Cleveland, OH", 0.0459 , 0.0758 , 0.0503 
+VAMCCoatesville__PA,"VAMC Coatesville, PA", 0.4428 , 0.3879 , 0.3756 
+VAMCColumbia__SC,"VAMC Columbia, SC",-0.3531 ,-0.2612 ,-0.3236 
+VAMCColumbus__OH,"VAMC Columbus, OH",-0.2378 ,-0.1528 ,-0.0992 
+VAMCConnecticut_HCS__CT,"VAMC Connecticut HCS, CT",-0.2500 ,-0.2434 ,-0.2108 
+VAMCDallas__TX,"VAMC Dallas, TX", 0.3313 , 0.3956 , 0.3372 
+VAMCDanville__IL,"VAMC Danville, IL",-0.1049 ,-0.0395 ,-0.0976 
+VAMCDayton__OH,"VAMC Dayton, OH", 0.7747 , 0.5875 , 0.6648 
+VAMCDenver__CO,"VAMC Denver, CO",-0.2622 ,-0.2820 ,-0.2570 
+VAMCDetroit__MI,"VAMC Detroit, MI", 0.7035 , 0.6993 , 0.6678 
+VAMCDublin__GA,"VAMC Dublin, GA", 0.1705 , 0.1963 , 0.2169 
+VAMCDurham__NC,"VAMC Durham, NC",-0.0295 ,-0.0121 ,-0.0309 
+VAMCEl_Paso__TX,"VAMC El Paso, TX", 1.1335 , 1.3056 , 1.1596 
+VAMCErie__PA,"VAMC Erie, PA", 0.5142 , 0.6623 , 0.6720 
+VAMCFargo__ND,"VAMC Fargo, ND", 0.0960 ,-0.6760 ,-0.2129 
+VAMCFayetteville__AR,"VAMC Fayetteville, AR",-0.4245 ,-0.3326 ,-0.3497 
+VAMCFayetteville__NC,"VAMC Fayetteville, NC", 0.6230 , 0.5560 , 0.5936 
+VAMCFresno__CA,"VAMC Fresno, CA",-0.3537 ,-0.3476 ,-0.4301 
+VAMCGainesville__FL,"VAMC Gainesville, FL",-0.3473 ,-0.4532 ,-0.4146 
+VAMCGrand_Junction__CO,"VAMC Grand Junction, CO", 0.3272 , 0.2237 , 0.2037 
+VAMCHampton__VA,"VAMC Hampton, VA", 0.2789 , 0.0811 , 0.1395 
+VAMCHines__IL,"VAMC Hines, IL",-0.0163 , 0.0368 ,-0.0021 
+VAMCHonolulu__HI,"VAMC Honolulu, HI", 0.7846 , 0.7494 , 0.7479 
+VAMCHouston__TX,"VAMC Houston, TX", 0.3887 , 0.2888 , 0.3351 
+VAMCHudson_Valley_HCS__NY,"VAMC Hudson Valley HCS, NY", 0.5274 , 0.5854 , 0.4893 
+VAMCHuntington__WV,"VAMC Huntington, WV", 0.3578 , 0.4501 , 0.4650 
+VAMCIndianapolis__IN,"VAMC Indianapolis, IN", 0.0855 , 0.0485 , 0.0915 
+VAMCIron_Mountain__MI,"VAMC Iron Mountain, MI",-0.5389 ,-0.7133 ,-0.6680 
+VAMCJackson__MS,"VAMC Jackson, MS",-0.3118 ,-0.3097 ,-0.3923 
+VAMCKansas_City__MO,"VAMC Kansas City, MO", 0.0268 ,-0.0187 ,-0.0060 
+VAMCLas_Vegas__NV,"VAMC Las Vegas, NV",-0.6025 ,-0.4869 ,-0.5563 
+VAMCLebanon__PA,"VAMC Lebanon, PA", 0.2492 , 0.1202 , 0.2138 
+VAMCLexington__KY,"VAMC Lexington, KY", 0.0967 , 0.1715 , 0.1380 
+VAMCLittle_Rock__AR,"VAMC Little Rock, AR", 0.1857 ,-0.0164 , 0.0885 
+VAMCLoma_Linda__CA,"VAMC Loma Linda, CA",-0.2543 , 0.0478 ,-0.0497 
+VAMCLong_Beach__CA,"VAMC Long Beach, CA",-0.1542 ,-0.2377 ,-0.2225 
+VAMCLos_Angeles_HCS__CA,"VAMC Los Angeles HCS, CA", 0.1429 , 0.0100 , 0.0618 
+VAMCLouisville__KY,"VAMC Louisville, KY", 0.1176 , 0.3329 , 0.2512 
+VAMCMadison__WI,"VAMC Madison, WI",-0.7335 ,-0.9191 ,-0.7228 
+VAMCManchester__NH,"VAMC Manchester, NH", 0.7582 , 0.5527 , 0.6996 
+VAMCManila__PI,"VAMC Manila, PI",-5.0479 ,-4.9092 ,-6.0220 
+VAMCMartinsburg__WV,"VAMC Martinsburg, WV", 0.5067 , 0.3828 , 0.4429 
+VAMCMemphis__TN,"VAMC Memphis, TN", 0.1113 ,-0.0048 , 0.0702 
+VAMCMiami__FL,"VAMC Miami, FL", 0.0258 , 0.2141 , 0.1481 
+VAMCMid_Tenn__HCS__TN,"VAMC Mid Tenn. HCS, TN", 0.2431 , 0.3123 , 0.2553 
+VAMCMilwaukee__WI,"VAMC Milwaukee, WI",-0.0823 ,-0.0359 ,-0.0106 
+VAMCMinneapolis__MN,"VAMC Minneapolis, MN",-0.0073 , 0.0396 , 0.0081 
+VAMCMontana_HCS__MT,"VAMC Montana HCS, MT",-0.2498 ,-0.2144 ,-0.2749 
+VAMCMontgomery__AL,"VAMC Montgomery, AL",-0.2233 ,-0.0674 ,-0.0784 
+VAMCMountain_Home__TN,"VAMC Mountain Home, TN",-0.0425 ,-0.1944 ,-0.1444 
+VAMCMuskogee__OK,"VAMC Muskogee, OK", 0.4933 , 0.6125 , 0.5409 
+VAMCNY_Harbor_HCS__NY,"VAMC NY Harbor HCS, NY",-0.3120 ,-0.4345 ,-0.3428 
+VAMCNebraska_W_Iowa__NE,"VAMC Nebraska-W Iowa, NE", 0.1311 ,-0.0217 , 0.0456 
+VAMCNew_Jersey_HCS__NJ,"VAMC New Jersey HCS, NJ",-0.5569 ,-0.6303 ,-0.5755 
+VAMCNew_Orleans__LA,"VAMC New Orleans, LA",-0.5516 ,-0.2540 ,-0.4524 
+VAMCNorth_Arizona_HCS__AZ,"VAMC North Arizona HCS, AZ",-0.1500 ,-0.0591 ,-0.0631 
+VAMCNorth_Calif_HCS__CA,"VAMC North Calif HCS, CA", 0.0628 ,-0.2056 ,-0.0620 
+VAMCNorth_Chicago__IL,"VAMC North Chicago, IL",-0.2418 ,-0.1678 ,-0.1494 
+VAMCNorth_Indiana_HCS__IN,"VAMC North Indiana HCS, IN",-0.2085 ,-0.1274 ,-0.1597 
+VAMCNorthampton__MA,"VAMC Northampton, MA", 0.4242 , 0.5941 , 0.4717 
+VAMCNorthport__NY,"VAMC Northport, NY",-0.2666 ,-0.0291 ,-0.1245 
+VAMCOklahoma_City__OK,"VAMC Oklahoma City, OK", 0.4577 , 0.4153 , 0.4225 
+VAMCOrlando__FL,"VAMC Orlando, FL",-0.2618 ,-0.3707 ,-0.3507 
+VAMCPalo_Alto__CA,"VAMC Palo Alto, CA",-0.4213 ,-0.2632 ,-0.3220 
+VAMCPhiladelphia__PA,"VAMC Philadelphia, PA", 0.3338 , 0.2530 , 0.2643 
+VAMCPhoenix__AZ,"VAMC Phoenix, AZ", 0.8540 , 0.8851 , 0.8523 
+VAMCPittsburgh__PA,"VAMC Pittsburgh, PA", 0.1829 , 0.2527 , 0.2158 
+VAMCPortland__OR,"VAMC Portland, OR",-0.2694 ,-0.1844 ,-0.2300 
+VAMCProvidence__RI,"VAMC Providence, RI",-0.5143 ,-0.6066 ,-0.5367 
+VAMCPuget_Sound_HCS__WA,"VAMC Puget Sound HCS, WA", 0.1467 , 0.0243 , 0.1345 
+VAMCReno__NV,"VAMC Reno, NV",-0.1851 ,-0.1553 ,-0.2015 
+VAMCRichmond__VA,"VAMC Richmond, VA", 0.2944 , 0.2761 , 0.2769 
+VAMCRoseburg__OR,"VAMC Roseburg, OR",-0.1220 , 0.0343 ,-0.0188 
+VAMCSaginaw__MI,"VAMC Saginaw, MI",-0.5850 ,-0.7004 ,-0.7540 
+VAMCSalem__VA,"VAMC Salem, VA",-0.0158 ,-0.1702 ,-0.1270 
+VAMCSalisbury__NC,"VAMC Salisbury, NC", 0.0555 , 0.2773 , 0.2263 
+VAMCSalt_Lake_City__UT,"VAMC Salt Lake City, UT",-0.3626 ,-0.0596 ,-0.2422 
+VAMCSan_Diego__CA,"VAMC San Diego, CA",-0.1244 ,-0.0989 ,-0.1372 
+VAMCSan_Francisco__CA,"VAMC San Francisco, CA", 0.2665 , 0.1613 , 0.2228 
+VAMCSan_Juan__PR,"VAMC San Juan, PR",-0.5549 ,-0.5165 ,-0.5632 
+VAMCSheridan__WY,"VAMC Sheridan, WY", 0.4641 , 0.0591 , 0.2658 
+VAMCShreveport__LA,"VAMC Shreveport, LA",-0.9249 ,-0.6837 ,-0.7762 
+VAMCSioux_Falls__SD,"VAMC Sioux Falls, SD", 0.0782 , 0.0329 , 0.0041 
+VAMCSouth_Arizona_HCS__AZ,"VAMC South Arizona HCS, AZ",-0.7087 ,-0.5015 ,-0.5740 
+VAMCSouth_Texas_HCS__TX,"VAMC South Texas HCS, TX", 0.1932 , 0.0565 , 0.1095 
+VAMCSpokane__WA,"VAMC Spokane, WA", 0.6765 , 0.4905 , 0.5744 
+VAMCSt__Cloud__MN,"VAMC St. Cloud, MN",-0.7646 ,-0.6427 ,-0.6497 
+VAMCSt__Louis__MO,"VAMC St. Louis, MO", 0.1097 , 0.0510 , 0.0195 
+VAMCTampa__FL,"VAMC Tampa, FL",-0.3880 ,-0.3451 ,-0.3449 
+VAMCTexas_Valley_Coast_HCS,VAMC Texas Valley Coast HCS, 0.2852 , 0.2734 , 0.2763 
+VAMCTogus__ME,"VAMC Togus, ME", 1.1678 , 1.0839 , 1.1469 
+VAMCTomah__WI,"VAMC Tomah, WI",-0.0520 ,-0.0633 ,-0.0335 
+VAMCTuscaloosa__AL,"VAMC Tuscaloosa, AL",-0.4151 ,-0.6296 ,-0.5032 
+VAMCWalla_Walla__WA,"VAMC Walla Walla, WA",-1.5710 ,-0.5961 ,-0.5113 
+VAMCWashington__DC,"VAMC Washington, DC", 0.2301 , 0.1643 , 0.2281 
+VAMCWest_Palm_Beach__FL,"VAMC West Palm Beach, FL",-0.8964 ,-0.7131 ,-0.7368 
+VAMCWhite_City__OR,"VAMC White City, OR", 0.6170 , 0.4409 , 0.5927 
+VAMCWhite_River_Jct___VT,"VAMC White River Jct., VT", 0.6105 , 0.7881 , 0.6780 
+VAMCWilkes_Barre__PA,"VAMC Wilkes-Barre, PA", 0.2454 ,-0.1840 , 0.0413 
+rate,Unemployment Rate, 0.0547 , 0.0466 , 0.0499 
+, ,,,

@@ -4,8 +4,10 @@ var vamcs = ['Albuquerque, NM','Alexandria, LA','All Others','Altoona, PA','Amar
 
 var models = {
   retirement:  {
+    color: '#d62728',
+    // color: '#1f77b4',
     equation: model_formula,
-    y: { type: 'continuous', min: 0, max: 1, title: 'Predicted Retirement Probability', format: d3.format('.8%') },
+    y: { type: 'continuous', min: 0, max: 1, title: 'Predicted Retirement Probability', format: d3.format('.1%') },
     variables: {
       age: { type: 'continuous', min: 45, max: 85, mean: 62, title: 'Age', increment: 1, format: d3.format('0f') },
       tenure: { type: 'continuous', min: 0, max: 60, mean: 25, title: 'Tenure', increment: 1, format: d3.format('0f') },
@@ -291,7 +293,7 @@ var draw = function(model){
         .attr('dx','-110')
         .attr('dy','0.3em')
         .text(model.y.format(predicted_p))
-        .style('fill','red')
+        .style('fill',model.color)
         .style('font-weight','bold');
       }
 
@@ -299,7 +301,8 @@ var draw = function(model){
         .attr('class','response-curve')
         .attr('d', v_i.path_generator(plot_data))
         .style('stroke-width', 3)
-        .style('stroke','red')
+        // .style('stroke',model.color)
+        .style('stroke', d3.rgb(model.color).brighter(0.7))
         .style('fill','none');
 
 
@@ -311,9 +314,9 @@ var draw = function(model){
         .attr('cy',function(d){ return d[1] })
         .attr('r', 6)
         .style('stroke-width',3.5)
-        .style('stroke','red')
+        .style('stroke',model.color)
         .style('fill','white')
-          .attr("cursor", "move");
+          .attr('cursor', 'move');
 
 
       var rect = background_layer.append('rect')
