@@ -321,8 +321,7 @@ var draw = function(model){
         .attr('y',0)
         .attr('width',graph_height)
         .attr('height',graph_height)
-        .style('fill','rgb(250,250,250)')
-        // .style('fill-opacity',0.5)
+        .style('fill','rgb(250,250,250)');
       
       var interaction_layers = g.selectAll('.background-layer, .foreground-layer')
         .selectAll('circle, rect, path');
@@ -373,16 +372,19 @@ var draw = function(model){
         .attr('class','predicted-p')
         .attr('x1', function(){
           var x1 = v_i.x(domain[0]);
-          return mod == 0 ? x1 : x1 - 50;
+          return mod == 0 ? x1 : x1 - 25;
         })
         .attr('y1',mean[1])
-        .attr('x2', v_i.x( domain[domain.length - 1] ))
+        .attr('x2', function(){
+          var x2 = v_i.x( domain[domain.length - 1] );
+          return mod == 2 ? x2 : x2 + 25;
+        })
         .attr('y2',mean[1])
         .style('stroke-width', 1.5)
         .style('stroke','lightgray')
         .style('fill','none');
 
-  });
+    });
 
 };
 
