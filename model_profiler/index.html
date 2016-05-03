@@ -12,7 +12,10 @@
   <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.min.js"></script>
 
-  <script type="text/javascript" src="./retirement_model_full_new.js"></script>
+  <script type="text/javascript" src="./promotion_model_full.js"></script>
+  <script type="text/javascript" src="./retirement_model_full.js"></script>
+  <script type="text/javascript" src="./voluntary_model_full.js"></script>
+  <script type="text/javascript" src="./involuntary_model_full.js"></script>
 
   <style>
     body {
@@ -66,6 +69,8 @@
   <div style="width: 960px; margin: 50px auto;">
   
     <p>The Model Profiler allows you to explore multivariate regression effects. Click and drag the points for each plot to explore how the variables interact across the model.</p>
+    <label>Select an event model: </label>
+    <select id="select-a-model" class="form-control"></select>
     <div id="model-profiler-parent" style="position: relative;">
       <svg id="model-profiler"></svg>
     </div>
