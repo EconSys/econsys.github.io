@@ -1,6 +1,6 @@
 (function(){
 
-var vamcs = ['Albuquerque, NM','Alexandria, LA','All Others','Altoona, PA','Amarillo, TX','Anchorage, AK','Ann Arbor, MI','Asheville, NC','Atlanta {Decatur}, GA','Augusta, GA','Baltimore HCS, MD','Battle Creek, MI','Bay Pines, FL','Beckley, WV','Bedford, MA','Big Spring, TX','Biloxi, MS','Birmingham, AL','Black Hills HCS, SD','Boise, ID','Boston HCS, MA','Bronx, NY','Buffalo, NY','Butler, PA','Central Texas HCS, TX','Charleston, SC','Cheyenne, WY','Chicago HCS, IL','Chillicothe, OH','Cincinnati, OH','Clarksburg, WV','Cleveland, OH','Coatesville, PA','Columbia, SC','Columbus, OH','Connecticut HCS, CT','Dallas, TX','Danville, IL','Dayton, OH','Denver, CO','Detroit, MI','Dublin, GA','Durham, NC','El Paso, TX','Erie, PA','Fargo, ND','Fayetteville, AR','Fayetteville, NC','Fresno, CA','Gainesville, FL','Grand Junction, CO','Hampton, VA','Hines, IL','Honolulu, HI','Houston, TX','Hudson Valley HCS, NY','Huntington, WV','Indianapolis, IN','Iron Mountain, MI','Jackson, MS','Kansas City, MO','Las Vegas, NV','Lebanon, PA','Lexington, KY','Little Rock, AR','Loma Linda, CA','Long Beach, CA','Los Angeles HCS, CA','Louisville, KY','Madison, WI','Manchester, NH','Manila, PI','Martinsburg, WV','Memphis, TN','Miami, FL','Mid Tenn. HCS, TN','Milwaukee, WI','Minneapolis, MN','Montana HCS, MT','Montgomery, AL','Mountain Home, TN','Muskogee, OK','NY Harbor HCS, NY','Nebraska-W Iowa, NE','New Jersey HCS, NJ','New Orleans, LA','North Arizona HCS, AZ','North Calif HCS, CA','North Chicago, IL','North Indiana HCS, IN','Northampton, MA','Northport, NY','Oklahoma City, OK','Orlando, FL','Palo Alto, CA','Philadelphia, PA','Phoenix, AZ','Pittsburgh, PA','Portland, OR','Providence, RI','Puget Sound HCS, WA','Reno, NV','Richmond, VA','Roseburg, OR','Saginaw, MI','Salem, VA','Salisbury, NC','Salt Lake City, UT','San Diego, CA','San Francisco, CA','San Juan, PR','Sheridan, WY','Shreveport, LA','Sioux Falls, SD','South Arizona HCS, AZ','South Texas HCS, TX','Spokane, WA','St. Cloud, MN','St. Louis, MO','Tampa, FL','Texas Valley Coast HCS','Togus, ME','Tomah, WI','Tuscaloosa, AL','Walla Walla, WA','Washington, DC','West Palm Beach, FL','White City, OR','White River Jct., VT','Wilkes-Barre, PA'];
+var vamcs = ['Albuquerque, NM','Alexandria, LA','Altoona, PA','Amarillo, TX','Anchorage, AK','Ann Arbor, MI','Asheville, NC','Atlanta {Decatur}, GA','Augusta, GA','Baltimore HCS, MD','Battle Creek, MI','Bay Pines, FL','Beckley, WV','Bedford, MA','Big Spring, TX','Biloxi, MS','Birmingham, AL','Black Hills HCS, SD','Boise, ID','Boston HCS, MA','Bronx, NY','Buffalo, NY','Butler, PA','Central Texas HCS, TX','Charleston, SC','Cheyenne, WY','Chicago HCS, IL','Chillicothe, OH','Cincinnati, OH','Clarksburg, WV','Cleveland, OH','Coatesville, PA','Columbia, SC','Columbus, OH','Connecticut HCS, CT','Dallas, TX','Danville, IL','Dayton, OH','Denver, CO','Detroit, MI','Dublin, GA','Durham, NC','El Paso, TX','Erie, PA','Fargo, ND','Fayetteville, AR','Fayetteville, NC','Fresno, CA','Gainesville, FL','Grand Junction, CO','Hampton, VA','Hines, IL','Honolulu, HI','Houston, TX','Hudson Valley HCS, NY','Huntington, WV','Indianapolis, IN','Iron Mountain, MI','Jackson, MS','Kansas City, MO','Las Vegas, NV','Lebanon, PA','Lexington, KY','Little Rock, AR','Loma Linda, CA','Long Beach, CA','Los Angeles HCS, CA','Louisville, KY','Madison, WI','Manchester, NH','Manila, PI','Martinsburg, WV','Memphis, TN','Miami, FL','Mid Tenn. HCS, TN','Milwaukee, WI','Minneapolis, MN','Montana HCS, MT','Montgomery, AL','Mountain Home, TN','Muskogee, OK','Nebraska-W Iowa, NE','New Jersey HCS, NJ','New Orleans, LA','North Arizona HCS, AZ','North Calif HCS, CA','North Chicago, IL','North Indiana HCS, IN','Northampton, MA','Northport, NY','NY Harbor HCS, NY','Oklahoma City, OK','Orlando, FL','Palo Alto, CA','Philadelphia, PA','Phoenix, AZ','Pittsburgh, PA','Portland, OR','Providence, RI','Puget Sound HCS, WA','Reno, NV','Richmond, VA','Roseburg, OR','Saginaw, MI','Salem, VA','Salisbury, NC','Salt Lake City, UT','San Diego, CA','San Francisco, CA','San Juan, PR','Sheridan, WY','Shreveport, LA','Sioux Falls, SD','South Arizona HCS, AZ','South Texas HCS, TX','Spokane, WA','St. Cloud, MN','St. Louis, MO','Tampa, FL','Texas Valley Coast HCS','Togus, ME','Tomah, WI','Tuscaloosa, AL','Walla Walla, WA','Washington, DC','West Palm Beach, FL','White City, OR','White River Jct., VT','Wilkes-Barre, PA','Wilmington, DE','All Others'];
 
 var models = {
   retirement:  {
@@ -9,14 +9,14 @@ var models = {
     equation: model_formula,
     y: { type: 'continuous', min: 0, max: 1, title: 'Predicted Retirement Probability', format: d3.format('.1%') },
     variables: {
-      age: { type: 'continuous', min: 45, max: 85, mean: 62, title: 'Age', increment: 1, format: d3.format('0f') },
+      age: { type: 'continuous', min: 50, max: 85, mean: 62, title: 'Age', increment: 1, format: d3.format('0f') },
       tenure: { type: 'continuous', min: 0, max: 60, mean: 25, title: 'Tenure', increment: 1, format: d3.format('0f') },
-      step: { type: 'ordinal', values: ['01','02','03','04','05','06','07','08','09','10','11','12','13','XX'], mode: '12', title: 'Step' },
-      review: { type: 'ordinal', values: ['Low','Moderate','High'], mode: 'Moderate', title: 'Review' },
-      grade: { type: 'ordinal', values: [1,2,3,4,5,6,7,99], mode: 2, title: 'Grade' },
-      vamc: { type: 'nominal', values: vamcs, mode: 'Pittsburgh, PA', title: 'VA Medical Center' },
+      step: { type: 'ordinal', values: ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','X'], mode: '12', title: 'Step' },
+      performance: { type: 'ordinal', values: ['Low','Moderate','High','Other'], mode: 'Moderate', title: 'Review' },
+      grade: { type: 'ordinal', values: [1,2,3,4,5,6,99], mode: 2, title: 'Grade' },
+      vamc: { type: 'nominal', values: vamcs, mode: 'Buffalo, NY', title: 'VA Medical Center' },
       occ: { type: 'nominal', values: ['610','620','621'], mode: '610', title: 'Occupational Series' },
-      unemployment: { type: 'continuous', min: 0.05, max: 0.26, mean: 0.07, increment: 0.01, title: 'Unemployment', format: d3.format('.1%') }
+      unemployment: { type: 'continuous', min: 0.05, max: 0.26, mean: 0.07, increment: 0.01, title: 'Unemployment Rate', format: d3.format('.1%') }
     }
   }
 };
@@ -270,8 +270,18 @@ var draw = function(model){
 
 
     v_i.path_generator = d3.svg.line()
-        .x(function(d) { return v_i.x(d.x); })
-        .y(function(d) { return y(d.y); })
+        .x(function(d) { 
+          var a = v_i.x(d.x);
+          if(isNaN(a))
+            console.log(d);
+          return v_i.x(d.x); 
+        })
+        .y(function(d) { 
+          var a = y(d.y);
+          if(isNaN(a))
+            console.log(d);
+          return y(d.y); 
+        })
         .interpolate('linear');
 
    
@@ -297,6 +307,7 @@ var draw = function(model){
         .style('font-weight','bold');
       }
 
+      console.log(v);
       foreground_layer.append('path')
         .attr('class','response-curve')
         .attr('d', v_i.path_generator(plot_data))
