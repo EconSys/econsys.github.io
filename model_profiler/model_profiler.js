@@ -459,8 +459,18 @@
         return i == 0; 
       });
 
-  select_a_model;
+  var url_params = {};
+  window.location.search.substr(1).split('&').forEach(function(params){
+    var p = params.split('=');
+    if(p.length == 2){
+      url_params[p[0]] = p[1];
+    }
+  });
 
-  draw(models[model_titles[0].model]);
+  var load_model = url_params['model'] ? url_params['model'] : model_titles[0].model;
+
+  $('#select-a-model').val(load_model);
+
+  draw(models[load_model]);
 
 })();
