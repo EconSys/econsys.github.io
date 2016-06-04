@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!-- jruby -run -e httpd . -p 9090 -->
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Open+Sans:400,300'>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.min.js"></script>
+    <style>
+    body {
+        font-size: 16px;
+    }
+    
+    .nav-header {
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 300;
+        background-color: whitesmoke;
+        color: rgb(43, 43, 42);
+        font-size: 22px;
+        line-height: 35px;
+        height: 55px;
+        padding: 10px 20px;
+    }
+    
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #999;
+        shape-rendering: crispEdges;
+    }
+    
+    .tick text {
+        fill: #666;
+        font-size: 15px;
+    }
+
+    </style>
+
+    <body>
+        <div class="nav-header">
+            <div>
+                <svg width="35" height="35" style="float: left;">
+                    <circle r="6" cx="12" cy="12" style="fill: rgb(227, 26, 28);"></circle>
+                    <circle r="6" cx="26" cy="12" style="fill: rgb(65, 171, 93);"></circle>
+                    <circle r="6" cx="12" cy="26" style="fill: rgb(254, 178, 76);"></circle>
+                    <circle r="6" cx="26" cy="26" style="fill: rgb(66, 146, 198);"></circle>
+                </svg>
+                <div style="margin-left: 40px">Multi-Series Chart</div>
+            </div>
+        </div>
+        <div style="width: 960px; margin: 50px auto;">
+            <svg id="chart"></svg>
+        </div>
+        </div>
+        <script type="text/javascript" src="./multiseries_chart.js"></script>
