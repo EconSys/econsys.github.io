@@ -23,7 +23,7 @@
   };
 
 
-  var margin = { left: 130, top: 25, bottom: 130, right: 50 },
+  var margin = { left: 140, top: 25, bottom: 130, right: 50 },
       graph_size = 232,
       graph_padding = 25,
       svg_height = 4 * (graph_size + graph_padding) + margin.top + 150,
@@ -37,17 +37,33 @@
       .append('g')
         .attr('transform', 'translate('+ margin.left + ',' + margin.top  + ')');
 
+  svg.append('text')
+    .attr('text-anchor','middle')
+    .text('Minimum Education')
+    .attr('transform','rotate(-90) translate(-' + (svg_height/2 - 100) + ',-120)')
+    .style('fill','#888')
+    .style('font-size','20px');
+
+  svg.append('text')
+    .attr('text-anchor','middle')
+    .text('English Importance')
+    .attr('transform','translate(' + (svg_width/2 - 105) + ',' + (svg_height - 80) + ')')
+    .style('fill','#888')
+    .style('font-size','20px');
+
 
 
   svg.selectAll(".x.axis")
     .data(english)
   .enter().append("g")
     .attr("class", "x axis")
-    .attr("transform", function(d, i) { return "translate(" + (english.length - i - 1) * (graph_size + graph_padding) + ",0)"; })
-    .each(function(){
+    .attr("transform", function(d, i) { return "translate(" + i * (graph_size + graph_padding) + ",0)"; })
+    .each(function(d, i){
       var x_svg = d3.select(this),
           translate_y = (graph_size + graph_padding) * education.length;
 
+      console.log(d);
+      console.log(i);
 
       x_svg.append('text')
         .attr('text-anchor','middle')
@@ -60,7 +76,7 @@
         .attr('text-anchor','middle')
         .text(function(d){ return d.label; })
         .attr('transform','translate(' + (graph_size / 2) +  ',' + (translate_y + 60) + ')')
-        .style('fill','#888')
+        .style('fill','#333')
         .style('font-size','14px');
 
     })
@@ -71,15 +87,8 @@
   .enter().append("g")
     .attr("class", "y axis")
     .attr("transform", function(d, i) { return "translate(0," + i * (graph_size + graph_padding) + ")"; })
-    .each(function(){
+    .each(function(d, i){
       var y_svg = d3.select(this);
-
-      y_svg.append('text')
-        .attr('text-anchor','middle')
-        .text(function(d){ return d.label; })
-        .attr('transform','rotate(-90) translate(-110,-90)')
-        .style('fill','#888')
-        .style('font-size','14px');
 
       y_svg.append('text')
         .attr('text-anchor','middle')
@@ -87,6 +96,13 @@
         .attr('transform','rotate(-90) translate(-110,-65)')
         .style('fill','#888')
         .style('font-size','12px');
+
+      y_svg.append('text')
+        .attr('text-anchor','middle')
+        .text(function(d){ return d.label; })
+        .attr('transform','rotate(-90) translate(-110,-90)')
+        .style('fill','#333')
+        .style('font-size','14px');
     });
 
 
@@ -155,7 +171,11 @@
     circles.enter().append('circle')
       .attr('r', 5)
       .style('fill','steelblue')
-      .style('opacity',0.5);
+      .style('opacity',0.5)
+    .on('mouseenter', function(d){
+      console.log('Education ' + d.education);
+      console.log('English ' + d.english);
+    });
 
 
     circles.transition()
