@@ -12,14 +12,31 @@
   <script src="//d3js.org/queue.v1.min.js"></script>
 
   <style>
-    .axis path, .axis line {
+
+    .axis, .frame {
+      shape-rendering: crispEdges;
+    }
+
+    .axis line {
       fill: none;
       stroke: #ccc;
-      shape-rendering: crispEdges;
     }
 
     .axis text {
       fill: #999;
+    }
+
+    .axis path {
+      display: none;
+    }
+
+    .axis line {
+      stroke: #ddd;
+    }
+
+    .frame {
+      fill: none;
+      stroke: #aaa;
     }
 
 
@@ -28,8 +45,22 @@
 </head>
 <body>
 
-  <div class="container">
+  <div class="container" style="margin-top: 50px;">
+    <div class="form-group">
+      <select id="current_soc" class="form-control"></select>
+    </div>
     <svg id="visualization"></svg>
+    <table id="table">
+      <thead>
+        <tr>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
   </div>
 
   <script src="./iww.js"></script>

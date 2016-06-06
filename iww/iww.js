@@ -6,151 +6,208 @@
         { values: [2], label: 'Postsecondary nondegree award' },
         { values: [3], label: 'Some college, no degree' }
       ],
-      english_importance = [
+      english = [
         { values: [2], label: '2' },
         { values: [3], label: '3' },
         { values: [4,5], label: '4-5' }
       ];
 
-  var draw = function(data){
-    var margin = { left: 150, top: 25, bottom: 100, right: 50 },
-        graph_size = 232,
-        svg_height = 4 * (graph_size + 25) + margin.top + 150,
-        svg_width = 960;
 
-    var x_s = data.map(function(d){
-          return d.skill_distance;
-        }),
-        x_min = d3.min(x_s),
-        x_max = d3.max(x_s),
-        x_scale = d3.scale.linear()
-            .domain([x_min, x_max])
+  var plot_offset = function(edu_index, eng_index){
+    var offset = {};
+
+    offset.x = eng_index * (graph_size + graph_padding);
+    offset.y = edu_index * (graph_size + graph_padding);
+
+    return offset;
+  };
+
+
+  var margin = { left: 130, top: 25, bottom: 100, right: 50 },
+      graph_size = 232,
+      graph_padding = 25,
+      svg_height = 4 * (graph_size + graph_padding) + margin.top + 150,
+      svg_width = 960;
+
+
+
+  var svg = d3.select('svg#visualization')
+        .attr('width', svg_width)
+        .attr('height', svg_height)
+      .append('g')
+        .attr('transform', 'translate('+ margin.left + ',' + margin.top  + ')');
+
+
+
+  svg.selectAll(".x.axis")
+    .data(english)
+  .enter().append("g")
+    .attr("class", "x axis")
+    .attr("transform", function(d, i) { return "translate(" + (english.length - i - 1) * (graph_size + graph_padding) + ",0)"; })
+
+
+  svg.selectAll(".y.axis")
+    .data(education)
+  .enter().append("g")
+    .attr("class", "y axis")
+    .attr("transform", function(d, i) { return "translate(0," + i * (graph_size + graph_padding) + ")"; })
+    .each(function(){
+      var y_svg = d3.select(this);
+
+      y_svg.append('text')
+        .attr('text-anchor','middle')
+        .text(function(d){ return d.label; })
+        .attr('transform','rotate(-90) translate(-110,-90)')
+        .style('fill','#888')
+        .style('font-size','14px');
+
+      y_svg.append('text')
+        .attr('text-anchor','middle')
+        .text('Median Income ($)')
+        .attr('transform','rotate(-90) translate(-110,-65)')
+        .style('fill','#888')
+        .style('font-size','12px');
+    })
+
+
+  education.forEach(function(edu, edu_index){
+    english.forEach(function(eng, eng_index){
+      var offset = plot_offset(edu_index, eng_index);
+
+      svg.append("rect")
+        .attr("class", "frame")
+        .attr("x", offset.x)
+        .attr("y", offset.y)
+        .attr("width", graph_size)
+        .attr("height", graph_size);
+    });
+  });
+
+
+  var skill_format = d3.format('0f');
+
+
+
+  var draw = function(data, x_extent, y_extent){
+
+    var x_scale = d3.scale.linear()
+            .domain(x_extent)
             .range([0, graph_size]),
         x_axis = d3.svg.axis().scale(x_scale)
           .orient('bottom')
-          .ticks(6);
+          .tickSize((graph_size + graph_padding) * education.length)
+          .tickFormat(skill_format);
 
+    svg.selectAll('.x.axis').each(function(){
+      d3.select(this).call(x_axis);
+    });
 
-    var y_s = data.map(function(d){
-          return d.median_income;
-        }),
-        y_min = d3.min(y_s),
-        y_max = d3.max(y_s),
-        y_scale = d3.scale.linear()
-            .domain([y_min, y_max])
+    var y_scale = d3.scale.linear()
+            .domain(y_extent)
             .range([graph_size, 0]),
         y_axis = d3.svg.axis().scale(y_scale)
           .orient('left')
+          .tickSize(-(graph_size + graph_padding) * english.length)
           .ticks(6);
 
-    var svg = d3.select('svg#visualization')
-            .attr('width', svg_width)
-            .attr('height', svg_height);
+    svg.selectAll('.y.axis').each(function(){
+      d3.select(this).call(y_axis);
+    });
 
-    if(svg.selectAll('.graph').empty()){
-      console.log('Setting up');
 
-      education.forEach(function(edu,i){
-        english_importance.forEach(function(eng, j){
 
-          var top =  i * (graph_size + margin.top) + margin.top,
-              left = j * (graph_size + 25) + margin.left;
-              
+    data.forEach(function(d){
+      var eng_index = d3.min([Math.round(d.english) - 2, 2]);
+      d.offset = plot_offset(d.education, eng_index)
+    })
 
-          var g = svg.append('g')
-            .attr('class', 'edu-' + i + ' eng-' + j)
-            .attr('transform','translate(' + left + ',' + top + ')');
+    var circles = svg.selectAll('circle')
+      .data(data, function(d){ return d.soc; });
+    
+    circles.enter().append('circle')
+      .attr('r', 5)
+      .style('fill','steelblue')
+      .style('opacity',0.5);
 
-          
-          var axes_layer = g.append('g')
-              .attr('class','axes-layer'),
-            foreground_layer = g.append('g')
-              .attr('class','foreground-layer');
 
-          if(j == 0){
-            var y_svg = axes_layer.append('g')
-              .attr('class', 'y axis')
-              .call(y_axis);
-
-            y_svg.append('text')
-              .attr('text-anchor','middle')
-              .text(edu.label)
-              .attr('transform','rotate(-90) translate(-110,-130)')
-              .style('fill','#888')
-              .style('font-size','14px');
-
-            y_svg.append('text')
-              .attr('text-anchor','middle')
-              .text('Median Income ($)')
-              .attr('transform','rotate(-90) translate(-110,-65)')
-              .style('fill','#888')
-              .style('font-size','12px');
-                
-          }
-
-          var x_svg = axes_layer.append('g')
-            .attr('class', 'x axis')
-            .attr('transform', 'translate(0,' + graph_size + ')')
-              .call(x_axis)
-            .append('text')
-
-          if(i == education.length - 1 ){
-            x_svg.text(eng.label)
-              .attr({ x: graph_size / 2 })
-              .attr('dy', 45)
-              .attr('text-anchor','middle')
-              .style({ 'fill': 'darkgray', 'font-size': '14px' });
-          }
-
-          var cross_data = data.filter(function(d){
-            return edu.values.indexOf(d.education) >= 0 && eng.values.indexOf(Math.round(d.english_importance)) >= 0;
-          });
-
-          console.log(cross_data);
-
-          g.selectAll('circle')
-            .data(cross_data, function(d){
-              return d.soc;
-            })
-          .enter().append('circle')
-            .attr('cx', function(d){ return x_scale(d.skill_distance) })
-            .attr('cy', function(d){ return y_scale(d.median_income) })
-            .attr('r', 5)
-            .style('fill', 'steelblue')
-            .style('opacity', 0.5);
-
-        });
+    circles.transition()
+      .attr('cx', function(d){
+        return x_scale(d.skill_distance) + d.offset.x;
+      })
+      .attr('cy', function(d){ 
+        return y_scale(d.median_income) + d.offset.y;
       });
-    }
+
+    circles.exit().remove();
+
+
+    d3.select('#table')
+  }
+
+  var get_skills_extent = function(skills){
+    var extents = skills.map(function(s){
+          var distances = [];
+          Object.keys(s).forEach(function(k){
+            if(k != 'soc')
+              distances.push(+s[k]);
+          });
+          return d3.extent(distances);
+        });
+    console.log(extents);
+
+    return d3.extent([].concat.apply([], extents));
   }
 
 
   var setup = function(error, skills, targets){
+    window.skills = skills;
+
     var transformed_targets = {};
 
     targets.forEach(function(t){
       transformed_targets[t.soc] = { 
         education: t.education, 
         median_income: t.median_income, 
-        english_importance: 
-        t.english_importance  
+        english: 
+        t.english  
       };
     });
 
-    var socs = Object.keys(skills[0]).filter(function(k){ return k != 'soc'; });
 
-    console.log('socs');
-    console.log(socs);
+    var socs = Object.keys(skills[0]).filter(function(k){ 
+      return k != 'soc'; 
+    });
 
-    var current_soc = 119051,
-        data = skills.map(function(s){
-          var t = transformed_targets[s.soc]
-          return { soc: s.soc, skill_distance: +s[current_soc], education: +t.education, median_income: +t.median_income, english_importance: +t.english_importance  };
-        });
 
-    draw(data);
+    var select_tag = d3.select('#current_soc');
 
+
+    var filter_and_draw = function(){
+      var current_soc = +select_tag.node().value,
+          data = skills.map(function(s){
+            var t = transformed_targets[s.soc]
+            return { soc: s.soc, skill_distance: +s[current_soc], education: +t.education, median_income: +t.median_income, english: +t.english  };
+          }),
+          x_extent = get_skills_extent(skills),
+          y_extent = d3.extent(targets.map(function(t){ return +t.median_income }));
+
+      console.log(x_extent);
+      draw(data, x_extent, y_extent);
+    };
+    
+    select_tag.on('change', function(e){
+      filter_and_draw();
+    });
+
+    select_tag.selectAll('option')
+        .data(socs)
+      .enter().append('option')
+        .attr('value', function(d){ return d; })
+        .text(function(d){ return d; });    
+
+    filter_and_draw();
   };
+
 
 
   queue()
