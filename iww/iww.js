@@ -7,9 +7,9 @@
         { values: [3], label: 'Some college, no degree' }
       ],
       english = [
-        { values: [2], label: '2' },
-        { values: [3], label: '3' },
-        { values: [4,5], label: '4-5' }
+        { values: [2], label: 'Low (2)' },
+        { values: [3], label: 'Medium (3)' },
+        { values: [4,5], label: 'High (4-5)' }
       ];
 
 
@@ -23,7 +23,7 @@
   };
 
 
-  var margin = { left: 130, top: 25, bottom: 100, right: 50 },
+  var margin = { left: 130, top: 25, bottom: 130, right: 50 },
       graph_size = 232,
       graph_padding = 25,
       svg_height = 4 * (graph_size + graph_padding) + margin.top + 150,
@@ -44,6 +44,26 @@
   .enter().append("g")
     .attr("class", "x axis")
     .attr("transform", function(d, i) { return "translate(" + (english.length - i - 1) * (graph_size + graph_padding) + ",0)"; })
+    .each(function(){
+      var x_svg = d3.select(this),
+          translate_y = (graph_size + graph_padding) * education.length;
+
+
+      x_svg.append('text')
+        .attr('text-anchor','middle')
+        .text('Skill Similarity')
+        .attr('transform','translate(' + (graph_size / 2) +  ',' + (translate_y + 35) + ')')
+        .style('fill','#888')
+        .style('font-size','12px');
+
+      x_svg.append('text')
+        .attr('text-anchor','middle')
+        .text(function(d){ return d.label; })
+        .attr('transform','translate(' + (graph_size / 2) +  ',' + (translate_y + 60) + ')')
+        .style('fill','#888')
+        .style('font-size','14px');
+
+    })
 
 
   svg.selectAll(".y.axis")
@@ -67,7 +87,7 @@
         .attr('transform','rotate(-90) translate(-110,-65)')
         .style('fill','#888')
         .style('font-size','12px');
-    })
+    });
 
 
   education.forEach(function(edu, edu_index){
@@ -88,21 +108,29 @@
 
 
 
-  var draw = function(data, x_extent, y_extent){
+  var draw = function(data){
 
-    var x_scale = d3.scale.linear()
-            .domain(x_extent)
+    var x_s = data.map(function(d){
+          return d.skill_distance;
+        }),
+        x_extent = d3.extent(x_s),
+        x_scale = d3.scale.linear()
+            .domain([ Math.floor(x_extent[0]) , Math.ceil(x_extent[1]) ])
             .range([0, graph_size]),
         x_axis = d3.svg.axis().scale(x_scale)
           .orient('bottom')
           .tickSize((graph_size + graph_padding) * education.length)
-          .tickFormat(skill_format);
+          .tickFormat(d3.format("d"));
 
     svg.selectAll('.x.axis').each(function(){
-      d3.select(this).call(x_axis);
+      d3.select(this).transition().call(x_axis);
     });
 
-    var y_scale = d3.scale.linear()
+    var y_s = data.map(function(d){
+          return d.median_income;
+        }),
+        y_extent = d3.extent(y_s)
+        y_scale = d3.scale.linear()
             .domain(y_extent)
             .range([graph_size, 0]),
         y_axis = d3.svg.axis().scale(y_scale)
@@ -111,7 +139,7 @@
           .ticks(6);
 
     svg.selectAll('.y.axis').each(function(){
-      d3.select(this).call(y_axis);
+      d3.select(this).transition().call(y_axis);
     });
 
 
@@ -144,19 +172,6 @@
     d3.select('#table')
   }
 
-  var get_skills_extent = function(skills){
-    var extents = skills.map(function(s){
-          var distances = [];
-          Object.keys(s).forEach(function(k){
-            if(k != 'soc')
-              distances.push(+s[k]);
-          });
-          return d3.extent(distances);
-        });
-    console.log(extents);
-
-    return d3.extent([].concat.apply([], extents));
-  }
 
 
   var setup = function(error, skills, targets){
@@ -187,12 +202,9 @@
           data = skills.map(function(s){
             var t = transformed_targets[s.soc]
             return { soc: s.soc, skill_distance: +s[current_soc], education: +t.education, median_income: +t.median_income, english: +t.english  };
-          }),
-          x_extent = get_skills_extent(skills),
-          y_extent = d3.extent(targets.map(function(t){ return +t.median_income }));
+          });
 
-      console.log(x_extent);
-      draw(data, x_extent, y_extent);
+      draw(data);
     };
     
     select_tag.on('change', function(e){
