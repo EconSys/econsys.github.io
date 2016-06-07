@@ -106,22 +106,23 @@
     });
 
 
+
   education.forEach(function(edu, edu_index){
     english.forEach(function(eng, eng_index){
       var offset = plot_offset(edu_index, eng_index);
 
-      svg.append("rect")
-        .attr("class", "frame")
-        .attr("x", offset.x)
-        .attr("y", offset.y)
-        .attr("width", graph_size)
-        .attr("height", graph_size);
+      svg.append('g')
+        .attr('transform', 'translate(' + offset.x + ',' + offset.y + ')')
+        .attr('class', 'cell edu-' + edu_index + ' eng-' + eng_index)
+      .append('rect')
+        .attr('class','frame')
+        .attr('width', graph_size)
+        .attr('height', graph_size);
     });
   });
 
 
   var skill_format = d3.format('0f');
-
 
 
   var draw = function(data){
@@ -154,43 +155,117 @@
           .tickSize(-(graph_size + graph_padding) * english.length)
           .ticks(6);
 
+
+    var brushCell;
+    // Clear the previously-active brush, if any.
+    var brushstart = function (p) {
+      if (brushCell !== this) {
+        d3.select(brushCell).call(brush.clear());
+        brush_x_scale.domain(x_scale.domain());
+        brush_y_scale.domain(y_scale.domain());
+        brushCell = this;
+      }
+    }
+
+    // Highlight the selected circles.
+    var brushmove = function() {
+      var e = brush.extent();
+      svg.selectAll("circle").classed("hidden", function(d) {
+        // console.log(d);
+        return e[0][0] > d.skill_distance ||  d.skill_distance > e[1][0]
+            || e[0][1] > d.median_income || d.median_income > e[1][1];
+      });
+    }
+
+  // If the brush is empty, select all circles.
+    var brushend = function () {
+      console.log('brushend')
+      if (brush.empty()) svg.selectAll(".hidden").classed("hidden", false);
+    }
+
+
+
+
+  var brush_x_scale = d3.scale.linear()
+        .range([0, graph_size])
+      brush_y_scale = d3.scale.linear()
+        .range([graph_size, 0]);
+
+
+    var brush = d3.svg.brush()
+      .x(brush_x_scale)
+      .y(brush_y_scale)
+      .on("brushstart", brushstart)
+      .on("brush", brushmove)
+      .on("brushend", brushend);
+
+
+
+
+
+
+    svg.selectAll('.cell').call(brush);
+
     svg.selectAll('.y.axis').each(function(){
       d3.select(this).transition().call(y_axis);
     });
 
 
+    education.forEach(function(edu, edu_index){
+      english.forEach(function(eng, eng_index){
 
-    data.forEach(function(d){
-      var eng_index = d3.min([Math.round(d.english) - 2, 2]);
-      d.offset = plot_offset(d.education, eng_index)
-    })
+        var g_data = data.filter(function(d){
+          return d.education == edu_index &&  d3.min([Math.round(d.english) - 2, 2]) == eng_index;
+        });
 
-    var circles = svg.selectAll('circle')
-      .data(data, function(d){ return d.soc; });
-    
-    circles.enter().append('circle')
-      .attr('r', 5)
-      .style('fill','steelblue')
-      .style('opacity',0.5)
-    .on('mouseenter', function(d){
-      console.log('Education ' + d.education);
-      console.log('English ' + d.english);
+        var g = d3.select('.edu-' + edu_index + '.eng-' + eng_index  );
+
+
+        var circles = g.selectAll('circle')
+          .data(g_data, function(d){ return d.soc; });
+
+        circles.enter().append('circle')
+          .attr('r', 5)
+          .style('fill','steelblue')
+          .style('opacity',0.5)
+
+        circles.transition()
+          .attr('cx', function(d){
+            return x_scale(d.skill_distance);
+          })
+          .attr('cy', function(d){ 
+            return y_scale(d.median_income);
+          });
+
+        circles.exit().remove();
+
+
+
+      });
     });
 
 
-    circles.transition()
-      .attr('cx', function(d){
-        return x_scale(d.skill_distance) + d.offset.x;
-      })
-      .attr('cy', function(d){ 
-        return y_scale(d.median_income) + d.offset.y;
-      });
+    // data.forEach(function(d){
+      
+    //   d.offset = plot_offset(d.education, eng_index)
+    // })
 
-    circles.exit().remove();
+    
+    // circles.enter().append('circle')
+    //   .attr('r', 5)
+    //   .style('fill','steelblue')
+    //   .style('opacity',0.5)
+    // .on('mouseenter', function(d){
+    //   console.log('Education ' + d.education);
+    //   console.log('English ' + d.english);
+    // });
 
 
-    d3.select('#table')
+
+
+    // d3.select('#table')
   }
+
 
 
 
