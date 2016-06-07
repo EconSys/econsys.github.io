@@ -62,9 +62,6 @@
       var x_svg = d3.select(this),
           translate_y = (graph_size + graph_padding) * education.length;
 
-      console.log(d);
-      console.log(i);
-
       x_svg.append('text')
         .attr('text-anchor','middle')
         .text('Skill Similarity')
@@ -106,18 +103,26 @@
     });
 
 
+  var table = d3.select('#table');
 
   education.forEach(function(edu, edu_index){
     english.forEach(function(eng, eng_index){
-      var offset = plot_offset(edu_index, eng_index);
+      var offset = plot_offset(edu_index, eng_index),
+          c = 'edu-' + edu_index + ' eng-' + eng_index;
 
       svg.append('g')
         .attr('transform', 'translate(' + offset.x + ',' + offset.y + ')')
-        .attr('class', 'cell edu-' + edu_index + ' eng-' + eng_index)
+        .attr('class', 'cell ' + c)
       .append('rect')
         .attr('class','frame')
         .attr('width', graph_size)
         .attr('height', graph_size);
+
+      table.append('tbody')
+        .attr('class', c)
+      .append('tr')
+        .attr('class','head')
+        .attr('colspan',4)
     });
   });
 
@@ -125,7 +130,13 @@
   var skill_format = d3.format('0f');
 
 
+  var brushCell,
+      brush;
+
+
   var draw = function(data){
+    if(brushCell)
+      d3.select(brushCell).call(brush.clear());
 
     var x_s = data.map(function(d){
           return d.skill_distance;
@@ -156,7 +167,11 @@
           .ticks(6);
 
 
-    var brushCell;
+    svg.selectAll('.y.axis').each(function(){
+      d3.select(this).transition().call(y_axis);
+    });
+
+
     // Clear the previously-active brush, if any.
     var brushstart = function (p) {
       if (brushCell !== this) {
@@ -171,7 +186,6 @@
     var brushmove = function() {
       var e = brush.extent();
       svg.selectAll("circle").classed("hidden", function(d) {
-        // console.log(d);
         return e[0][0] > d.skill_distance ||  d.skill_distance > e[1][0]
             || e[0][1] > d.median_income || d.median_income > e[1][1];
       });
@@ -192,7 +206,7 @@
         .range([graph_size, 0]);
 
 
-    var brush = d3.svg.brush()
+    brush = d3.svg.brush()
       .x(brush_x_scale)
       .y(brush_y_scale)
       .on("brushstart", brushstart)
@@ -202,21 +216,15 @@
 
 
 
-
-
-    svg.selectAll('.cell').call(brush);
-
-    svg.selectAll('.y.axis').each(function(){
-      d3.select(this).transition().call(y_axis);
-    });
-
-
     education.forEach(function(edu, edu_index){
       english.forEach(function(eng, eng_index){
 
+
         var g_data = data.filter(function(d){
-          return d.education == edu_index &&  d3.min([Math.round(d.english) - 2, 2]) == eng_index;
-        });
+              return d.education == edu_index &&  d3.min([Math.round(d.english) - 2, 2]) == eng_index;
+            }).sort(function(a,b){
+              return d3.ascending(+a.skill_distance, + b.skill_distance);
+            });
 
         var g = d3.select('.edu-' + edu_index + '.eng-' + eng_index  );
 
@@ -239,10 +247,24 @@
 
         circles.exit().remove();
 
+        var c = 'tbody.edu-' + edu_index + '.eng-' + eng_index;
 
+        table.select(c).selectAll('tr.tow')
+          .data(g_data)
+        .enter().append('tr')
+          .attr('class', 'row')
+          .each(function(d){
+            var tr = d3.select(this);
+
+            tr.append('td').text(titles[d.soc] + ' (' + d.soc + ')');
+            tr.append('td').text(d.skill_distance);
+          })
 
       });
     });
+
+    svg.selectAll('.cell').call(brush);
+
 
 
     // data.forEach(function(d){
@@ -259,18 +281,15 @@
     //   console.log('Education ' + d.education);
     //   console.log('English ' + d.english);
     // });
-
-
-
-
-    // d3.select('#table')
   }
 
 
 
 
-  var setup = function(error, skills, targets){
+  var setup = function(error, titles, skills, targets){
+    console.log(error)
     window.skills = skills;
+    window.titles = titles;
 
     var transformed_targets = {};
 
@@ -318,6 +337,7 @@
 
 
   queue()
+    .defer(d3.json, './data/occupation_titles.json')
     .defer(d3.csv, './data/skill_distances.csv')
     .defer(d3.csv, './data/target_characteristics.csv')
     .await(setup);
