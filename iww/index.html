@@ -1,100 +1,101 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Identifying Better Jobs and Pathways for Low-Wage Immigrant Women Workers</title>
-
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-
   <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.min.js"></script>
   <script src="//d3js.org/queue.v1.min.js"></script>
-
   <style>
-    .axis,
-    .frame {
-      shape-rendering: crispEdges;
-    }
-
-    .axis line {
-      stroke: #ececec;
-    }
-
-    .axis path {
-      display: none;
-    }
-
-    .cell text {
-      font-weight: bold;
-      text-transform: capitalize;
-    }
-
-    .frame {
-      fill: #fff;
-      fill-opacity: 0;
-      stroke: #dedddd;
-      stroke-width: 2;
-    }
-
-    circle.hidden {
-      display: inherit !important;
-      fill: #ccc !important;
-    }
-
-    .extent {
-      fill: #000;
-      fill-opacity: .125;
-      stroke: #fff;
-    }
-
-    td.head-row {
-      background-color: whitesmoke;
-      color: #333;
-      font-weight: bold;
-    }
-
-    th.skill, th.income,
-    td.skill, td.income {
-      text-align: right;
-    }
-
-    div.body {
-      margin: 50px auto;
-      width: 960px;
-    }
-
-    #tooltip {
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      min-width: 100px;
-      min-height: 24px;
-      background-color: whitesmoke;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      visibility: hidden;
-    }
-
-    #visualization rect:focus, #visualization rect:active,
-    #visualization a:focus, #visualization a:active {
-      outline: none;
-    }
-
-    #visualization rect:focus, #visualization rect:active {
-      stroke: orange;
-    }
-
+  .axis,
+  .frame {
+    shape-rendering: crispEdges;
+  }
+  
+  .axis line {
+    stroke: #ececec;
+  }
+  
+  .axis path {
+    display: none;
+  }
+  
+  .cell text {
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+  
+  .frame {
+    fill: #fff;
+    fill-opacity: 0;
+    stroke: #dedddd;
+    stroke-width: 2;
+  }
+  
+  circle.hidden {
+    display: inherit !important;
+    fill: #ccc !important;
+  }
+  
+  .extent {
+    fill: #000;
+    fill-opacity: .125;
+    stroke: #fff;
+  }
+  
+  td.head-row {
+    background-color: whitesmoke;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  th.skill,
+  th.income,
+  td.skill,
+  td.income {
+    text-align: right;
+  }
+  
+  div.body {
+    margin: 50px auto;
+    width: 960px;
+  }
+  
+  #tooltip {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    min-width: 100px;
+    min-height: 24px;
+    background-color: whitesmoke;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    visibility: hidden;
+  }
+  
+  #visualization rect:focus,
+  #visualization rect:active,
+  #visualization a:focus,
+  #visualization a:active {
+    outline: none;
+  }
+  
+  #visualization rect:focus,
+  #visualization rect:active {
+    stroke: orange;
+  }
   </style>
-
 </head>
-<body>
 
+<body>
   <div class="body" style="margin-top: 50px;">
     <h1>Identifying Better Jobs and Pathways for Low-Wage Immigrant Women Workers</h1>
     <hr>
-    <p>The scatter plot matrix below shows the skill proximity currently selected occupation to all target occupations and their median income by education and english importance. Click a point to see more details from <a href="http://www.onetonline.org/" target="_blank">O*NET</a>.</p>
+    <p>The scatter plot matrix below shows the skill proximity from the currently selected occupation to all target occupations and their median income by education and english importance. Click a point to see more details from <a href="http://www.onetonline.org/" target="_blank">O*NET</a>.</p>
     <div class="form-group">
       <label>Current Occupation</label>
       <select id="current_soc" class="form-control"></select>
@@ -104,8 +105,7 @@
       <div id="tooltip"></div>
     </div>
   </div>
-
   <script src="./iww.js"></script>
-
 </body>
+
 </html>
