@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Pathways to Target Occupations for Immigrant Working Women</title>
+  <title>Identifying Better Jobs and Pathways for Low-Wage Immigrant Women Workers</title>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
@@ -18,7 +18,7 @@
     }
 
     .axis line {
-      stroke: #ddd;
+      stroke: #ececec;
     }
 
     .axis path {
@@ -31,8 +31,10 @@
     }
 
     .frame {
-      fill: none;
-      stroke: #aaa;
+      fill: #fff;
+      fill-opacity: 0;
+      stroke: #dedddd;
+      stroke-width: 2;
     }
 
     circle.hidden {
@@ -62,26 +64,36 @@
       width: 960px;
     }
 
+    #tooltip {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      min-width: 100px;
+      min-height: 24px;
+      background-color: whitesmoke;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      visibility: hidden;
+    }
+
   </style>
 
 </head>
 <body>
 
   <div class="body" style="margin-top: 50px;">
+    <h1>Identifying Better Jobs and Pathways for Low-Wage Immigrant Women Workers</h1>
+    <hr>
+    <p>The scatter plot matrix below shows the skill proximity currently selected occupation to all target occupations and their median income by education and english importance. Click each circle to see more details from <a href="http://www.onetonline.org/" target="_blank">O*NET</a>.</p>
     <div class="form-group">
       <label>Current Occupation</label>
       <select id="current_soc" class="form-control"></select>
     </div>
-    <svg id="visualization"></svg>
-    <table id="table" class="table">
-      <thead>
-        <tr>
-          <th>Occupation</th>
-          <th class="skill">Skill Similarity</th>
-          <th class="income">Income</th>
-        </tr>
-      </thead>
-    </table>
+    <div style="position: relative;">
+      <svg id="visualization"></svg>
+      <div id="tooltip"></div>
+    </div>
   </div>
 
   <script src="./iww.js"></script>

@@ -64,7 +64,7 @@
 
       x_svg.append('text')
         .attr('text-anchor','middle')
-        .text('Skill Similarity')
+        .text('Skill Proximity')
         .attr('transform','translate(' + (graph_size / 2) +  ',' + (translate_y + 35) + ')')
         .style('fill','#888')
         .style('font-size','12px');
@@ -103,7 +103,7 @@
     });
 
 
-  var table = d3.select('#table');
+  var plot_tabindex = 0;
 
   education.forEach(function(edu, edu_index){
     english.forEach(function(eng, eng_index){
@@ -115,37 +115,32 @@
         .attr('class', 'cell ' + c)
       .append('rect')
         .attr('class','frame')
+        .attr('tabindex', (plot_tabindex + 1) * 1000)
         .attr('width', graph_size)
-        .attr('height', graph_size);
+        .attr('height', graph_size)
+        .on('click', function(){
+          d3.select(this).node().focus();
+        });
 
-      table.append('tbody')
-        .attr('class', c)
-      .append('tr')
-        .append('td')
-          .attr('class','head-row')
-          .attr('colspan', 3)
-          .text(edu.label + ', ' + eng.label)
+      plot_tabindex += 1;
     });
   });
 
 
-  var skill_format = d3.format('0f');
+  var skill_format = d3.format('.2f'),
+      income_format = d3.format('$,');
 
-
-  var brushCell,
-      brush;
+  var tooltip = d3.select('#tooltip');
 
 
   var draw = function(data){
-    if(brushCell)
-      d3.select(brushCell).call(brush.clear());
-
     var x_s = data.map(function(d){
           return d.skill_distance;
         }),
         x_extent = d3.extent(x_s),
+        x_extent = [ Math.floor(x_extent[0]) , Math.ceil(x_extent[1]) ],
         x_scale = d3.scale.linear()
-            .domain([ Math.floor(x_extent[0]) , Math.ceil(x_extent[1]) ])
+            .domain(x_extent)
             .range([0, graph_size]),
         x_axis = d3.svg.axis().scale(x_scale)
           .orient('bottom')
@@ -174,54 +169,12 @@
     });
 
 
-    // Clear the previously-active brush, if any.
-    var brushstart = function (p) {
-      if (brushCell !== this) {
-        d3.select(brushCell).call(brush.clear());
-        brush_x_scale.domain(x_scale.domain());
-        brush_y_scale.domain(y_scale.domain());
-        brushCell = this;
-      }
-    }
-
-    // Highlight the selected circles.
-    var brushmove = function() {
-      var e = brush.extent();
-      svg.selectAll("circle").classed("hidden", function(d) {
-        return e[0][0] > d.skill_distance ||  d.skill_distance > e[1][0]
-            || e[0][1] > d.median_income || d.median_income > e[1][1];
-      });
-    }
-
-  // If the brush is empty, select all circles.
-    var brushend = function () {
-      console.log('brushend')
-      if (brush.empty()) svg.selectAll(".hidden").classed("hidden", false);
-    }
-
-
-
-
-  var brush_x_scale = d3.scale.linear()
-        .range([0, graph_size])
-      brush_y_scale = d3.scale.linear()
-        .range([graph_size, 0]);
-
-
-    brush = d3.svg.brush()
-      .x(brush_x_scale)
-      .y(brush_y_scale)
-      .on("brushstart", brushstart)
-      .on("brush", brushmove)
-      .on("brushend", brushend);
-
-
-
+    plot_tabindex = 0;
 
     education.forEach(function(edu, edu_index){
       english.forEach(function(eng, eng_index){
-
-        var cross_class = '.edu-' + edu_index + '.eng-' + eng_index;
+        var offset = plot_offset(edu_index, eng_index),
+            cross_class = '.edu-' + edu_index + '.eng-' + eng_index;
 
 
         var g_data = data.filter(function(d){
@@ -230,83 +183,171 @@
               return d3.ascending(+a.skill_distance, +b.skill_distance);
             });
 
-        var g = svg.select('g' + cross_class);
+        var skill_median = d3.median(g_data.map(function(d){
+              return +d.skill_distance;
+            })),
+            skill_median_data = skill_median ? [skill_median] : [],
+            income_median = d3.median(g_data.map(function(d){
+              return +d.median_income;
+            })),
+            income_median_data = income_median ? [income_median] : [];
 
-        console.log(g_data);
+      var g = svg.select('g' + cross_class);
 
-        var circles = g.selectAll('circle')
-          .data(g_data, function(d){ return d.soc; });
 
-        circles.enter().append('circle')
+      var skill_median_line = g.selectAll('line.skill_median')
+            .data(skill_median_data);
+
+      skill_median_line.enter().append('line')
+        .attr('class','skill_median')
+        .style({
+          'stroke-width': 1.5,
+          'stroke': 'gray',
+          'stroke-opacity': 0.5
+        });
+
+      skill_median_line.transition()
+        .attr('x1', x_scale(skill_median))
+        .attr('y1', y_scale(y_extent[0]))
+        .attr('x2', x_scale(skill_median))
+        .attr('y2', y_scale(y_extent[1]));
+
+
+      skill_median_line.exit().remove();
+
+      var skill_median_label = g.selectAll('text.skill_median')
+            .data(skill_median_data);
+
+       skill_median_label.enter().append('text')
+        .attr('class','skill_median')
+        .attr('dx','0.5em')
+        .attr('dy','1em')
+        .style({
+          'font-size': '10px',
+          'fill': d3.rgb('gray').darker(),
+          'fill-opacity': 0.5
+        })
+        .append('title').text('Median Skill Proximity');
+
+        skill_median_label.text(skill_format(skill_median))
+          .transition()
+          .attr('x', x_scale(skill_median))
+          .attr('y', y_scale(y_extent[1]))
+
+      skill_median_label.exit().remove();
+
+
+      var income_median_line = g.selectAll('line.income_median')
+              .data(income_median_data);
+
+      income_median_line.enter().append('line')
+        .attr('class','income_median')
+        .style({
+          'stroke-width': 1.5,
+          'stroke': 'gray',
+          'stroke-opacity': 0.5
+        });
+
+      income_median_line.transition()
+        .attr('x1', x_scale(x_extent[0]))
+        .attr('y1', y_scale(income_median))
+        .attr('x2', x_scale(x_extent[1]))
+        .attr('y2', y_scale(income_median));
+
+
+      income_median_line.exit().remove();
+
+
+      var income_median_label = g.selectAll('text.income_median')
+            .data(income_median_data);
+
+       income_median_label.enter().append('text')
+        .attr('class','income_median')
+        .attr('dx','-0.25em')
+        .attr('dy','-0.5em')
+        .style({
+          'font-size': '10px',
+          'fill': d3.rgb('gray').darker(),
+          'fill-opacity': 0.5,
+          'text-anchor': 'end'
+        })
+        ;
+
+        income_median_label.text(income_format(income_median))
+          .transition()
+          .attr('x', x_scale(x_extent[1]))
+          .attr('y', y_scale(income_median));
+
+      income_median_label.exit().remove();
+
+      var over_event = function(d){
+        var circle = d3.select(this).select('circle');
+
+        tooltip.style('visibility','visible');
+        tooltip.html(titles[d.soc] + '<br>Skill Proximity: ' + skill_format(d.skill_distance) + '<br>Median Income: ' + income_format(d.median_income));
+        tooltip.style('left', +circle.attr('cx') + margin.left + offset.x + 20 + 'px');
+        tooltip.style('top', +circle.attr('cy') + margin.top +  offset.y + 'px');
+
+        circle.transition()
+          .attr('r', 10)
+          .style('opacity', 1)
+          .style('fill','orange');
+      };
+
+      var out_event = function(d){
+        var circle = d3.select(this).select('circle');
+        tooltip.style('visibility','hidden');
+
+        circle.transition()
           .attr('r', 5)
-          .style('fill','steelblue')
-          .style('opacity',0.5)
+          .style('opacity', 0.5)
+          .style('fill','steelblue');
+      };
 
-        circles.transition()
-          .attr('cx', function(d){
-            return x_scale(d.skill_distance);
-          })
-          .attr('cy', function(d){ 
-            return y_scale(d.median_income);
-          });
+      var links = g.selectAll('a')
+        .data(g_data, function(d){ return d.soc; });
 
-        circles.exit().remove();
+      var links_enter = links.enter()
+        .append('a')
+        .attr('class','duty-station')
+        .attr('target','_blank')
+        .attr('xlink:href', function(d){
+          return 'http://www.onetonline.org/link/summary/' + d.soc.toString().substr(0,2) + '-' + d.soc.toString().substr(2,4) + '.00';
+        }).each(function(){
+          d3.select(this).append('circle')
+            .attr('r', 5)
+            .style('fill','steelblue')
+            .style('opacity',0.5)
+        })
+        .on('focus', over_event)
+        .on('mouseenter', over_event)
+        .on('blur', out_event)
+        .on('mouseleave', out_event)
+  
+        links.attr('tabindex', function(d,i){
+          return i + 1001 * (plot_tabindex + 1);
+        }).each(function(){
+          var circle = d3.select(this).select('circle');
+          circle.transition()
+            .attr('cx', function(d){
+              return x_scale(d.skill_distance);
+            })
+            .attr('cy', function(d){ 
+              return y_scale(d.median_income);
+            });
+        });
 
-        var rows = table.select('tbody' + cross_class).selectAll('tr.data-row')
-          .data(g_data, function(d,i){
-            return i;
-          });
-        
-        rows.enter().append('tr')
-          .attr('class','data-row')
-          .each(function(d){
-            var tr = d3.select(this);
+        links.exit().remove();
 
-            tr.append('td').attr('class','soc');
-            tr.append('td').attr('class','skill');
-            tr.append('td').attr('class','income');
-          });;
-          
-        rows.attr('class', 'data-row')
-          .each(function(d){
-            var tr = d3.select(this);
-
-            tr.select('.soc').text(titles[d.soc] + ' (' + d.soc + ')');
-            tr.select('.skill').text(d.skill_distance);
-            tr.select('.income').text(d.median_income);
-          });
-
-        rows.exit().remove();
-
+        plot_tabindex++;
       });
     });
-
-    svg.selectAll('.cell').call(brush);
-
-
-
-    // data.forEach(function(d){
-      
-    //   d.offset = plot_offset(d.education, eng_index)
-    // })
-
-    
-    // circles.enter().append('circle')
-    //   .attr('r', 5)
-    //   .style('fill','steelblue')
-    //   .style('opacity',0.5)
-    // .on('mouseenter', function(d){
-    //   console.log('Education ' + d.education);
-    //   console.log('English ' + d.english);
-    // });
   }
 
 
 
 
   var setup = function(error, titles, skills, targets){
-    console.log(error)
-    window.skills = skills;
     window.titles = titles;
 
     var transformed_targets = {};
@@ -347,7 +388,7 @@
         .data(socs)
       .enter().append('option')
         .attr('value', function(d){ return d; })
-        .text(function(d){ return d; });    
+        .text(function(d){ return titles[d] + ' (' + d + ')'; });    
 
     filter_and_draw();
   };
