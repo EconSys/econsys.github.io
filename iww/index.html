@@ -46,24 +46,39 @@
       stroke: #fff;
     }
 
+    td.head-row {
+      background-color: whitesmoke;
+      color: #333;
+      font-weight: bold;
+    }
+
+    th.skill, th.income,
+    td.skill, td.income {
+      text-align: right;
+    }
+
+    div.body {
+      margin: 50px auto;
+      width: 960px;
+    }
+
   </style>
 
 </head>
 <body>
 
-  <div class="container" style="margin-top: 50px;">
+  <div class="body" style="margin-top: 50px;">
     <div class="form-group">
       <label>Current Occupation</label>
       <select id="current_soc" class="form-control"></select>
     </div>
     <svg id="visualization"></svg>
-    <table id="table">
+    <table id="table" class="table">
       <thead>
         <tr>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
+          <th>Occupation</th>
+          <th class="skill">Skill Similarity</th>
+          <th class="income">Income</th>
         </tr>
       </thead>
     </table>

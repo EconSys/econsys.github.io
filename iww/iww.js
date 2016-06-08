@@ -121,8 +121,10 @@
       table.append('tbody')
         .attr('class', c)
       .append('tr')
-        .attr('class','head')
-        .attr('colspan',4)
+        .append('td')
+          .attr('class','head-row')
+          .attr('colspan', 3)
+          .text(edu.label + ', ' + eng.label)
     });
   });
 
@@ -219,15 +221,18 @@
     education.forEach(function(edu, edu_index){
       english.forEach(function(eng, eng_index){
 
+        var cross_class = '.edu-' + edu_index + '.eng-' + eng_index;
+
 
         var g_data = data.filter(function(d){
               return d.education == edu_index &&  d3.min([Math.round(d.english) - 2, 2]) == eng_index;
             }).sort(function(a,b){
-              return d3.ascending(+a.skill_distance, + b.skill_distance);
+              return d3.ascending(+a.skill_distance, +b.skill_distance);
             });
 
-        var g = d3.select('.edu-' + edu_index + '.eng-' + eng_index  );
+        var g = svg.select('g' + cross_class);
 
+        console.log(g_data);
 
         var circles = g.selectAll('circle')
           .data(g_data, function(d){ return d.soc; });
@@ -247,18 +252,31 @@
 
         circles.exit().remove();
 
-        var c = 'tbody.edu-' + edu_index + '.eng-' + eng_index;
-
-        table.select(c).selectAll('tr.tow')
-          .data(g_data)
-        .enter().append('tr')
-          .attr('class', 'row')
+        var rows = table.select('tbody' + cross_class).selectAll('tr.data-row')
+          .data(g_data, function(d,i){
+            return i;
+          });
+        
+        rows.enter().append('tr')
+          .attr('class','data-row')
           .each(function(d){
             var tr = d3.select(this);
 
-            tr.append('td').text(titles[d.soc] + ' (' + d.soc + ')');
-            tr.append('td').text(d.skill_distance);
-          })
+            tr.append('td').attr('class','soc');
+            tr.append('td').attr('class','skill');
+            tr.append('td').attr('class','income');
+          });;
+          
+        rows.attr('class', 'data-row')
+          .each(function(d){
+            var tr = d3.select(this);
+
+            tr.select('.soc').text(titles[d.soc] + ' (' + d.soc + ')');
+            tr.select('.skill').text(d.skill_distance);
+            tr.select('.income').text(d.median_income);
+          });
+
+        rows.exit().remove();
 
       });
     });
