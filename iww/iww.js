@@ -204,7 +204,8 @@
           'stroke-width': 1.5,
           'stroke': 'gray',
           'stroke-opacity': 0.5
-        });
+        })
+        .append('title').text('Median Skill Proximity');
 
       skill_median_line.transition()
         .attr('x1', x_scale(skill_median))
@@ -226,8 +227,7 @@
           'font-size': '10px',
           'fill': d3.rgb('gray').darker(),
           'fill-opacity': 0.5
-        })
-        .append('title').text('Median Skill Proximity');
+        });
 
         skill_median_label.text(skill_format(skill_median))
           .transition()
@@ -246,7 +246,8 @@
           'stroke-width': 1.5,
           'stroke': 'gray',
           'stroke-opacity': 0.5
-        });
+        })
+        .append('title').text('Median Income across Occupations');
 
       income_median_line.transition()
         .attr('x1', x_scale(x_extent[0]))
@@ -270,8 +271,7 @@
           'fill': d3.rgb('gray').darker(),
           'fill-opacity': 0.5,
           'text-anchor': 'end'
-        })
-        ;
+        });
 
         income_median_label.text(income_format(income_median))
           .transition()
