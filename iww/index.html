@@ -88,6 +88,20 @@
   #visualization rect:active {
     stroke: orange;
   }
+
+  #visualization circle {
+    fill-opacity: 0.5;
+    -webkit-transition: fill-opacity 250ms;
+    transition: fill-opacity 250ms;
+  }
+
+  #visualization circle.inactive {
+    fill-opacity: 0.1;
+  }
+
+  #visualization circle.active {
+    fill-opacity: 1;
+  }
   </style>
 </head>
 
