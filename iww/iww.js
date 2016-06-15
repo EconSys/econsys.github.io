@@ -89,7 +89,7 @@
 
       y_svg.append('text')
         .attr('text-anchor','middle')
-        .text('25th Percentile Income ($)')
+        .text('25th Percentile Earnings ($)')
         .attr('transform','rotate(-90) translate(-110,-65)')
         .style('fill','#888')
         .style('font-size','12px');
@@ -128,7 +128,7 @@
 
 
   var skill_format = d3.format('.2f'),
-      income_format = d3.format('$,'),
+      earnings_format = d3.format('$,'),
       growth_format = d3.format(',');
 
   var tooltip = d3.select('#tooltip');
@@ -153,7 +153,7 @@
     });
 
     var y_s = data.map(function(d){
-          return d.income;
+          return d.earnings;
         }),
         y_extent = d3.extent(y_s)
         y_scale = d3.scale.linear()
@@ -199,10 +199,10 @@
               return +d.skill_distance;
             })),
             skill_median_data = skill_median ? [skill_median] : [],
-            income_median = d3.median(g_data.map(function(d){
-              return +d.income;
+            earnings_median = d3.median(g_data.map(function(d){
+              return +d.earnings;
             })),
-            income_median_data = income_median ? [income_median] : [];
+            earnings_median_data = earnings_median ? [earnings_median] : [];
 
       var g = svg.select('g' + cross_class);
 
@@ -249,11 +249,11 @@
       skill_median_label.exit().remove();
 
 
-      var income_median_line = g.selectAll('line.income_median')
-              .data(income_median_data);
+      var earnings_median_line = g.selectAll('line.earnings_median')
+              .data(earnings_median_data);
 
-      income_median_line.enter().append('line')
-        .attr('class','income_median')
+      earnings_median_line.enter().append('line')
+        .attr('class','earnings_median')
         .style({
           'stroke-width': 1.5,
           'stroke': 'gray',
@@ -261,21 +261,21 @@
         })
         .append('title').text('Median across Occupations');
 
-      income_median_line.transition()
+      earnings_median_line.transition()
         .attr('x1', x_scale(x_extent[0]))
-        .attr('y1', y_scale(income_median))
+        .attr('y1', y_scale(earnings_median))
         .attr('x2', x_scale(x_extent[1]))
-        .attr('y2', y_scale(income_median));
+        .attr('y2', y_scale(earnings_median));
 
 
-      income_median_line.exit().remove();
+      earnings_median_line.exit().remove();
 
 
-      var income_median_label = g.selectAll('text.income_median')
-            .data(income_median_data);
+      var earnings_median_label = g.selectAll('text.earnings_median')
+            .data(earnings_median_data);
 
-       income_median_label.enter().append('text')
-        .attr('class','income_median')
+       earnings_median_label.enter().append('text')
+        .attr('class','earnings_median')
         .attr('dx','-0.25em')
         .attr('dy','-0.5em')
         .style({
@@ -285,12 +285,12 @@
           'text-anchor': 'end'
         });
 
-        income_median_label.text(income_format(income_median))
+        earnings_median_label.text(earnings_format(earnings_median))
           .transition()
           .attr('x', x_scale(x_extent[1]))
-          .attr('y', y_scale(income_median));
+          .attr('y', y_scale(earnings_median));
 
-      income_median_label.exit().remove();
+      earnings_median_label.exit().remove();
 
       var over_event = function(d){
         var circle = d3.select(this).select('circle');
@@ -307,7 +307,7 @@
         tooltip.style('visibility','visible');
         tooltip.html(titles[d.soc] + '<br>' + 
             'Skill Proximity: ' + skill_format(d.skill_distance) + '<br>' + 
-            '25th Percentile Income: ' + income_format(d.income) + '<br>' + 
+            '25th Percentile Earnings: ' + earnings_format(d.earnings) + '<br>' + 
             'Projected Growth: ' + growth_format(d.growth)
           );
         tooltip.style('left', +circle.attr('cx') + margin.left + offset.x + 20 + 'px');
@@ -358,7 +358,7 @@
               return x_scale(d.skill_distance);
             })
             .attr('cy', function(d){ 
-              return y_scale(d.income);
+              return y_scale(d.earnings);
             });
         });
 
@@ -380,7 +380,7 @@
     targets.forEach(function(t){
       transformed_targets[t.soc] = { 
         education: t.education, 
-        income: t.wage_25, 
+        earnings: t.wage_25, 
         english: t.english ,
         growth: t.growth_2014_2024
       };
@@ -399,7 +399,7 @@
       var current_soc = +select_tag.node().value,
           data = skills.map(function(s){
             var t = transformed_targets[s.soc]
-            return { soc: s.soc, skill_distance: +s[current_soc], education: +t.education, income: +t.income, english: +t.english, growth: +t.growth * 1000 };
+            return { soc: s.soc, skill_distance: +s[current_soc], education: +t.education, earnings: +t.earnings, english: +t.english, growth: +t.growth * 1000 };
           });
 
       draw(data);
