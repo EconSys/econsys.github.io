@@ -380,7 +380,7 @@
     targets.forEach(function(t){
       transformed_targets[t.soc] = { 
         education: t.education, 
-        income: t.wage_10, 
+        income: t.wage_25, 
         english: t.english ,
         growth: t.growth_2014_2024
       };
