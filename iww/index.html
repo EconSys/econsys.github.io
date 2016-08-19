@@ -5,103 +5,106 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Identifying Better Jobs and Pathways for Low-Wage Immigrant Women Workers</title>
+
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
   <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.min.js"></script>
   <script src="//d3js.org/queue.v1.min.js"></script>
+  
   <style>
-  .axis,
-  .frame {
-    shape-rendering: crispEdges;
-  }
-  
-  .axis line {
-    stroke: #ececec;
-  }
-  
-  .axis path {
-    display: none;
-  }
-  
-  .cell text {
-    font-weight: bold;
-    text-transform: capitalize;
-  }
-  
-  .frame {
-    fill: #fff;
-    fill-opacity: 0;
-    stroke: #dedddd;
-    stroke-width: 2;
-  }
-  
-  circle.hidden {
-    display: inherit !important;
-    fill: #ccc !important;
-  }
-  
-  .extent {
-    fill: #000;
-    fill-opacity: .125;
-    stroke: #fff;
-  }
-  
-  td.head-row {
-    background-color: whitesmoke;
-    color: #333;
-    font-weight: bold;
-  }
-  
-  th.skill,
-  th.earnings,
-  td.skill,
-  td.earnings {
-    text-align: right;
-  }
-  
-  div.body {
-    margin: 50px auto;
-    width: 960px;
-  }
-  
-  #tooltip {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    min-width: 100px;
-    min-height: 24px;
-    background-color: whitesmoke;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    visibility: hidden;
-  }
-  
-  #visualization rect:focus,
-  #visualization rect:active,
-  #visualization a:focus,
-  #visualization a:active {
-    outline: none;
-  }
-  
-  #visualization rect:focus,
-  #visualization rect:active {
-    stroke: orange;
-  }
+    .axis,
+    .frame {
+      shape-rendering: crispEdges;
+    }
+    
+    .axis line {
+      stroke: #ececec;
+    }
+    
+    .axis path {
+      display: none;
+    }
+    
+    .cell text {
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+    
+    .frame {
+      fill: #fff;
+      fill-opacity: 0;
+      stroke: #dedddd;
+      stroke-width: 2;
+    }
+    
+    circle.hidden {
+      display: inherit !important;
+      fill: #ccc !important;
+    }
+    
+    .extent {
+      fill: #000;
+      fill-opacity: .125;
+      stroke: #fff;
+    }
+    
+    td.head-row {
+      background-color: whitesmoke;
+      color: #333;
+      font-weight: bold;
+    }
+    
+    th.skill,
+    th.earnings,
+    td.skill,
+    td.earnings {
+      text-align: right;
+    }
+    
+    div.body {
+      margin: 50px auto;
+      width: 960px;
+    }
+    
+    #tooltip {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      min-width: 100px;
+      min-height: 24px;
+      background-color: whitesmoke;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      visibility: hidden;
+    }
+    
+    #visualization rect:focus,
+    #visualization rect:active,
+    #visualization a:focus,
+    #visualization a:active {
+      outline: none;
+    }
+    
+    #visualization rect:focus,
+    #visualization rect:active {
+      stroke: orange;
+    }
 
-  #visualization circle {
-    fill-opacity: 0.5;
-    -webkit-transition: fill-opacity 250ms;
-    transition: fill-opacity 250ms;
-  }
+    #visualization circle {
+      fill-opacity: 0.5;
+      -webkit-transition: fill-opacity 250ms;
+      transition: fill-opacity 250ms;
+    }
 
-  #visualization circle.inactive {
-    fill-opacity: 0.1;
-  }
+    #visualization circle.inactive {
+      fill-opacity: 0.1;
+    }
 
-  #visualization circle.active {
-    fill-opacity: 1;
-  }
+    #visualization circle.active {
+      fill-opacity: 1;
+    }
   </style>
 </head>
 
